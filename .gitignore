@@ -1,0 +1,4 @@
+# Eclipse build directories
+
+Projects/Eclipse/*/Release
+Projects/Eclipse/*/Debug

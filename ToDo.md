@@ -29,8 +29,8 @@
 
 ### STM32F4
 
-- GIT repo létrehozása:
-    - Dokumentumok rendezése (github/cloud)
+- GIT repo létrehozása: __(DONE)__
+    - Dokumentumok rendezése (github/cloud) __(DONE)__
 - IT kezelés megismerése,
 - SD Card driver élesztése FatFS-hez,
 - Webszerver felélesztése.
