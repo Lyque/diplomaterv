@@ -1,0 +1,46 @@
+/*
+ * config.h
+ *
+ *  Created on: Sep 26, 2016
+ *      Author: lyque
+ */
+
+#ifndef INC_CONFIG_H_
+#define INC_CONFIG_H_
+
+// SDIO variables
+
+#define SDIOx								SDIO
+
+#define SDIOx_PORT_FIRST					GPIOC
+#define SDIOx_PORT_SECOND					GPIOD
+#define SDIOx_PORT_FIRST_CLK_ENABLE			__GPIOC_CLK_ENABLE
+#define SDIOx_PORT_FIRST_CLK_DISABLE		__GPIOC_CLK_DISABLE
+#define SDIOx_PORT_SECOND_CLK_ENABLE		__GPIOD_CLK_ENABLE
+#define SDIOx_PORT_SECOND_CLK_DISABLE		__GPIOD_CLK_DISABLE
+
+#define SDIOx_CLK_ENABLE					__HAL_RCC_SDIO_CLK_ENABLE
+#define SDIOx_CLK_DISABLE					__HAL_RCC_SDIO_CLK_DISABLE
+
+#define SDIOx_PIN_D0_FIRST_PORT				GPIO_PIN_8
+#define SDIOx_PIN_D1_FIRST_PORT				GPIO_PIN_9
+#define SDIOx_PIN_D2_FIRST_PORT				GPIO_PIN_10
+#define SDIOx_PIN_D3_FIRST_PORT				GPIO_PIN_11
+#define SDIOx_PIN_CK_FIRST_PORT				GPIO_PIN_12
+#define SDIOx_PIN_CMD_SECOND_PORT			GPIO_PIN_2
+
+// ADC variables
+
+#define ADCx								ADC1
+
+#define ADCx_CHANNEL						ADC_CHANNEL_3
+#define ADCx_PORT							GPIOA
+#define ADCx_PORT_CLK_ENABLE				__GPIOA_CLK_ENABLE
+#define ADCx_PORT_CLK_DISABLE				__GPIOA_CLK_DISABLE
+
+#define ADCx_CLK_ENABLE						__ADC1_CLK_ENABLE
+#define ADCx_CLK_DISABLE					__ADC1_CLK_DISABLE
+
+// UART/USART variables
+
+#endif /* INC_CONFIG_H_ */
