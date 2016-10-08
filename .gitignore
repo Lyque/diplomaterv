@@ -3,3 +3,9 @@
 Projects/Eclipse/*/Release
 Projects/Eclipse/*/Debug
 Projects/Eclipse/*/.settings
+
+
+# Temporary files
+
+*~
+
