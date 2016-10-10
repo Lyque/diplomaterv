@@ -1,4 +1,4 @@
-# LwIP jegyzet
+# LwIP jegyzet (ST [UM1713])
 
 ## Támogatott protokollok
 
@@ -54,4 +54,51 @@
         - Az operációs rendszer nem engedi el az erőforrást egészen addig, amíg a socket-et le nem zárják,
             - Ez akkor is bekövetkezik, ha pl. a _connect_ elhasal, és újrapróbálkozunk,
             - (Talán emiatt volt, hogy a V-Rep-ben nem megfelelő leállítás esetén nem tudtuk egyből elölről kezdeni a tesztelést?),
-        - 
+        - Forrás: [Wikipedia](https://en.wikipedia.org/wiki/Berkeley_sockets),
+
+## TCP/IP model rétegei
+
+További források:
+- [Omnisecu](http://www.omnisecu.com/tcpip/tcpip-model.php),
+- [Microsoft](https://technet.microsoft.com/en-us/library/cc958821.aspx).
+
+1. Link layer:
+    - Más forrásokban Network Access Layer,
+    - Definiálja, hogy az adat fizikailag hogyan kell haladjon a hálózati csatornán (electormos/optikai jelek),
+2. Internet layer:
+    - Független hálózatokat köt össze,
+    - Az adatot csomagokba rendezi (IP datagrams),
+        - Tartalmazza a forrás és a cél címét (logikai vagy IP cím),
+    - Felelős az IP datagramok továbbításáért,
+    - Feladata:
+        - Csomagok hálózatra illesztése,
+        - Csomagok független továbbítása a cél felé,
+        - A csomagok (mivel csomagkapcsolt kommunikáció) különböző sorrendben érkezhetnek a célhoz,
+            - A felsőbb rétegek feladata a csomagok sorbarendezése,
+    - Fő protokolljai:
+        - IP,
+        - ICMP,
+        - ARP,
+        - RARP,
+        - IGMP,
+3. Transport layer:
+    - A forrás és a cél host közötti kommunikációért felelős,
+    - Definiálja a szolgáltatás szintjét és állapotát az adattovábbítás során,
+    - Fő protokolljai:
+        - __TCP__,
+        - UDP,
+4. Application layer:
+    - Process-to-process kommunikáció,
+    - Fő protokolljai:
+        - __HTTP__,
+        - Telnet,
+        - SSH,
+        - FTP,
+        - TFTP,
+        - SNMP,
+        - SMTP,
+        - DHCP,
+        - RDP,
+        - stb.
+
+## 
