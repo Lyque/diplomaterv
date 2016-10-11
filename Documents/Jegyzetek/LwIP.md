@@ -1,5 +1,6 @@
 # LwIP jegyzet (ST [UM1713])
 
+
 ## Támogatott protokollok
 
 - __IPv4__,
@@ -13,6 +14,7 @@
 - DHCP,
 - PPP (Point to Point Protocol),
 - ARP (Address Resolution Protocol).
+
 
 ## Három programozási interfész
 
@@ -56,11 +58,13 @@
             - (Talán emiatt volt, hogy a V-Rep-ben nem megfelelő leállítás esetén nem tudtuk egyből elölről kezdeni a tesztelést?),
         - Forrás: [Wikipedia](https://en.wikipedia.org/wiki/Berkeley_sockets),
 
+
 ## TCP/IP model rétegei
 
 További források:
 - [Omnisecu](http://www.omnisecu.com/tcpip/tcpip-model.php),
 - [Microsoft](https://technet.microsoft.com/en-us/library/cc958821.aspx).
+
 
 1. Link layer:
     - Más forrásokban Network Access Layer,
@@ -101,4 +105,81 @@ További források:
         - RDP,
         - stb.
 
-## 
+
+## LwIP mappa rendszer
+
+- __doc:__ 
+    - a dokumentációt tartalmazza,
+- __src:__
+    - az LwIP stack forrásfájljait tartalmazza,
+- __api:__
+    - a Netconn és a Socket API fájljait tartalmazza,
+- __core:__
+    - az LwIP alapfájljait tartalmazza,
+- __include:__
+    - az LwIP include fájljait tartalmazza,
+- __netif:__
+    - a Network interfész fájlokat tartalmazza,
+- __system:__
+    - az  LwIP hardware specifikus fájljait tartalmazza,
+- __arch:__
+    - STM32 architektúra fájljai tartalmazza,
+- __OS:__
+    - az LwIP hardware specifikus fájljait tartalmazza operációs rendszer használata esetén,
+- __noOS:__
+    - az LwIP hardware specifikus fájljait tartalmazza standalone használat esetén.
+
+
+## LwIP API áttekintés
+
+Három féle API áll rendelkezésre:
+- Raw API,
+- Netconn API,
+- Socket API.
+
+
+### Raw API
+
+- Az LwIP API-ra alapszik,
+- Callback-alapú alkalmazás fejlesztéséhez,
+- A felhasználónak kell callback függvényeket regisztálnia a különböző eseményekhez (TCP_Sent, TCP_error, stb..).
+- A callback függvényt az LwIP core layer hívja meg, ha az esemény bekövetkezik,
+
+
+#### TCP Raw API függvények
+
+- TCP kapcsolat felépítés:
+    - tcp_new,
+    - tcp_bind,
+    - tcp_listen,
+    - tcp_accept,
+    - tcp_accepted,
+    - tcp_connect,
+- TCP adat küldése:
+    - tcp_write,
+    - tcp_sent,
+    - tcp_output,
+- TCP adat fogadása:
+    - tcp_recv,
+    - tcp_recved,
+- Alkalmazás polling:
+    - tcp_poll,
+- Kapcsolat lezárása és megszakítása:
+    - tcp_close,
+    - tcp_err,
+    - tcp_abort.
+
+
+#### UDP Raw API függvények
+
+- udp_new,
+- udp_remove,
+- udp_bind,
+- udp_connect,
+- udp_disconnect,
+- udp_send,
+- udp_recv.
+
+
+### Netconn API
+
