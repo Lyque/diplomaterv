@@ -234,3 +234,17 @@ Három féle API áll rendelkezésre:
 - __tot_len:__ a pbuf hosszát és az összes, láncban lévő pbuf hosszát Tartalmazza,
 - __ref:__ 4-bites számláló, ami megmutatja, hány pointer mutat a pbuf-ra. A pbuf csak akkor törölhető a memóriából, ha ez a számláló nulla.
 - __flags:__ 4-bit, ami mutatja a pbuf típusát.
+
+
+### Pbuf típusok
+
+- PBUF_POOL:
+    - pbuf foglalás egy közös, előre definiált méretű készletből történik. A foglalandó adatmérettől függően egy vagy több felfűzött pbuf szükséges.
+- PBUF_RAM:
+    - pbuf foglalás dinamikusan történik a memóriában (egy folytonos memóriaterület az egész pbuf számára),
+- PBUF_ROM:
+    - nem szükséges területfoglalás az adatnak: a pbuf payload pointer a ROM-ban lévő adatra mutat, ami csak konstans adat küldésre használható.
+
+
+- Csomag fogadására a PBUF_POOL megfelelő. Lehetővé teszi a gyors memóriafoglalást a beérkező adat számára. Az adat méretétől függően egy vagy több felfűzött pbuf foglalás történik. A PBUF_RAM nem megfelelő a csomagok fogadására, mert a dinamikus memóriafoglalás késleltetéssel jár, és memóriatöredezettséghez vezet.
+- Csomagok küldéséhez a felhasználó választhatja ki az adathoz leginkább megfelelő pbuf típust.
