@@ -183,3 +183,54 @@ Három féle API áll rendelkezésre:
 
 ### Netconn API
 
+- Magas szintű szekvenciális API,
+- Blokkoló open-read-write paradigmákat használ,
+- Helyes működéshez szükséges multithread-et támogató operációs rendszer.
+
+
+#### Netconn API függvények
+
+- netconn_new,
+- netconn_delete,
+- netconn_bind,
+- netconn_connect,
+- netconn_send,
+- netconn_recv,
+- netconn_listen,
+- netconn_accept,
+- netconn_write,
+- netconn_close.
+
+
+### Socket API
+
+- BSD socket API,
+- A Netconn API fölé épült.
+
+
+### Socket API függvények
+
+- soocket,
+- bind,
+- listen,
+- connect,
+- accept,
+- read,
+- write,
+- close.
+
+
+## LwIP buffer menedzsment
+
+- Az LwIP pbuf adatstruktúrát használ a csomagok bufferelésére,
+- A pbuf lehetővé teszi a dinamikus memóriafoglalást a csomgaok tárolására,
+- A pbuf láncba fűzhető, így lehetővé téve a csomagok több pbuf-ban történő kiterjesztését,
+
+![alt text](./01_pbuf_structure.png "Pbuf structure")
+
+- __next:__ a következő pbuf-ra mutató pointert tartalmazza,
+- __payload:__ a csomag adat-ra mutató pointert tartalmazza,
+- __len:__ a pbuf által tartalmazott adat hosszát tartalmazza,
+- __tot_len:__ a pbuf hosszát és az összes, láncban lévő pbuf hosszát Tartalmazza,
+- __ref:__ 4-bites számláló, ami megmutatja, hány pointer mutat a pbuf-ra. A pbuf csak akkor törölhető a memóriából, ha ez a számláló nulla.
+- __flags:__ 4-bit, ami mutatja a pbuf típusát.
