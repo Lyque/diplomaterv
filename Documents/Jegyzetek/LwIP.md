@@ -226,7 +226,7 @@ Három féle API áll rendelkezésre:
 - A pbuf lehetővé teszi a dinamikus memóriafoglalást a csomgaok tárolására,
 - A pbuf láncba fűzhető, így lehetővé téve a csomagok több pbuf-ban történő kiterjesztését,
 
-![alt text](./01_pbuf_structure.png "Pbuf structure")
+![pbuf_structure](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/01_pbuf_structure.PNG "Pbuf structure")
 
 - __next:__ a következő pbuf-ra mutató pointert tartalmazza,
 - __payload:__ a csomag adat-ra mutató pointert tartalmazza,
