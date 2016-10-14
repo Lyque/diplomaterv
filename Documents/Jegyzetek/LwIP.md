@@ -223,7 +223,7 @@ Három féle API áll rendelkezésre:
 ## LwIP buffer menedzsment
 
 - Az LwIP pbuf adatstruktúrát használ a csomagok bufferelésére,
-- A pbuf lehetővé teszi a dinamikus memóriafoglalást a csomgaok tárolására,
+- A pbuf lehetővé teszi a dinamikus memóriafoglalást a csomagok tárolására,
 - A pbuf láncba fűzhető, így lehetővé téve a csomagok több pbuf-ban történő kiterjesztését,
 
 ![pbuf_structure](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/01_pbuf_structure.PNG "Pbuf structure")
@@ -232,19 +232,93 @@ Három féle API áll rendelkezésre:
 - __payload:__ a csomag adat-ra mutató pointert tartalmazza,
 - __len:__ a pbuf által tartalmazott adat hosszát tartalmazza,
 - __tot_len:__ a pbuf hosszát és az összes, láncban lévő pbuf hosszát Tartalmazza,
-- __ref:__ 4-bites számláló, ami megmutatja, hány pointer mutat a pbuf-ra. A pbuf csak akkor törölhető a memóriából, ha ez a számláló nulla.
+- __ref:__ 4-bites számláló, ami számolja, hány pointer mutat a pbuf-ra. A pbuf csak akkor törölhető a memóriából, ha ez a számláló nulla.
 - __flags:__ 4-bit, ami mutatja a pbuf típusát.
 
 
 ### Pbuf típusok
 
-- PBUF_POOL:
+- __PBUF_POOL:__
     - pbuf foglalás egy közös, előre definiált méretű készletből történik. A foglalandó adatmérettől függően egy vagy több felfűzött pbuf szükséges.
-- PBUF_RAM:
+- __PBUF_RAM:__
     - pbuf foglalás dinamikusan történik a memóriában (egy folytonos memóriaterület az egész pbuf számára),
-- PBUF_ROM:
+- __PBUF_ROM:__
     - nem szükséges területfoglalás az adatnak: a pbuf payload pointer a ROM-ban lévő adatra mutat, ami csak konstans adat küldésre használható.
 
 
-- Csomag fogadására a PBUF_POOL megfelelő. Lehetővé teszi a gyors memóriafoglalást a beérkező adat számára. Az adat méretétől függően egy vagy több felfűzött pbuf foglalás történik. A PBUF_RAM nem megfelelő a csomagok fogadására, mert a dinamikus memóriafoglalás késleltetéssel jár, és memóriatöredezettséghez vezet.
+
+- Csomag fogadására a PBUF_POOL felel meg. Lehetővé teszi a gyors memóriafoglalást a beérkező adat számára. Az adat méretétől függően egy vagy több felfűzött pbuf foglalás történik. A PBUF_RAM nem megfelelő a csomagok fogadására, mert a dinamikus memóriafoglalás késleltetéssel jár, és memóriatöredezettséghez vezet.
 - Csomagok küldéséhez a felhasználó választhatja ki az adathoz leginkább megfelelő pbuf típust.
+
+
+### Pbuf menedzsment API
+
+- Az LwIP tartalmaz egy külön API-t a pbuf-ok kezeléséhez (pbuf.c).
+
+
+#### Pbuf API függvények
+
+- pbuf_alloc,
+- pbuf_realloc,
+- pbuf_ref,
+- pbuf_free,
+- pbuf_clen,
+- pbuf_cat,
+- pbuf_chain,
+- pbuf_dechain,
+- pbuf_header,
+- pbuf_copy_partial,
+- pbuf_take,
+- pbuf_coalesce,
+- pbuf_mamcmp,
+- pbuf_memfind,
+- pbuf_strstr.
+
+
+## LwIP használata az Ethernet HAL driver segítségével
+
+- Két implementáció:
+    - Operációs rendszer nélkül (standalone),
+    - Operációs rendszerrel,
+- Mindkét implementációnál az _ethernetif.c_ köti össze az LwIP-t az STM32 Ethernet hálózati interfészével,
+- Az Ethernet kezelő változót (ETH_HandleTypeDef) ls az Ethernet DMA leíró válltozót (ETH_DMADescTyoeDef), illetve az Rx/Tx buffereket szintén az _ethernetif.c_ fájlban célszerű deklarálni.
+
+
+#### Ethernet interfész függvények
+
+- low_level_init,
+- low_level_output,
+- low_level_input,
+- ethernetif_init,
+- ethernetif_input.
+
+
+### Különbségek standalone és RTOS használata esetén
+
+- Az ethernetif_input() függvény használata különbözik a két alkalmazás esetén:
+    - Standalone alkalmazás esetén a függvényt a main hurokba kell helyezni, és pollingolni kell az érkező adatokat,
+    - RTOS alkalmazásokban egy külön thread-ben kell várakozni egy szemaforra. A szemafort az Ethernet perifária által generált interrupt szolgáltatja.
+
+
+- Az _ethernetif.c_ implementálja a periféria MSP rutinjait:
+    - Alacsony szintű inicializálás (GPIO, CLK, stb.),
+    - Interrupt callback függvények létrehozása.
+
+- RTOS esetén a _sys_arch.c_ fájlt is használni kell:
+    - Ebben a fájlban történik az üzenetek átadásának implementációja (mailbox, szemforok).
+
+
+## LwIP konfigurálása
+
+- Az LwIP tartalmaz egy _lwipopts.h_ fájlt, ami lehetővé teszi a stack konfigurálását,
+- Nem szükséges mindent külön beállítani, a beállítatlan értékek az alapértelmezett értéküket veszik fel (_opt.h_-ban levő értékek).
+
+
+### Modul támogatás
+
+- A felhasználó kiválaszthatja az alkalmazásához szükséges modulokat, így optimalizálva a kódméretet.
+
+
+### Memória konfiguráció
+
+- Az LwIP rugalmas memóriamenedzsmentet tesz lehetővé,
