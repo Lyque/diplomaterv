@@ -322,3 +322,65 @@ Három féle API áll rendelkezésre:
 ### Memória konfiguráció
 
 - Az LwIP rugalmas memóriamenedzsmentet tesz lehetővé,
+- Fix méretű statikus memóriaterületet foglal le,
+- Ezt a memóriaterületet darabolja fel a többféle adatstruktúra számára, amit az LwIP használ,
+- Minden memóriakészlet konfigurálható úgy, hogy fix számú adatstruktúrát tároljon,
+    - Ezt a sázmot az _lwipopts.h_ fájlban lehet megváltoztatni,
+
+
+#### LwIP memória konfiurációs értékek
+
+- MEM_SIZE,
+- MEMP_NUM_PBUF,
+- MEMP_NUMUDP_PCB,
+- MEMP_NUMTCP_PCB,
+- MEMP_NUM_TCP_PCB_LISTEN,
+- MEMP_TCP_SEG,
+- PBUF_POOL_SIZE,
+- PBUF_POOL_BUFSIZE,
+- TCP_MSS,
+- TCP_SND_BUF,
+- TCP_SND_QUEUELEN,
+- TCP_WND.
+
+
+## Alkalmazás fejlesztése LwIP stack-kel
+
+
+### Raw API használata standalone módban
+
+
+#### Működési modell
+
+- Standalone módban a működés a folyamatos pollingoláson alapszik,
+- Egy csomad érkezésekor először az Ethernet driver bufferéből az LwIP bufferébe másoljuk az adatot,
+- A leggyorsabb működéshez az LwIP buffereket a pool-ból célszerű allokálni,
+- Amint a fájl másolás kész, az LwIP feldolgozza azt,
+- Az LwIP az alkalmazás réteggel callback függvények segítségével kommunikál,
+    - Ezeket a függvényeket még a kommunikációs folyamat előtt hozzá kell rendelni,
+
+![standalone_application_model](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/02_standalone_application_model.PNG "Standalone application model")
+
+- TCP alkalmazáshoz a következő callback függvényeket kell hozzárendelni AZ LwIP-hez:
+    - __TCP_accept:__ bejövő TCP kapcsolódási esemény,
+    - __TCP_recev:__ bejövő adatcsomag esemény,
+    - __TCP_sent:__ sikeres adatküldés jelzése,
+    - __TCP_err:__ TCP hiba jelzése,
+    - __TCP_poll:__ periodikus callback (minden 1-2 másodpercben) az alkalmazás pollingolására.
+
+
+### Netconn és Socket API használata RTOS-sel
+
+
+#### Működési modell
+
+- RTOS esetén a működés valamelyest változik,
+- A TCP/IP stack és az alkalmazás külön szálon futnak,
+- Az alkalmazás és a stack API hívásokon kereszütl kommunikálnak,
+    - Az API hívások az RTOS mailbox mechanizmusát használja a folyamatok közti kommunikációra,
+- Az API hívások blokkoló hívások,
+    - Az alkalmazás szála addig blokkolódik, amíg válasz nem érkezik a stack-től,
+- A hálózati thread felelős, hogy a driver-től kapott csomagokat továbbítsa a TCP/IP stack felé (RTOS mailbox segítségével),
+    - A csomag érkezéséről az Ethernet interrupt értesíti.
+
+![lwip_operation_model_with_rtos](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/03_lwip_operation_model_with_rtos.PNG "LwIP operation model with RTOS")
