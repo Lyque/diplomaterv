@@ -384,3 +384,40 @@ Három féle API áll rendelkezésre:
     - A csomag érkezéséről az Ethernet interrupt értesíti.
 
 ![lwip_operation_model_with_rtos](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/03_lwip_operation_model_with_rtos.PNG "LwIP operation model with RTOS")
+
+
+## Alkalmazás beállítások
+
+
+### PHY interfész beállításai
+
+- Az Ethernet periféria egy külső PHY-hez csatlakozik, ami megvalósítja a kommunikáció fizikai rétegét,
+- A PHY regisztereinek definiálása a HAL konfigurációs fájlban találhatóak (_stm32f4xx_hal_conf.h_),
+- A PHY működhet MII vagy RMII módban,
+    - A mód kiválasztásához a _MediaInterface_ paramétert kell beállítani az Init structure paraméterezésekor,
+
+
+#### MAC és IP cím beállítások
+
+- Az alapértelmezett MAC cím _00:00:00:00:00:02_,
+    - Megváltoztatásához az _stm32f4xx_hal_conf.h_-ban szereplő megfelelő byte-okat kell átírni,
+- Az alapértelmezett IP cím _192.168.0.10,
+    - Megváltoztatásához az _stm32f4xx_hal_conf.h_-ban szereplő megfelelő byte-okat kell átírni.
+    - Ha az alkalmazás DHCP-re van konfigurálva, de nem talál DHCP szervert, akkor az IP cím automatikusan a statikus IP-re lesz beállítva.
+
+
+## SSI (Server Side Includes)
+
+- Az SSI egy módszer, hogy dinamik adatot ágyazzunk be HTML kódba,
+- Ezt a HTML kódba való speciális tag-ek elhelyezésével érhetjük el,
+    - A tag-ek az alábbi példához hasonlóan néznek ki:
+    ```
+    <!--#tag-->
+    ```
+
+
+## CGI (Common Gateway Interface)
+
+- A CGI egy megszokott web technika a klienstől jövő kérések feldolgozására szerver oldalon,
+- Az LwIP csak a GET metódust támogatja, és 16 paraméterig használható,
+- A CGI kezelő függvény szerver oldalon fut le és egy HTML file-al tér vissza, amit a HHTP szerver továbbít a kliens felé.
