@@ -289,13 +289,13 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
 	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-    osDelay(100);
+    osDelay(200);
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-    osDelay(100);
+    osDelay(200);
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-	osDelay(100);
+	osDelay(200);
 	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-	osDelay(100);
+	osDelay(200);
   }
   /* USER CODE END 5 */ 
 }

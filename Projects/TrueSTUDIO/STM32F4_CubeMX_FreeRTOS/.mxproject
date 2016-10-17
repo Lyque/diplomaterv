@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/Lyque/Atollic/TrueSTUDIO/ARM_workspace_6.0/STM32F4_CubeMX_FreeRTOS/Inc
+HeaderPath=C:/Users/Lyque/My Tresors/Diplomaterv/Github/Projects/TrueSTUDIO/STM32F4_CubeMX_FreeRTOS/Inc
 HeaderFiles=ffconf.h;bsp_driver_sd.h;fatfs.h;FreeRTOSConfig.h;lwip.h;lwipopts.h;ethernetif.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;mxconstants.h;
-SourcePath=C:/Users/Lyque/Atollic/TrueSTUDIO/ARM_workspace_6.0/STM32F4_CubeMX_FreeRTOS/Src
+SourcePath=C:/Users/Lyque/My Tresors/Diplomaterv/Github/Projects/TrueSTUDIO/STM32F4_CubeMX_FreeRTOS/Src
 SourceFiles=ffconf.h;bsp_driver_sd.h;fatfs.h;FreeRTOSConfig.h;lwip.h;lwipopts.h;ethernetif.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;mxconstants.h;bsp_driver_sd.c;fatfs.c;freertos.c;lwip.c;ethernetif.c;stm32f4xx_it.c;stm32f4xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]
