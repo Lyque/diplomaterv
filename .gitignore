@@ -5,6 +5,13 @@ Projects/Eclipse/*/Debug
 Projects/Eclipse/*/.settings
 
 
+# TrueSTUDIO build directories
+
+Projects/TrueSTUDIO/*/Release
+Projects/TrueSTUDIO/*/Debug
+Projects/TrueSTUDIO/*/.settings
+
+
 # Temporary files
 
 *~
