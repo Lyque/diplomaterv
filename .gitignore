@@ -16,14 +16,14 @@ Projects/TrueSTUDIO/*/.settings
 
 *~
 
-# Latex copmile files
+# LaTeX compile files
 
-*Latex_diplomaterv/*.aux
-*Latex_diplomaterv/*.tmp
-*Latex_diplomaterv/*.log
-*Latex_diplomaterv/*.bbl
-*Latex_diplomaterv/*.blg
-*Latex_diplomaterv/*.out
-*Latex_diplomaterv/*.toc
-*Latex_diplomaterv/*.tps
-*Latex_diplomaterv/*.thm
+**/LaTeX_diplomaterv/*.aux
+**/LaTeX_diplomaterv/*.tmp
+**/LaTeX_diplomaterv/*.log
+**/LaTeX_diplomaterv/*.bbl
+**/LaTeX_diplomaterv/*.blg
+**/LaTeX_diplomaterv/*.out
+**/LaTeX_diplomaterv/*.toc
+**/LaTeX_diplomaterv/*.tps
+**/LaTeX_diplomaterv/*.thm
