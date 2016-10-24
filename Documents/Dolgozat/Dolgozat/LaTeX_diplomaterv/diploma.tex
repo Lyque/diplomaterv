@@ -20,16 +20,18 @@
 \usepackage{setspace}  % Ettol a tablazatok, abrak, labjegyzetek maradnak 1-es sorkozzel!
 \usepackage[hang]{caption}
 \usepackage{hyperref}
+\usepackage[euler]{textgreek}
 
 %--------------------------------------------------------------------------------------
 % Main variables
 %--------------------------------------------------------------------------------------
-\newcommand{\vikszerzo}{Bódis-Szomorú András}
-\newcommand{\vikkonzulens}{dr.~Konzulens Elemér}
-\newcommand{\vikcim}{Elektronikus terelõk}
-\newcommand{\viktanszek}{Méréstechnika és Információs Rendszerek Tanszék}
+\newcommand{\vikszerzo}{Bálint Ádám}
+\newcommand{\vikkonzulens}{Szabó Zoltán}
+\newcommand{\cegkonzulens}{Mikó Gyula}
+\newcommand{\vikcim}{Operációs rendszerek összehasonlítása mikrovezérlõs rendszerekben}
+\newcommand{\viktanszek}{Automatizálási és Alkalmazott Informatikai Tanszék}
 \newcommand{\vikdoktipus}{Diplomaterv}
-\newcommand{\vikdepartmentr}{Bódis-Szomorú András}
+\newcommand{\vikdepartmentr}{Bálint Ádám}
 
 %--------------------------------------------------------------------------------------
 % Page layout setup
@@ -110,7 +112,6 @@
 \author{\vikszerzo}
 \title{\viktitle}
 \includeonly{
-	guideline,%
 	project,%
 	titlepage,%
 	declaration,%
@@ -140,7 +141,6 @@ aboveskip=10pt}
 %--------------------------------------------------------------------------------------
 \begin{document}
 \singlespacing
-\include{guideline}
 \include{project}
 
 \pagenumbering{arabic}

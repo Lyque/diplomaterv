@@ -16,3 +16,14 @@ Projects/TrueSTUDIO/*/.settings
 
 *~
 
+# Latex copmile files
+
+*Latex_diplomaterv/*.aux
+*Latex_diplomaterv/*.tmp
+*Latex_diplomaterv/*.log
+*Latex_diplomaterv/*.bbl
+*Latex_diplomaterv/*.blg
+*Latex_diplomaterv/*.out
+*Latex_diplomaterv/*.toc
+*Latex_diplomaterv/*.tps
+*Latex_diplomaterv/*.thm
