@@ -1,0 +1,2 @@
+# Általánosan használt liszenszek
+
