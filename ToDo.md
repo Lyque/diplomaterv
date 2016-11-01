@@ -13,9 +13,13 @@
 
 # Diplomaterv ToDo
 
+Bővebben az _Asana_ projektkezelő szoftverben.
+
 ## Dokumentum
 
-- Latex sablon átalakítása.
+- GIT repo létrehozása: __(DONE)__
+    - Dokumentumok rendezése (github/cloud) __(DONE)__
+- Latex sablon átalakítása. __(DONE)__
 
 ## Szoftver
 
@@ -29,8 +33,6 @@
 
 ### STM32F4
 
-- GIT repo létrehozása: __(DONE)__
-    - Dokumentumok rendezése (github/cloud) __(DONE)__
 - IT kezelés megismerése,
 - SD Card driver élesztése FatFS-hez,
 - Webszerver felélesztése.
