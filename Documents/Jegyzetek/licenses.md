@@ -9,10 +9,14 @@
 
 ## Zárt forráskódú szoftver
 
-Zárt forráskódú szoftver esetén a forráskód a gyártó
+Zárt forráskódú szoftver esetén a forráskód kizárólag a gyártó/fejlesztő kezében marad. A szoftver használatáért általában valamekkora összeget kell fizetni, amely gyakran magában foglalja a fellépő problémák megoldásában való segítségnyújtást is. 
+Természetesen a zárt forráskód nem vonja kötelezően maga után, hogy a felhasználónak fizetnie kell a szoftver használatáért. Sok gyártó a termékét ingyen elérhetővé teszi (freeware). Ilyen esetben a jövedelemszerzési felhasználásból és/vagy a segítségnyújtásból származik a fejlesztést fedező bevétel.
+A gyártó a felhasználás feltételeit saját maga szabhatja meg, így ebben az esetben nem lehet általános elemzést végezni a licencekkel kapcsolatban.
 
 
 ## Nyílt forráskódú szoftver
+
+A szoftverek másik nagy csoportja a nyílt forráskódú szoftverek. Ekkor a forráskód publikusan elérhető. A nyílt forráskódú szoftverek esetén is lehetőség van egyéni licenc használatára, azonban a szoftverek többségénél elterjedt, általánosan használt licencekkel találkozunk.
 
 
 ### Apache Licence 2.0
