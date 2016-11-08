@@ -2,7 +2,8 @@
 
 - Zárt forráskódú szoftver,
 - Nyílt forráskódú szoftver:
-    - Apache Licence 2.0,
+    - MIT License,
+    - Apache License 2.0,
     - BSD,
     - GNU GPLv2,
     - GNU GPLv3.
@@ -20,7 +21,36 @@ A gyártó a felhasználás feltételeit saját maga szabhatja meg, így ebben a
 A szoftverek másik nagy csoportját alkotják a nyílt forráskódú szoftverek. Ekkor a forráskód publikusan elérhető. A nyílt forráskódú szoftverek esetén is lehetőség van egyéni licenc használatára, azonban a szoftverek többségénél elterjedt, általánosan használt licencekkel találkozunk.
 
 
-### Apache Licence 2.0
+### MIT License
+
+Az MIT licenc a legegyzerűbb licencek egyike. A licenc alá eső forráskód szabadon másolható, módosítható, terjeszthető, akár más licenc alá helyezhető. 
+
+```
+The MIT License (MIT)
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a 
+copy of this software and associated documentation files (the "Software"), 
+to deal in the Software without restriction, including without 
+limitation the rights to use, copy, modify, merge, publish, distribute, 
+sublicense, and/or sell copies of the Software, and to permit persons to 
+whom the Software is furnished to do so, subject to the following 
+conditions:
+
+The above copyright notice and this permission notice shall be included 
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+
+### Apache License 2.0
 
 
 ```
@@ -651,7 +681,9 @@ General Public License instead of this License.
 
 ### GNU GPLv3
 
+A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami a megérthetőséget hivatott szolgálni. 
 
+A tartalmi változtatások megcélozzák a más licencekkel való használat megkönnyítését, a licenccel védett szoftverhez járó felhasználó termék módosított programmal való használatának biztosítását (tivoizáció[lábjegyzet] elkerülése), jobban specifikálja a jogok elvesztését, illetve azok visszaszerzésének lehetőségeit, illetve megjelenik a _megkülönböztető_ licenc definíciója, ami nem tartalmazza, vagy megtiltja valamely, az eredeti licencben foglalt jog gyakorlását.
 
 ```
 TERMS AND CONDITIONS
@@ -1240,25 +1272,14 @@ GNU Lesser General Public License instead of this License. But first,
 please read <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 ```
 
-## Összeférhetőségi táblázat
-
-|            | 3-clause BSD | 2-clause BSD | Apache 2.0 | GNU GPLv2 | GNU GPLv3 |
-|:----------:|:------------:|:------------:|:----------:|:---------:|:---------:|
-|3-clause BSD|       X      |              |            |           |           |
-|2-clause BSD|              |       X      |            |           |           |
-| Apache 2.0 |              |              |      X     |           |           |
-|  GNU GPLv2 |              |              |            |     X     |           |
-|  GNU GPLv3 |              |              |            |           |     X     |
-
-
 ## Felhasznált források
 
-- [Choose a licence](http://choosealicense.com/licenses/)
+- [Choose a license](http://choosealicense.com/licenses/)
 - [GNU open source](https://www.gnu.org/philosophy/categories.html)
 - [GNU licenses](https://www.gnu.org/licenses/license-list.html)
 - [GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 - [GNU GPLv3](https://www.gnu.org/licenses/gpl.html)
 - [opensource](https://opensource.com/resources/what-open-source)
 - [spdx](https://spdx.org/licenses/BSD-4-Clause.html)
-- [opensource licences](https://opensource.org/licenses/alphabetical)
+- [opensource licenses](https://opensource.org/licenses/alphabetical)
 - [linfo](http://www.linfo.org/bsdlicense.html)
