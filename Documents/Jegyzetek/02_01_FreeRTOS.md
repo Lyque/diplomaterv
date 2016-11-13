@@ -81,7 +81,7 @@ A FreeRTOS három alap kommunikációs struktúrát kínál a felhasználónak:
 ### Sorok (queues)
 
 A sorok fix méretű adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzők a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként működnek (First In First Out), bár a FreeRTOS lehetővé teszi a sor elejére való írást is.
-A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban. Olvasáskor a paraméterként átadott memóriacímre kerül átmásolásra, ezért figyelni kell arra, hogy az átadott változó által elfoglalt memória legalább akkora legyen, mint a sor által tartalmazott adattípus mérete. A FreeRTOS API kétféle függvényt használ olvasásra:
+A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban. Olvasáskor a paraméterként átadott memóriacímre kerül átmásolásra, ezért figyelni kell arra, hogy az átadott változó által elfoglalt memória legalább akkora legyen, mint a sor által tartalmazott adattípus mérete. Amennyiben a továbbítandó adattípus már nagynak tekinthető, akkor érdemes a memóriára mutató pointereket elhelyezni a sorban, ezzel csökkentve a RAM kihasználtságát (ekkor viszont különösen figyelni kell arra, hogy a kijelölt memóriaterület tolajdonosa egyértelmű legyen, vagyis ne történjen különböző taszkokból módosítás egyidőben, illetve biztosítani kell a memóriaterüet érvényességét). A FreeRTOS API kétféle függvényt használ olvasásra:
 - Az egyik automatikusan eltávolítja a kiolvasott elemet a sorból (__xQueueReceive()__),
 - A másik kiolvassa a soronkövetkező elemet, de azt nem távolítja el a sorból(__xQueuePeek()__).
 
@@ -141,7 +141,11 @@ Két felhasználása elterjedt a számláló szemaforoknak:
 
 ### Mutexek
 
+Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erőforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erőforrás szabad, akkor az igénylő taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erőforrással való munkát. A mutex-et a lehető legkorábban (az erőforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
 
+Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
+
+A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor nem.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerű implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.] 
 
 
 ## Megszakítás-kezelés
