@@ -145,8 +145,43 @@ Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás 
 
 Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
 
-A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor nem.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerű implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.] 
+A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor implementációjából hiányzik.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerű implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.] 
 
 
 ## Megszakítás-kezelés
+
+Beágyazott rendszereknél gyakran kell a környezettől származó eseményekre reagálni (például adat érkezése valamely kommunikációs interfészen). Az ilyen események kezelésekor a megszakítások alkalmazása gyakran elengedhetetlen. 
+
+Megszakítás használata esetén figyelni kell arra, hogy a megszakítási rutinokban csak _FromISR_-re végződő API függvényeket hívhatunk. Ellenkező esetben nem várt működés következhet be (blokkoljuk a megszakítási rutint, ami az alkalmazás fagyásához vezethet; kontextus-váltást okozunk, amiből nem térünk vissza, így a megszakítási rutinból sosem lépünk ki, stb.). 
+
+A FreeRTOS ütemezője a (STM32-re épülő rendszerekben) a SysTick interruptot használja az ütemező periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására Futásra kész állapotba kerül, akkor vagy a következő ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszer az ütemező futtatására.
+
+Az alacsonyabb prioritású megszakítások szintén nem tudnak érvényre jutni, így azok bekövetkezéséről nem kapunk értesítést (az első beérkező, alacsonyabb prioritású megszakítás jelző bitje bebillen az esemény hatására, de amennyiben több is érkezik a magasabb prioritású megszakítási rutin futása alatt, úgy azok elvesznek). 
+Az említett problémák végett a megszakítási rutint a lehető legrövidebb idő alatt be kell fejezni. 
+
+### Késleltetett megszakítás-kezelés
+
+A megszakítási rutint a lehető legrövidebb idő alatt el kell hagyni, emiatt célszerű a kevésbé fontos műveleteket egy kezelő taszkban megvalósítani. A FreeRTOS a szemaforokon keresztül biztosít lehetőséget a megszakítás és taszk szinkronizációjára.
+
+A megszakítás hatására a megszakítási rutinban csak szükséges lépéseket végezzük el (például eseményjelző bitek törlése), majd egy szemaforon keresztül jelzi a feldolgozó taszknak az esemény bekövetkeztét. Ha a feldolgozás időkritikus, akkor a feldolgozó szálhoz rendelt magas prioritással biztosítható, hogy az éppen futó taszkot preemtálja. Ekkor a megszakítási rutin végén az ütemező meghívásával a visszatérés utána azonnal feldolgozásra kerül az esemény.
+
+Az eseményt kezelő taszk blokkoló _take_ utasítással várakozik Blokkolt állapoban a szemafor érkezésére. A jelzés hatására Futásra kész állapotba kerül, ahonnan az ütemező (az éppen futó taszkot preemtálva) Futó állapotba mozgatja. Az esemény feldolgozását követően újra meghívja a blokkoló _take_ utasítást, így újból Blokkolt állapotba kerül az újabb esemény bekövetkezéséig.
+
+Todo: Példa
+
+
+### Interruptok egymásba ágyazása
+
+Az STM32 mikrokontrollerek lehetővé teszik prioritások hozzárendelését a megszakításokhoz. Ezáltal létrejöhet olyan állapot, amikor egy magasabb prioritású megszakítás érkezik egy alacsonyabb szintű megszakítási rutin futása közben. Ekkor a magasabb prioritású megszakítás késleltetés nélkül érvényre jut, és a magasabb prioritású megszakítási rutin befejeztével az alacsony prioritású folytatódik.
+
+A FreeRTOS rendszer konfigurációs fájlában (_FreeRTOSConfig.h_) beállítható azon legmagasabb prioritás, amihez a FreeRTOS hozzáférhet. Ezáltal a megszkaításoknak két csoportja adódik:
+- A FreeRTOS által kezelt megszakítások,
+- A FreeRTOS-tól teljesen függetlem megszakítások.
+
+A FreeRTOS által kezelt prioritások kritikus szakaszba lépéskor letiltásra kerülnek, így azok nem szakíthatják meg az atomi utasításként futtatandó kódrészletet. Viszont a megszakítások ezen csoportja használhatja a _FromISR_-re végződő FreeRTOS API függvényeket.
+
+A FreeRTOS-tól független megszakítások kezelése teljes mértékben a fejlesztő feladata. Az operációs rendszer nem tudja megakadályozni a futásukat, így a kritikus szakaszban is képesek futni. A kiemelkedően időkritikus kódrészleteket célszerű ezekben a megszakítási turinokban megvalósítani (például motorvezérlés). A FreeRTOS-tól független megszakítási rutinokban nem szabad API függvényeket használni!
+
+
+## Erőforrás-kezelés
 
