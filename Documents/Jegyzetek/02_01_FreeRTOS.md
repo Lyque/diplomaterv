@@ -248,23 +248,36 @@ Minden taszkhoz tartozik egy TCB (Task Control Block) és egy stack. A TCB struk
 Az egyes alkalmazások különböznek memória-allokációs igényükben és az erőírt időzítési korlátokban, ezért nincs olyan memória-allokációs séma, amely minden alkalmazásban megállná a helyét. A FreeRTOS több allokációs algoritmust is a fejlesztő rendelekezésére bocsát, amiből az alkalmazásnak megfelelő kiválasztásával lehet elérni a megfelelő működést.
 
 
-### heap1.h
+### Heap_1.c
 
 Kisebb beágyazott alkalmazásoknál gyakran még az ütemező indulása előtt létrehozunk minden taszkot és kommunikációs objektumot. Ilyenkor elég a memóriát lefoglalni az alkalmazás indulása előtt, és a futás alatt minden memória lefoglalva marad. Ez azt is jelenti, hogy nem kell komplex algoritmusokat megvalósítani a determinisztikusság biztosítására és a Memóriatöredezettség ellkerülésére, hanem elég a kódméretet és az egyszerűséget szem előtt tartani.
 
-Ezt az implementációt tartalmazza a __heap1.h__. A fájl a __pvPortMalloc()__ egyszerű megvalósítását tartalmazza, azonban a __pvPortFree()__ nincs implementálva. A __heap1.h__ nem fenyegeti a rendszer determinisztikusságát.
+Ezt az implementációt tartalmazza a __heap1.h__. A fájl a __pvPortMalloc()__ egyszerű megvalósítását tartalmazza, azonban a __pvPortFree()__ nincs implementálva. A __heap_1.c__ nem fenyegeti a rendszer determinisztikusságát.
 
 A __pvPortMalloc()__ függvény a FreeRTOS heap-jét ossza fel kisebb területekre, majd ezeket rendeli hozzá az egyes taszkokhoz. A heap teljes méretét a __configTOTAL_HEAP_SIZE__ konfigurációs érték határozza meg a __FreeRTOSConfig.h__ fájlban. Nagy méretű tömböt definiálva már a memórifoglalás előtt látszólag sok memóriát fog felhasználni az alkalmazás, mivel a FreeRTOS ezt induláskor lefoglalja.
 
 
-### heap2.h
+### Heap_2.c
+
+A __heap_2.c__ szintén a __configTOTAL_HEAP_SIZE__ konfigurációs értéket használja, viszont a __pvPortMalloc()__ mellett már implementálva van a __pvPortFree()__ is. A memóriafoglalás során a legjobban illeszkedő területből oszt ki a taszk számára memóriát.
+
+A legjobban illeszkedő (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb eső, elgendő nagyságú blokkból legyen kiszolgálva. 
+
+A megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
+
+A __heap_2.c__ fájl használata javasolt, ha az alkalmazás ismételve létrehoz és töröl taszkokat, és a taszkokhoz tartozó stack mérete nem változik.
+
+A __heap_2.c__ működése nem determinisztikus, de hatékonyabb, mint a _standard library_ implementációi.
 
 
-### heap3.h
+### Heap_3.c
+
+A __heap_3.c__ a _standard library_ függvényeit használja, de a függvények alatt felfüggeszti az ütemező működését, ezzel elérve, hogy a memória-kezelés thread-safe legyen.
+
+A heap méretét nem befolyásolja a __configTOTAL_HEAP_SIZE__ érték, ehelyett a linker beállításai határozza meg.
 
 
 
-
-
+# Hivatkozások
 
 - [FreeRTOS TCB](http://www.aosabook.org/en/freertos.html)
