@@ -185,3 +185,86 @@ A FreeRTOS-tól független megszakítások kezelése teljes mértékben a fejles
 
 ## Erőforrás-kezelés
 
+Multitaszk rendszerek esetén fennáll a lehetősége, hogy egy taszk kikerül a Futó állapotból még mielőtt befejezné egy erőforrással a műveleteket. Ha az erőforrást egy másik taszk is használni akarja, akkor inkonzisztencia léphet fel. Tipikus megjelenései a problémának:
+- Periféria elérése,
+- Egy közös adat olvasása, módosítása, majd visszaírása,[lábjegyzet-> magas szintű nyelv esetén (pl C) ez látszólag lehet egy utasítás, viszont a fordító által előállított gépi kód több utasításból áll]
+- Változó nem atomi elérése (például több tagú struktúra értékeinek megváltoztatása),
+- Nem reentráns függvények, [lábjegyzet-> reentráns függvény]
+
+Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy taszk megkapja egy erőforrás kezelésének jogát, akkor más taszk nem férhet hozzá, egészen addig, amig a birtokló taszk be nem fejezte az erőforrással a feladatát, és az erőforrás felszabadítását mutex-en keresztül nem jelezte. 
+
+
+### Kritikus szakasz
+
+A közös erőforrások használatakor gyakran szükség van egy adott műveletsor atomivá tételére, azaz arra, hogy a kijelölt műveletek futását semmi ne szakíthassa meg, látszólag egy utasításként fussanak le. 
+
+A FreeRTOS támogatja a kritikus szakaszok használatát a __taskENTER_CRITICAL()__ és __taskEXIT_CRITICAL()__ makrók használatával.
+
+A kritikus szakaszokat minden probléma nélkül egymásba lehet ágyazni, mivel a rendszerkernel nyílvántartja, hogy milyen mélyen van az alkalmazás a kritikus szakaszokban. A rendszer csak akkor hagyja el a kritikus szakaszt, ha a számláló nullára csökken, vagyis ha minden __taskENTER_CRITICAL()__ híváshoz tartozik egy __taskEXIT_CRITICAL()__ is.
+
+A kritikus szakaszt a lehető leggyorsabban el kell hagyni, különben a beérkező megszakítások válaszideje nagy mértékben megnőhet.
+
+
+### Ütemező felfüggesztése
+
+A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemező letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástl, viszont a megszakítások nem kerülnek letiltásra. Hátránya, hogy az ütemező elindítása hosszabb időt vehet igénybe.
+
+
+### Gatekeeper taszk
+
+A gatekeeper taszk alkalmazása a kölcsönös kizárás egy olyan megvalósítása, mely működésénél fogva védett a prioritás inverzió és a holtpont kialakulásával szemben.
+
+A gatekeeper taszk egyedüli birtokosa egy erőforrásnak, így csak a taszk tudja közvetlenül elérni az erőforrást, a többi taszk közvetetten, a gatekeeper taszk szolgáltatásain keresztül tudja használni az erőforrást.
+
+Amikor egy taszk használni akarja az erőforrást, akkor üzenetet küld a gatekeeper taszknak (általában sor használatával). Mivel egyedül a gatekeeper taszk jogosult elérni az erőforrást, és nincs szükség explicit mutex használatára. 
+
+A gatekeeper taszk Blokkolt állapotban vár, amíg nem érkezik üzenet a sorba. Az üzenet beérkezése után elvégzi a megfelelő műveleteket az erőforráson, majd ha kiürült a sor, akkor ismét Blokkolt állapotba kerül. 
+
+A megszakítások probléma nélkül tudják használni a gatekeeper taszkok szolgáltatásait, mivel a sorba való írás támogatott megszakítási rutinból is.
+
+
+## Memória-kezelés
+
+Beágyazott alkalmazások fejlesztése során is szükség van dinamikus memóriafoglalásra. Az asztali alkalmazásoknál megszokott __malloc()__ és __calloc()__ függvények több szempontból sem felelnek meg mikrokontrolleres alkalmazásokban:
+- Kisebb rendszerekben nem biztos, hogy elérhető,
+- Az implementációjuk sok helyet foglalhat,
+- Nem determinisztikus a lefutásuk; a végrehajtási idő különbözhet különböző híváskor,
+- Memóriatöredezettség léphet fel.
+
+Minden taszkhoz tartozik egy TCB (Task Control Block) és egy stack. A TCB struktúra a következő elemeket tartalmazza (a teljesség igénye nélkül):
+
+|      Változó      |   Jelentés   |
+|:-----------------:|:------------:|
+|   pxTopOfStack    | Az stack utolsó elemére mutató pointer|
+| xGenericListItem  | A FreeRTOS a TCB ezen elemét helyezi az adott állapothoz tartozó listába (nem magát a TCB-t) |
+|  xEventListItem   | A FreeRTOS a TCB ezen elemét helyezi az adott eseményhez tartozó listába (nem magát a TCB-t) |
+|    uxPriority     | A taszk prioritása |
+|      pxStack      | A stack kezdetére mutató pointer |
+|    pcTaskName     | A taszk neve. Kizárólag debug célokra |
+|   pxEndOfStack    | A stack végére mutató pointer a stack túlcsordulásának detektálására |
+|  uxBasePriority   | Az utojára taszkhoz rendelt prioritás. Mutex használata esetén a prioritás öröklés során megnövelt prioritás visszaállítására |
+| ulRunTimeCounter  | A taszk __Fut__ állapotban töltött idejét tárolja futási statisztika készítéséhez |
+
+Az egyes alkalmazások különböznek memória-allokációs igényükben és az erőírt időzítési korlátokban, ezért nincs olyan memória-allokációs séma, amely minden alkalmazásban megállná a helyét. A FreeRTOS több allokációs algoritmust is a fejlesztő rendelekezésére bocsát, amiből az alkalmazásnak megfelelő kiválasztásával lehet elérni a megfelelő működést.
+
+
+### heap1.h
+
+Kisebb beágyazott alkalmazásoknál gyakran még az ütemező indulása előtt létrehozunk minden taszkot és kommunikációs objektumot. Ilyenkor elég a memóriát lefoglalni az alkalmazás indulása előtt, és a futás alatt minden memória lefoglalva marad. Ez azt is jelenti, hogy nem kell komplex algoritmusokat megvalósítani a determinisztikusság biztosítására és a Memóriatöredezettség ellkerülésére, hanem elég a kódméretet és az egyszerűséget szem előtt tartani.
+
+Ezt az implementációt tartalmazza a __heap1.h__. A fájl a __pvPortMalloc()__ egyszerű megvalósítását tartalmazza, azonban a __pvPortFree()__ nincs implementálva. A __heap1.h__ nem fenyegeti a rendszer determinisztikusságát.
+
+A __pvPortMalloc()__ függvény a FreeRTOS heap-jét ossza fel kisebb területekre, majd ezeket rendeli hozzá az egyes taszkokhoz. A heap teljes méretét a __configTOTAL_HEAP_SIZE__ konfigurációs érték határozza meg a __FreeRTOSConfig.h__ fájlban. Nagy méretű tömböt definiálva már a memórifoglalás előtt látszólag sok memóriát fog felhasználni az alkalmazás, mivel a FreeRTOS ezt induláskor lefoglalja.
+
+
+### heap2.h
+
+
+### heap3.h
+
+
+
+
+
+
+- [FreeRTOS TCB](http://www.aosabook.org/en/freertos.html)
