@@ -226,7 +226,7 @@ Három féle API áll rendelkezésre:
 - A pbuf lehetővé teszi a dinamikus memóriafoglalást a csomagok tárolására,
 - A pbuf láncba fűzhető, így lehetővé téve a csomagok több pbuf-ban történő kiterjesztését,
 
-![pbuf_structure](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/Figures/LwIP/01_pbuf_structure.PNG "Pbuf structure")
+![pbuf_structure](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/LwIP/01_pbuf_structure.PNG "Pbuf structure")
 
 - __next:__ a következő pbuf-ra mutató pointert tartalmazza,
 - __payload:__ a csomag adat-ra mutató pointert tartalmazza,
@@ -359,7 +359,7 @@ Három féle API áll rendelkezésre:
 - Az LwIP az alkalmazás réteggel callback függvények segítségével kommunikál,
     - Ezeket a függvényeket még a kommunikációs folyamat előtt hozzá kell rendelni,
 
-![standalone_application_model](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/Figures/LwIP/02_standalone_application_model.PNG "Standalone application model")
+![standalone_application_model](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/LwIP/02_standalone_application_model.PNG "Standalone application model")
 
 - TCP alkalmazáshoz a következő callback függvényeket kell hozzárendelni AZ LwIP-hez:
     - __TCP_accept:__ bejövő TCP kapcsolódási esemény,
@@ -383,7 +383,7 @@ Három féle API áll rendelkezésre:
 - A hálózati thread felelős, hogy a driver-től kapott csomagokat továbbítsa a TCP/IP stack felé (RTOS mailbox segítségével),
     - A csomag érkezéséről az Ethernet interrupt értesíti.
 
-![lwip_operation_model_with_rtos](https://github.com/Lyque/diplomaterv/raw/LwIP/Documents/Jegyzetek/Figures/LwIP/03_lwip_operation_model_with_rtos.PNG "LwIP operation model with RTOS")
+![lwip_operation_model_with_rtos](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/LwIP/03_lwip_operation_model_with_rtos.PNG "LwIP operation model with RTOS")
 
 
 ## Alkalmazás beállítások

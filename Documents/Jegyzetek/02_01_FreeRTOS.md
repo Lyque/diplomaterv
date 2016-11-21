@@ -14,14 +14,14 @@ A FreeRTOS nem korlátozza a létrehozható taszkok és prioritások számát, a
 
 A beágyazott rendszerek döntő része egymagos processzorokat használ, amiből az következik, hogy egyszerre csak egy taszk futhat. A taszkok eszerint két nagy csoportba oszthatóak: éppen futó taszk (___Fut___ állapot), illetve az összes többi (___Nem fut___ állapot).
 
-![freertos_states](https://github.com/Lyque/diplomaterv/raw/FreeRTOS_notes/Documents/Jegyzetek/Figures/FreeRTOS/01_FreeRTOS_states.png "FreeRTOS states simplified")
+![freertos_states](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/FreeRTOS/01_FreeRTOS_states.png "FreeRTOS states simplified")
 
 Annak, hogy egy taszk éppen miért nem fut, több oka lehet. Ez alapján a __Nem fut__ állapot több állapotra felosztható.
 Ha egy taszk képes lenne futni, de például egy nagyobb prioritású taszk birtokolja a processzort, akkor a taszk állapota ___Futásra kész___. Ha a taszk valamilyen eseményre vár (időzítés, másik taszk szinkronizáló jele), akkor a taszk ___Blokkolt___ állapotban van. Az operációs rendszer lehetőséget ad arra, hogy a taszkokat függvényhívással ___Felfüggesztett___ állapotba kényszerítsük. Ekkor egy másik függvényhívással tudjuk visszahozni az ütemezendő feladatok sorába a taszkot.
 
 A taszkok önként lemondhatnak a futásról (időzítés, szinkronizáció, taskYIELD() függvény hívása), viszont futó állapotba csak az ütemező helyezheti.
 
-![freertos_states_expanded](https://github.com/Lyque/diplomaterv/raw/FreeRTOS_notes/Documents/Jegyzetek/Figures/FreeRTOS/02_FreeRTOS_states_expanded.png "FreeRTOS states expanded")
+![freertos_states_expanded](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/FreeRTOS/02_FreeRTOS_states_expanded.png "FreeRTOS states expanded")
 
 
 ### Idle taszk
