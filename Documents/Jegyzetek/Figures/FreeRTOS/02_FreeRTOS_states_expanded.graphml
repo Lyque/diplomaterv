@@ -18,7 +18,7 @@
       <data key="d6">
         <y:GenericNode configuration="ShinyPlateNode2">
           <y:Geometry height="122.0" width="179.0" x="512.5" y="274.0"/>
-          <y:Fill color="#FF0000" transparent="false"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="100.9375" x="39.03125" y="49.19921875">Futásra kész<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -34,7 +34,7 @@
       <data key="d6">
         <y:GenericNode configuration="ShinyPlateNode2">
           <y:Geometry height="122.0" width="179.0" x="814.0" y="274.0"/>
-          <y:Fill color="#00FF00" transparent="false"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="28.875" x="75.0625" y="49.19921875">Fut<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -50,7 +50,7 @@
       <data key="d6">
         <y:GenericNode configuration="ShinyPlateNode2">
           <y:Geometry height="122.0" width="179.0" x="512.5" y="500.171875"/>
-          <y:Fill color="#3366FF" transparent="false"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="67.1171875" x="55.94140625" y="49.19921875">Blokkolt<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -66,7 +66,7 @@
       <data key="d6">
         <y:GenericNode configuration="ShinyPlateNode2">
           <y:Geometry height="122.0" width="179.0" x="512.5" y="47.828125"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:Fill color="#C0C0C0" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.4453125" x="33.27734375" y="49.19921875">Felfüggesztett<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -181,7 +181,6 @@
       </data>
     </edge>
     <edge id="e6" source="n1" target="n3">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -202,7 +201,6 @@
       </data>
     </edge>
     <edge id="e7" source="n1" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
