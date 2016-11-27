@@ -30,19 +30,156 @@ A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mér
 
 ## Rhealstone
 
+1989-ben a Dr. Dobbs Journal cikkeként jelent meg egy javaslat, ami a valós idejű rendszerek objektív értékelését célozta meg. Rabindra P. Kar, az Intel Systems Group senior mérnöke ismertette a módszer előnyeit és szempontjait, melynek a Rhealstone nevet adta.[lábjegyzet-> név eredete]
 
+A cikk megjelenésekor már léteztek teljesítménymérő metódusok (Whetstone, Dhrystone), de ezek a fordító által generált kódot, illetve a hardware-t minősítették. A Rhealstone metrika célja, hogy a fejlesztőket segítse az alkalmazásukhoz leginkább megfelelő operációs rendszer kiválasztásában.
+
+A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képességeit:
+- Taszkváltási idő (Task switching time),
+- Preemptálási idő (Preemption time),
+- Megszakítás-késleltetési idő (Interrupt latency time),
+- Szemafor-váltási idő (Semaphore shuffling time),
+- Deadlock-feloldási idő (Deadlock breaking time) [lábjegyzet-> Nincs kialakult holtpont, igazából a prioritásinverzió jelenségét vizsgálja],
+- Datagram-átviteli idő (Datagram throughput time) [lábjegyzet-> Bár időnek van feltüntetve, kB/sec-ben értendő. Minden kategóriának a reciprokát kell venni a mréés végén, így Rhealstone/sec értéket kapva. Ha az 1kB-hoz tartozó időt mérjük, akkor minden úgy történik, mint a többi kategóriánál.]
+
+1990-ben megjelent egy második cikk is, amely amellett, hogy az egyes kategóriák példaprogramjait tartalmazta (iRMX operációs rendszerhez), pár kategória meghatározását megváltoztatták. Ezen változtatásokat az adott kategória részletezésekor ismertetem.
+
+### Taszkváltási idő
+
+A taszváltási idő a két független, futásra kész, azonos prioritású taszkok váltásához szükséges átlagos időtartam.
+
+[Kép]
+
+A taszkváltási idő alapvető jellemzője egy multitaszk rendszernek. A mérés a taszkokat nyilvántartó struktúrák hatékonyságáról ad képet. A taszkváltási időt a használt processzor architektúrája, utasításkészlete is befolyásolja.
+
+A rendszerek a futtatható taszkokat általában valamilyen listában tárolják, így különböző számú taszkkal elvégezve a mérést más eredményt kaphatunk.
+
+
+### Preemptálási idő
+
+A preemptálási idő egy magasabb prioritású taszk érvényre jutásához szükséges átlagos időtartam.
+
+[Kép]
+
+A preemptálási idő nagyban hasonlít a taszkváltási időhöz, azonban a járulékos utasítások miatt általában hosszabb időt jelent.
+
+
+### Megszakítás-késleltetési idő
+
+A megszakítás-késleltetési idő
+
+A megszakítás-késleltetési idő egy esemény beérkezése és a megszakítás kezelő rutin első utasítása között eltelt átlagos időtartam.
+
+[Kép]
+
+
+### Szemafor-váltási idő
+
+Az 1989-es cikk szerint szemafor-váltási idő az az átlagos időtartam, ami egy szemafor elengedése és egy, a szemaforra várakozó taszk elindulása között eltelik.
+
+[Kép]
+
+Ezt a meghatározást 1990-ben annyival módosították, hogy a szemafor-váltási idő egy már birtokolt szemafor kérése és a kérés teljesítése között eltelt időtartam, a birtokló taszk futási idejétől eltekintve.
+
+[Kép]
+
+A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös kizárást valósít meg (mutex).
+
+
+### Deadlock-feloldási idő
+
+A deadlock-feloldási idő az az átlagos időtartam, ami egy olyan erőforrás eléréséhez szükséges, amit egy alacsonyabb prioritású taszk már birtokol.
+
+[Kép]
+
+Vagyis a deadlock-feloldási idő a birtoklási probléma feloldásához szükséges összesített idő egy alacsony és egy magas prioritású taszk között.
+
+
+### Datagram-átviteli idő
+
+A datagram-átviteli idő a taszkok között elérhető adatsebesség az operációs rendszer objektumait kihasználva (vagyis nem megosztott memórián vagy pointeren keresztül). Az adatküldő taszknak kapnia kell értesítést az adat átvételéről.
+
+[Kép]
+
+Az egy évvel később megjelent cikkben ezt a kategóriát is módosították kis mértékben. Egyrészt a megnevezést taszk közötti üzene-késleltetésre változtatták, másrészt nem a maximális adatsebesség meghatározása a mérés célja, hanem az adattovábbítást végző objektum kezelésének és az operációs rendszer járulékos műveleteinek hatékonyságának megmérése.
+
+[Kép]
+
+
+### Rhealstone jellemzők összegzése
+
+Az elvégzett mérések mikroszekundum és milliszekumdum nagyságrendű értékeket adnak vissza. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetőek egy reprezentatív értékké. Az átváltásnak köszönhetően a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
+
+#### Objektív Rhealstone érték
+
+Objektív értékelés esetén minden jellemző azonos súllyal szerepel a számolás során.
+
+[Képlet]
+
+
+#### Súlyozott Rhealstone érték
+
+Az esetek döntő többségében a vizsgált feladatok nem azonos gyakorisággal szerepelnek egy alkalmazásban, sőt, előfordulhat, hogy valamely funkciót nem is használ az alkalmazás. Ekkor informatívabb eredményt kapunk, ha az egyes jellemzőkre kapott számértékeket különböző súllyal vesszük bele a végeredmény meghatározásába.
+
+[Képlet]
 
 
 ## Legrosszabb válaszidő
+
+2001-ben a Nemzetközi Automatizálási Társaság (International Society of Automation - ISA) egy jelentésben fejtette ki azt az álláspontját, miszerint a késleltetés nem jellemzi a valós idejű rendszert, mert lehet, hogy a legtöbb esetben az előírt időn belül válaszol, de ritkán előfordulhatnak késleltetések vagy kihagyott események, amiket a mérés során nem lehet detektálni.
+
+A Társaság egy olyan mérési összeállítást javasol a fejlesztőknek, ami egyszerűsége ellenére képes meghatározni a rendszer legrosszabb válaszidejét.
+
+A méréshez szükséges eszközök:
+- Mérendő rendszer (legalább egy be- és kimenettel),
+- Jelgenerátor.
+- Két darab digitális számláló.
+
+
+### Mérési elrendezés
+
+A jelgenerátor kimenetét a mérendő rendszer bemenetére, illetve mindkét számláló __count up__ bemenetére kötjük, míg mérendő rendszer kimenetét a kimeneti számláló __count down__ bemenetére kötjük.
+
+[Kép]
+
+
+### Mérési elv
+
+A mérés során azt a legkisebb frekvenciát keressük, amit a rendszer már nem tud követni, vagyis impulzusokat veszít. Ezáltal a kimenetén megjelenő impulzusok száma különbözni fog a bemenetére adott impulzusok számától. A kapott frekvencia a a legrosszabb válaszidő reciproka.
+
+
+### Mérés menete
+
+1. A rendszeren futó program a bemenetére érkező jelet a kimenetére másolja. A mérés során digitális és analóg I/O láb is használható.
+2. Mérési eszközök csatlakoztatása.
+3. Alacsony frekvenciáról indulva növeljük a bemeneti jel frekvenciáját. Az _A_ számláló folyamatosan számol felfele. Amíg a rendszer képes követni a bemenetet, addig a _B_ számláló 1 és 0 között váltakozik. Amikor a rendszer már nem képes követni a bemenetet, akkor a _B_ számláló elkezdt felfele számolni.
+4. Csökkentjük a bemeneti frekvencia értékét egészen addig, amíg a rendszer újból képessé nem válik a bemenet követésére. A kapott frekvencia a legrosszabb válaszidő reciproka.
+
+A mérést célszerű elvégezni különböző terhelés mellett. Ha valamelyik funkció használata közben (adattároló vezérlése, hálózati kommunikáció, stb.) a _B_ számláló elindul, akkor az adott frekvencián a rendszer nem determinisztikus.
 
 
 ## Választott metrikák
 
 
 
+
 --------------------------------------------------------------------------
 
-## Operációs rendszer specifikus
+# Saját mérések
+
+- Külső mérőegység alkalmazása -> működés közben tesztelhető,
+- Késleltetések mérése,
+- Jitter,
+- Rhealstone mérések:
+    - Taszkváltási idő,
+    - Preemptálási idő,
+    - Megszakítás-késleltetési idő,
+    - Deadlock-feloldási idő,
+    - Datagram-átviteli idő:
+        - 1kB adat átvitele queue-n keresztül,
+- Fordítás után a gépi kód elemzése -> a láb billentgetéséért felelős kódsorok idejét kompenzálni lehet.
+
+# Operációs rendszer specifikus
 
 - Memóriaigény:
     - Skálázhatóság,
@@ -56,7 +193,7 @@ A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mér
 - Megbízhatóság.
 
 
-## Mikrokontroller specifikus
+# Mikrokontroller specifikus
 
 - Aritmetikai utasítások elvégzése különböző számábrázolások esetén:
     - 32/64 bites számok,
