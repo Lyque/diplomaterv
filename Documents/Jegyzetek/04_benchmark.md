@@ -13,7 +13,7 @@ az 1980-as évek végén hozott létre szabványt a folyamatirányító számít
 A továbbiakban különböző forrásokból vett szempontokat vizsgálok meg, majd azok alapján állítom fel a dolgozat során megfigyelt tulajdonságok listáját.
 
 
-# Memóriaigény
+## Memóriaigény
 
 A mikrokontrollerek területén a memória mérete korlátozott (ROM és RAM egyaránt), ezért fontos, hogy a használt rendszer minél kisebb lenyomattal rendelkezzen.
 
@@ -159,6 +159,10 @@ A mérést célszerű elvégezni különböző terhelés mellett. Ha valamelyik 
 
 
 ## Választott metrikák
+
+A feladat megoldása során elsődlegesen az operációs rendszerek jellemzőit vizsgálom, ezért nem kerülnek külön tesztelésre az egyes hardverek előnyei. Az egyes rendszer-jellemzőket terheletlenül és terhelés alatt is megmérem.
+
+Egy ipari alkalmazás szimulációját is megvalósítom, mely egy másik összehasonlítási alapot nyújt a dolgozathoz. Az alkalmazást felhasználom a terhelés alatti mérés megvalósításához is.
 
 
 
