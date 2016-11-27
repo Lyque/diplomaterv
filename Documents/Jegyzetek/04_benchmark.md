@@ -10,6 +10,13 @@ A választást az sem segíti előre, hogy nincs egyértelmű módszer az operá
 Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN) 
 az 1980-as évek végén hozott létre szabványt a folyamatirányító számítógépes rendszerek teljesítménymutatóinak mérésére (DIN 19242 szabvány-sorozat), a valós idejű operációs rendszerek értékelésére ez nem jelent megoldást.]
 
+Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehetőú legkisebb szintre csökkenteni.
+A kulcsfontosságú szempontok az alábbiak:
+- Megismételhetőség: egy mérést meg kell tudnunk ismételni. Ehhez szükséges a pontos mérési összeállítás, a mérés körülményei, a használt eszközök és szoftverek.
+- Véletlenszerűség: a mérés során nem független események következhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell mérési folyamatok véletlenszerű futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben kövessék egymást).
+- Vezérlés: a mérés során a vezérelhető paramétereket (melyek a mérést befolyásolhatják) lehetőségeinkhez mérten kézben kell tartani.
+- Szemléletesség: a mérés eredményének reprezentatívnak kell lennie. Számértékek esetén két mérés eredményét össze kell tudnunk hasonlítani és tudnunk kell relációt vonni a két érték közé.
+
 A továbbiakban különböző forrásokból vett szempontokat vizsgálok meg, majd azok alapján állítom fel a dolgozat során megfigyelt tulajdonságok listáját.
 
 
@@ -158,13 +165,18 @@ A mérés során azt a legkisebb frekvenciát keressük, amit a rendszer már ne
 A mérést célszerű elvégezni különböző terhelés mellett. Ha valamelyik funkció használata közben (adattároló vezérlése, hálózati kommunikáció, stb.) a _B_ számláló elindul, akkor az adott frekvencián a rendszer nem determinisztikus.
 
 
-## Választott metrikák
+## Vizsgált operációs rendszer jellemzők
 
 A feladat megoldása során elsődlegesen az operációs rendszerek jellemzőit vizsgálom, ezért nem kerülnek külön tesztelésre az egyes hardverek előnyei. Az egyes rendszer-jellemzőket terheletlenül és terhelés alatt is megmérem.
 
 Egy ipari alkalmazás szimulációját is megvalósítom, mely egy másik összehasonlítási alapot nyújt a dolgozathoz. Az alkalmazást felhasználom a terhelés alatti mérés megvalósításához is.
 
-
+A dolgozat további részeibena [referencia] fejezetben felsorolt összes jellemző meghatározására képes rendszert állítok össze, mellyel végrehajtom a méréseket. A meghatározandó jellemzők:
+- Memóriaigény,
+- Késleltetés,
+- Jitter,
+- Rhealstone értékek,
+- Legrosszabb válaszidő.
 
 
 --------------------------------------------------------------------------
