@@ -5,12 +5,12 @@
 
 A FreeRTOS a Real Time Engineers Ltd. által fejlesztett valós idejű operációs rendszer. A fejlesztők céljai között volt a rendszer erőforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebből adódóan csak az alap funkciók vannak megvalóstva, mint ütemezés, taszkok közötti kommunikáció lehetősége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külső hardver használatára (ezeket vagy nekünk meg megírnunk, vagy harmadik féltől származó kódot kell használnunk).
 
-A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetővé teszi GPL-től eltérő licenccel ellátott modulok használatát, amennyiben azok a FreeRTOS-sal kizárólag a FreeRTOS API-n keresztül kommunikálnak. 
+A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetővé teszi GPL-től eltérő licenccel ellátott modulok használatát, amennyiben azok a FreeRTOS-sal kizárólag a FreeRTOS API-n keresztül kommunikálnak.
 
 
 ## Taszkok
 
-A FreeRTOS nem korlátozza a létrehozható taszkok és prioritások számát, amíg a rendelkezésre álló memória lehetővé teszi azok futtatását. A rendszer lehetőséget biztosít ciklikus és nem ciklikus taszkok futtatására egyaránt. 
+A FreeRTOS nem korlátozza a létrehozható taszkok és prioritások számát, amíg a rendelkezésre álló memória lehetővé teszi azok futtatását. A rendszer lehetőséget biztosít ciklikus és nem ciklikus taszkok futtatására egyaránt.
 
 A beágyazott rendszerek döntő része egymagos processzorokat használ, amiből az következik, hogy egyszerre csak egy taszk futhat. A taszkok eszerint két nagy csoportba oszthatóak: éppen futó taszk (___Fut___ állapot), illetve az összes többi (___Nem fut___ állapot).
 
@@ -30,12 +30,12 @@ A processzor működése közben mindig utasításokat kell futtatnia, ezért le
 
 Az Idle taszk a legkisebb prioritással rendelkezik, így biztosítva, hogy elhagyja a Fut állapotot, amint egy magasabb prioritású taszk Futásra kész állapotba kerül.
 
-Taszk törlése esetén az Idle taszk végzi el a különböző erőforrások felszabadítását. Mivel a FreeRTOS nem biztosít védelmet egy taszk _kiéheztetésével_ szemben ezért fontos, hogy az alkalmazás tervezésekor biztosítsunk olyan időszeletet, amikor másik, nagyobb prioritású taszk nem fut. 
+Taszk törlése esetén az Idle taszk végzi el a különböző erőforrások felszabadítását. Mivel a FreeRTOS nem biztosít védelmet egy taszk _kiéheztetésével_ szemben ezért fontos, hogy az alkalmazás tervezésekor biztosítsunk olyan időszeletet, amikor másik, nagyobb prioritású taszk nem fut.
 
 
 #### Idle hook függvény
 
-Előfordulhat, hogy az alkalmazásunkban olyan funkciót szeretnénk megvalósítani, amelyet az Idle taszk minden egyes iterációjára le kell futtatni (például teljesítménymérés érdekében). Ezt a célt szolgálja az ___Idle hook__ függvény, ami az Idle taszk minden lefutásakor meghívódik. 
+Előfordulhat, hogy az alkalmazásunkban olyan funkciót szeretnénk megvalósítani, amelyet az Idle taszk minden egyes iterációjára le kell futtatni (például teljesítménymérés érdekében). Ezt a célt szolgálja az ___Idle hook__ függvény, ami az Idle taszk minden lefutásakor meghívódik.
 
 Az Idle hook általános felhasználása:
 - Alacsony prioritású háttér-, vagy folyamatos feldolgozás,
@@ -53,9 +53,9 @@ Az Idle hook általános felhasználása:
 
 A FreeRTOS által használt ütemezési mechanizmust Fix Prioritásos Preemptív Ütemezésnek hívjuk[lábjegyzet->A FreeRTOS kooperatív ütemezést is támogat, viszont a valós idejű futás eléréséhez a preemptív ütemezés szükséges, ezért a továbbiakban csak a preemptív ütemezéssel foglalkozunk.]. _Fix prioritásos_, mivel a rendszer magától nem változtatja a prioritásokat, _preemptív_, mert egy taszk Futásra kész állapotba lépésekor preemtálja az éppen futó taszkot, ha a futó taszk prioritása alacsonyabb.
 
-A taszkok lehetnek Blokkolt állapotban, ahonnan egy esemény bekövetkezését követően automatikusan Futásra kész állapotba kerülnek. 
+A taszkok lehetnek Blokkolt állapotban, ahonnan egy esemény bekövetkezését követően automatikusan Futásra kész állapotba kerülnek.
 
-Időbeli események azok, amik egy bizonyos időpillanatban következnek be (például egy kéleltetési idő letelik). Az időbeli eseményeket kihasználva lehetőség nyílik periodikus futtatásra, vagy időtúllépés detektálására. 
+Időbeli események azok, amik egy bizonyos időpillanatban következnek be (például egy kéleltetési idő letelik). Az időbeli eseményeket kihasználva lehetőség nyílik periodikus futtatásra, vagy időtúllépés detektálására.
 
 Szinkronizáló események azok, amikor egy taszk vagy megszakításkezelő rutin jelzést küld valamilyen kommunikációs struktúrán keresztül egy másik taszknak. Tipikusan aszinkron jelzésre használjuk, mint például adat érkezését egy periférián keresztül.
 
@@ -87,7 +87,7 @@ A sorba való írás során másolat készül az eredeti változóról, és ez a
 
 A FreeRTOS-ban minden kommunikációs struktúra a sor valamilyen speciális megvalósítása.
 
-A sorok egy taszkhoz sem tartoznak, így egy sorba akár több taszk is írhat, illetve olvashat egy alkalmazáson belül. 
+A sorok egy taszkhoz sem tartoznak, így egy sorba akár több taszk is írhat, illetve olvashat egy alkalmazáson belül.
 
 #### Olvasás sorból
 
@@ -141,23 +141,23 @@ Két felhasználása elterjedt a számláló szemaforoknak:
 
 ### Mutexek
 
-Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erőforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erőforrás szabad, akkor az igénylő taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erőforrással való munkát. A mutex-et a lehető legkorábban (az erőforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
+Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erőforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erőforrás szabad, akkor az igénylő taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erőforrással való munkát. A mutex-et a lehető legkorábban (az erőforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét.
 
-Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
+Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza.
 
-A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor implementációjából hiányzik.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerű implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.] 
+A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor implementációjából hiányzik.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerű implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.]
 
 
 ## Megszakítás-kezelés
 
-Beágyazott rendszereknél gyakran kell a környezettől származó eseményekre reagálni (például adat érkezése valamely kommunikációs interfészen). Az ilyen események kezelésekor a megszakítások alkalmazása gyakran elengedhetetlen. 
+Beágyazott rendszereknél gyakran kell a környezettől származó eseményekre reagálni (például adat érkezése valamely kommunikációs interfészen). Az ilyen események kezelésekor a megszakítások alkalmazása gyakran elengedhetetlen.
 
-Megszakítás használata esetén figyelni kell arra, hogy a megszakítási rutinokban csak _FromISR_-re végződő API függvényeket hívhatunk. Ellenkező esetben nem várt működés következhet be (blokkoljuk a megszakítási rutint, ami az alkalmazás fagyásához vezethet; kontextus-váltást okozunk, amiből nem térünk vissza, így a megszakítási rutinból sosem lépünk ki, stb.). 
+Megszakítás használata esetén figyelni kell arra, hogy a megszakítási rutinokban csak _FromISR_-re végződő API függvényeket hívhatunk. Ellenkező esetben nem várt működés következhet be (blokkoljuk a megszakítási rutint, ami az alkalmazás fagyásához vezethet; kontextus-váltást okozunk, amiből nem térünk vissza, így a megszakítási rutinból sosem lépünk ki, stb.).
 
 A FreeRTOS ütemezője a (STM32-re épülő rendszerekben) a SysTick interruptot használja az ütemező periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására Futásra kész állapotba kerül, akkor vagy a következő ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszer az ütemező futtatására.
 
-Az alacsonyabb prioritású megszakítások szintén nem tudnak érvényre jutni, így azok bekövetkezéséről nem kapunk értesítést (az első beérkező, alacsonyabb prioritású megszakítás jelző bitje bebillen az esemény hatására, de amennyiben több is érkezik a magasabb prioritású megszakítási rutin futása alatt, úgy azok elvesznek). 
-Az említett problémák végett a megszakítási rutint a lehető legrövidebb idő alatt be kell fejezni. 
+Az alacsonyabb prioritású megszakítások szintén nem tudnak érvényre jutni, így azok bekövetkezéséről nem kapunk értesítést (az első beérkező, alacsonyabb prioritású megszakítás jelző bitje bebillen az esemény hatására, de amennyiben több is érkezik a magasabb prioritású megszakítási rutin futása alatt, úgy azok elvesznek).
+Az említett problémák végett a megszakítási rutint a lehető legrövidebb idő alatt be kell fejezni.
 
 ### Késleltetett megszakítás-kezelés
 
@@ -191,12 +191,12 @@ Multitaszk rendszerek esetén fennáll a lehetősége, hogy egy taszk kikerül a
 - Változó nem atomi elérése (például több tagú struktúra értékeinek megváltoztatása),
 - Nem reentráns függvények, [lábjegyzet-> reentráns függvény]
 
-Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy taszk megkapja egy erőforrás kezelésének jogát, akkor más taszk nem férhet hozzá, egészen addig, amig a birtokló taszk be nem fejezte az erőforrással a feladatát, és az erőforrás felszabadítását mutex-en keresztül nem jelezte. 
+Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy taszk megkapja egy erőforrás kezelésének jogát, akkor más taszk nem férhet hozzá, egészen addig, amig a birtokló taszk be nem fejezte az erőforrással a feladatát, és az erőforrás felszabadítását mutex-en keresztül nem jelezte.
 
 
 ### Kritikus szakasz
 
-A közös erőforrások használatakor gyakran szükség van egy adott műveletsor atomivá tételére, azaz arra, hogy a kijelölt műveletek futását semmi ne szakíthassa meg, látszólag egy utasításként fussanak le. 
+A közös erőforrások használatakor gyakran szükség van egy adott műveletsor atomivá tételére, azaz arra, hogy a kijelölt műveletek futását semmi ne szakíthassa meg, látszólag egy utasításként fussanak le.
 
 A FreeRTOS támogatja a kritikus szakaszok használatát a __taskENTER_CRITICAL()__ és __taskEXIT_CRITICAL()__ makrók használatával.
 
@@ -207,7 +207,7 @@ A kritikus szakaszt a lehető leggyorsabban el kell hagyni, különben a beérke
 
 ### Ütemező felfüggesztése
 
-A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemező letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástl, viszont a megszakítások nem kerülnek letiltásra. Hátránya, hogy az ütemező elindítása hosszabb időt vehet igénybe.
+A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemező letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástól, viszont a megszakítások nem kerülnek letiltásra. Hátránya, hogy az ütemező elindítása hosszabb időt vehet igénybe.
 
 
 ### Gatekeeper taszk
@@ -216,9 +216,9 @@ A gatekeeper taszk alkalmazása a kölcsönös kizárás egy olyan megvalósít�
 
 A gatekeeper taszk egyedüli birtokosa egy erőforrásnak, így csak a taszk tudja közvetlenül elérni az erőforrást, a többi taszk közvetetten, a gatekeeper taszk szolgáltatásain keresztül tudja használni az erőforrást.
 
-Amikor egy taszk használni akarja az erőforrást, akkor üzenetet küld a gatekeeper taszknak (általában sor használatával). Mivel egyedül a gatekeeper taszk jogosult elérni az erőforrást, és nincs szükség explicit mutex használatára. 
+Amikor egy taszk használni akarja az erőforrást, akkor üzenetet küld a gatekeeper taszknak (általában sor használatával). Mivel egyedül a gatekeeper taszk jogosult elérni az erőforrást, és nincs szükség explicit mutex használatára.
 
-A gatekeeper taszk Blokkolt állapotban vár, amíg nem érkezik üzenet a sorba. Az üzenet beérkezése után elvégzi a megfelelő műveleteket az erőforráson, majd ha kiürült a sor, akkor ismét Blokkolt állapotba kerül. 
+A gatekeeper taszk Blokkolt állapotban vár, amíg nem érkezik üzenet a sorba. Az üzenet beérkezése után elvégzi a megfelelő műveleteket az erőforráson, majd ha kiürült a sor, akkor ismét Blokkolt állapotba kerül.
 
 A megszakítások probléma nélkül tudják használni a gatekeeper taszkok szolgáltatásait, mivel a sorba való írás támogatott megszakítási rutinból is.
 
@@ -261,7 +261,7 @@ A __pvPortMalloc()__ függvény a FreeRTOS heap-jét ossza fel kisebb területek
 
 A __heap_2.c__ szintén a __configTOTAL_HEAP_SIZE__ konfigurációs értéket használja, viszont a __pvPortMalloc()__ mellett már implementálva van a __pvPortFree()__ is. A memóriafoglalás során a legjobban illeszkedő területből oszt ki a taszk számára memóriát.
 
-A legjobban illeszkedő (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb eső, elgendő nagyságú blokkból legyen kiszolgálva. 
+A legjobban illeszkedő (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb eső, elgendő nagyságú blokkból legyen kiszolgálva.
 
 A megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
 
