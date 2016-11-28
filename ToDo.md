@@ -24,10 +24,8 @@ Bővebben az _Asana_ projektkezelő szoftverben.
 ## Szoftver
 
 - Oprendszereknek utána nézni,
-- Teljesítménymutatók mérésének utána nézni,
+- Teljesítménymutatók mérésének utána nézni, __(DONE)__
 - Összehasonlító metrikák kidolgozása:
-    - Késleltetés (rendszer jellemző) (?),
-    - Különböző ábrázolási módok (32 bit, floating point) aritmetika-sebessége (hardver) (?),
     - Képfeldolgozás (MISD),
 - Rendszerterv létrehozása.
 
