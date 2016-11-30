@@ -2,7 +2,7 @@
 
 ## Operációs rendszer meghatározás
 
-Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és szolgáltatásokat biztosít más programok (vagy alkalmazások) számára. Az alkalmazások valósítják meg azt a funkcionalitást, amire a számítógép felhasználójának szüksége van, vagy a számítógép felhasználója akar. Az operációs rendszer által nyújtott szolgálatások az alkalmazások feljesztését egyszerűsítik, ezáltal felgyorsítják a fejlesztést és karbantarthatóbbá teszik a programot.
+Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és szolgáltatásokat biztosít más programok (vagy alkalmazások) számára. Az alkalmazások valósítják meg azt a funkcionalitást, amire a számítógép felhasználójának szüksége van, vagy a számítógép felhasználója akar. Az operációs rendszer által nyújtott szolgálatások az alkalmazások feljesztését egyszerűsítik, ezáltal felgyorsítják a fejlesztést és karbantarthatóbbá teszik a szoftvert.
 
 Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyidejűleg kezelt felhasználók számának és az ütemező működésének függvényében. A továbbiakban csak a multitaszkot támogató operációs rendszerekkel foglalkozom.
 
@@ -23,7 +23,7 @@ Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a felad
 
 ## Operációs rendszer feladatai
 
-Az operációs rendszer elsődleges feladatad a használt processzor perifériáinak kezelése, azokhoz meghatározott interfész biztosítása. További feladata még a létrehozott taszkok ütemezése, a taszkok közötti kommunikáció és szinkronizáció megvalósítása.
+Az operációs rendszer elsődleges feladata a használt processzor perifériáinak kezelése, azokhoz meghatározott interfész biztosítása. További feladata még a létrehozott taszkok ütemezése, a taszkok közötti kommunikáció és szinkronizáció megvalósítása.
 
 
 ### Ütemezés
@@ -45,12 +45,16 @@ A taszkok futtatása az érkezési sorrendben történik. A beérkező taszkok e
 
 Az átlagos várakozási idő nagy lehet, ha egy időigényes folyamatra több gyors lefutású folyamat várakozik.
 
+Nem preemptív.
+
 
 #### Shortest Job First (Legrövidebb feladat először)
 
 A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes működés esetén az átalgos várakozási idő optimális lesz.
 
 A gyakorlatban nehéz előre megjósolni egy taszk futási idejét.
+
+Lehet preemptív és nem-preemptív is. Preemptív esetben Shortest Remaining Time First (Legrövidebb hátralevő idejű először).
 
 
 #### Prioritásos ütemezés
@@ -59,9 +63,14 @@ A következő taszk kiválasztása a prioritása alapján történik. Növelni l
 
 Rossz tervezés esetén az alacsony prioritású feladatok nem jutnak processzoridőhöz (kiéheztetés - starvation).
 
+Lehet preemptív és nem-preemptív is.
+
+
 #### Round Robin
 
 Időosztáson alapuló mechanizmus. A várakozási sor egy cirkuláris buffer. Minden taszk adott időszeletet kap, majd az időszelet lejártával a sorban következő taszk kapja meg a futás jogát.
+
+Lehet preemptív és nem-preemptív is.
 
 
 ### Hibrid ütemezés
@@ -90,7 +99,7 @@ A konzisztencia biztosítása céljából az atomi műveleteket _kritikus szakas
 
 Az operációs rendszerek a kritikus szakaszokat több szinten megvalósíthatják. Legszigorúbb esetben a megszakítások letiltásra kerülnek, és az ütemező a kritikus szakasz befejezéséig felfüggesztett állapotban van. A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemező letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástól, viszont a megszakítások nem kerülnek letiltásra.
 
-A kritikus szakaszt a lehető leggyorsabban el kell hagyni, mert különben a beérkező megszakítások és magasabb prioritású taszkok késleltetést szenvednek, ami rontja az alkalmazás hatékonyságát. 
+A kritikus szakaszt a lehető leggyorsabban el kell hagyni, mert különben a beérkező megszakítások és magasabb prioritású taszkok késleltetést szenvednek, ami rontja az alkalmazás hatékonyságát.
 
 
 #### Kommunikációs objektumok
@@ -119,14 +128,20 @@ Szemaforokat leggyakrabban szinkronizációs célból, vagy erőforrások védel
 
 Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
 
+[Kép]
+
 Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történő kezelése, ezzel is minimalizálva a megszakítási rutin hosszát.
 
 Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a szemafor egy adott taszkban gyakrabban kerül jelzésre, mint ahogy feldolgozzuk, akkor jelzések veszhetnek el (amíg az egyik jelzés várakozik, addig az utána következő eseményeknek nincs lehetőségük várakozó állapotba kerülni).
+
+[Kép]
 
 
 ##### Számláló szemafor
 
 A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül Blokkolt állapotba a jelző taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor, melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
+
+[Kép]
 
 Két felhasználása elterjedt a számláló szemaforoknak:
 - Események számlálása: ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
@@ -137,12 +152,16 @@ Két felhasználása elterjedt a számláló szemaforoknak:
 
 Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erőforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erőforrás szabad, akkor az igénylő taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erőforrással való munkát. A mutex-et a lehető legkorábban (az erőforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
 
+[Kép]
+
 Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
 
 
 ##### Sor (Queue)
 
 A sorok fix méretű adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzők a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként működnek.
+
+[Kép]
 
 A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban.
 

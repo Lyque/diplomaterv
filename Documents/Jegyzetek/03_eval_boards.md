@@ -26,11 +26,14 @@ Az eszköz 1MByte Flash memóriával és 192kbyte RAM-mal rendelkezik.
 
 A kártyán megtalálható több periféria, mely a különböző interfészek kipróbálását teszi lehetővé (mint például gyorsulásszenzor, mikrofon).
 
+![stm32f4_discovery](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Eval_Boards/01_STM32F4-Discovery.jpg "STM32F4 Discovery")
+
 
 ### STM32F4 Discovery - Base Board
 
 Az STM32F4 Discovery fejlesztőeszközhöz több kiegészítő kártya is kapható, melyek célja a kipróbálható perifériák számának növelése. Egyik ilyen bővítőkártya az STM32F4DIS-BB, ami tartalmaz microSD-kártya foglalatot, az Ethernet interfész fizikai rétegét megvalósító IC-t, illetve a csatlakoztatáshoz szükséges RJ45-ös csatlakozót. Ezen kívül kivezetésre került egy DB9-es csatlakozó - mely az egyik soros kommunikációs portot teszi elérhetővé -, egy FPC csatlakozó - mely kamera csatlakoztatását teszi lehetővé -, illetve az egyik oldali csatlakozósorra ráköthető 3,5"-os TFT kijelző.
 
+![stm32f4_disco_bb](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Eval_Boards/02_STM32F4DIS_BB.jpg "STM32F4 Discovery BaseBoard")
 
 ## Raspberry Pi 3
 
@@ -39,6 +42,8 @@ A Raspberry Pi Foundation 2008-ban alapították azzal a céllal, hogy a informa
 Az első nagyteljesítményű, bankkártya méretű számítógépüket 2012 februárjában bocsájtották piacra, melynek ára töredéke volt az asztali számítógépekének. Azóta több verziója is kijött az eszköznek, melyet folyamatosan fejlesztettek mind teljesítményben, mind az integrált funkciók számában. 2015 novemberében a világ első 5$-os számítógépével jelentek meg a piacon, melynek a Raspberry Pi Zero nevet adták.
 
 A legújabb verziójú kártya, a Raspberry Pi 3 model B az előző verzióhoz képest erősebb processzort kapott, illetve tartalmaz beépített Bluetooth illetve WiFi modult.
+
+![raspberry_pi_3](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Eval_Boards/03_Raspberry_Pi_3.jpg "Raspberry Pi 3")
 
 A hardver főbb jellemzői:
 - 1,2GHz 64-bit quad-core ARMv8 CPU,
@@ -66,6 +71,9 @@ Interfészek:
 - PWM.
 
 Már az első verzió megjelenésekor rendelkezésre álltak különböző linux disztribúciók portjai, melyekkel az eszköz asztali számítógépként használható volt. Népszerűségének köszönhetően a második verziótól kezdve már a Windows 10 IoT Core is támogatja a platformot.
+
+
+-------------------------------------------------------------------------
 
 # Források
 
