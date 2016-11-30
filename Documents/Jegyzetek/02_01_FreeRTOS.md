@@ -3,7 +3,7 @@
 
 ## Bevezetés
 
-A FreeRTOS a Real Time Engineers Ltd. által fejlesztett valós idejű operációs rendszer. A fejlesztők céljai között volt a rendszer erőforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebből adódóan csak az alap funkciók vannak megvalóstva, mint ütemezés, taszkok közötti kommunikáció lehetősége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külső hardver használatára (ezeket vagy nekünk meg megírnunk, vagy harmadik féltől származó kódot kell használnunk).
+A FreeRTOS a Real Time Engineers Ltd. által fejlesztett valós idejű operációs rendszer. A fejlesztők céljai között volt a rendszer erőforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebből adódóan csak az alap funkciók vannak megvalósítva, mint ütemezés, taszkok közötti kommunikáció lehetősége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külső hardver használatára (ezeket vagy nekünk meg megírnunk, vagy harmadik féltől származó kódot kell használnunk).
 
 A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetővé teszi GPL-től eltérő licenccel ellátott modulok használatát, amennyiben azok a FreeRTOS-sal kizárólag a FreeRTOS API-n keresztül kommunikálnak.
 
@@ -26,7 +26,7 @@ A taszkok önként lemondhatnak a futásról (időzítés, szinkronizáció, tas
 
 ### Idle taszk
 
-A processzor működése közben mindig utasításokat kell futtatnia, ezért legalább egy taszknak Futásra kész állapotban kell lennie. Hogy ez biztosítva legyen, az ütemező indulásakor automatikusan létrejön egy ciklikus ___Idle taszk___.
+A processzor folyamatosan utasításokat hajt végre működése közben (eltekintve a különböző energiatakarékos üzemmódoktól), ezért legalább egy taszknak mindig Futásra kész állapotban kell lennie. Hogy ez biztosítva legyen, az ütemező indulásakor automatikusan létrejön egy ciklikus ___Idle taszk___.
 
 Az Idle taszk a legkisebb prioritással rendelkezik, így biztosítva, hogy elhagyja a Fut állapotot, amint egy magasabb prioritású taszk Futásra kész állapotba kerül.
 
@@ -38,7 +38,7 @@ Taszk törlése esetén az Idle taszk végzi el a különböző erőforrások fe
 Előfordulhat, hogy az alkalmazásunkban olyan funkciót szeretnénk megvalósítani, amelyet az Idle taszk minden egyes iterációjára le kell futtatni (például teljesítménymérés érdekében). Ezt a célt szolgálja az ___Idle hook__ függvény, ami az Idle taszk minden lefutásakor meghívódik.
 
 Az Idle hook általános felhasználása:
-- Alacsony prioritású háttér-, vagy folyamatos feldolgozás,
+- Alacsony prioritású háttérfolyamat, vagy folyamatos feldolgozás,
 - A szabad processzoridő mérése (teljesítménymérés),
 - Processzor alacsony fogyasztású üzemmódba váltása.
 
@@ -53,21 +53,27 @@ Az Idle hook általános felhasználása:
 
 A FreeRTOS által használt ütemezési mechanizmust Fix Prioritásos Preemptív Ütemezésnek hívjuk[lábjegyzet->A FreeRTOS kooperatív ütemezést is támogat, viszont a valós idejű futás eléréséhez a preemptív ütemezés szükséges, ezért a továbbiakban csak a preemptív ütemezéssel foglalkozunk.]. _Fix prioritásos_, mivel a rendszer magától nem változtatja a prioritásokat, _preemptív_, mert egy taszk Futásra kész állapotba lépésekor preemtálja az éppen futó taszkot, ha a futó taszk prioritása alacsonyabb.
 
+[ToDo -> Itt átfogalmazni kicsit a dolgokat. Elég kusza a gondolatmenet.]
+
 A taszkok lehetnek Blokkolt állapotban, ahonnan egy esemény bekövetkezését követően automatikusan Futásra kész állapotba kerülnek.
 
-Időbeli események azok, amik egy bizonyos időpillanatban következnek be (például egy kéleltetési idő letelik). Az időbeli eseményeket kihasználva lehetőség nyílik periodikus futtatásra, vagy időtúllépés detektálására.
+Időbeli események azok, amik egy bizonyos időpillanatban következnek be (például egy késleltetési idő letelik). Az időbeli eseményeket kihasználva lehetőség nyílik periodikus futtatásra, vagy időtúllépés detektálására.
 
 Szinkronizáló események azok, amikor egy taszk vagy megszakításkezelő rutin jelzést küld valamilyen kommunikációs struktúrán keresztül egy másik taszknak. Tipikusan aszinkron jelzésre használjuk, mint például adat érkezését egy periférián keresztül.
 
 
 ### Taszkok prioritásának meghatározása
 
+[ToDo -> Itt átfogalmazni kicsit a dolgokat. Elég kusza a gondolatmenet.]
+
 Ökölszabályként alkalmazható, hogy a hard real-time funkciókat magasabb prioritással látjuk el, mint a soft real-time funkciókat.
 
 Rate Monotonic Scheduling (Gyakoriság Monoton Ütemezés) az a gyakran alkalmazott prioritás-hozzárendelés, amikor minden taszkhoz egyedi prioritásszintet rendelünk a végrehajtási gyakoriság függvényében. A gyakrabban lefutó folyamatokhoz magasabb, a ritkábban lefutó folyamatokhoz alacsonyabb prioritást állítunk be.
 
 
-## Kommunikációs struktúrák
+## Kommunikációs objektumok
+
+[ToDo -> Átfogalmazni. Ne legyen nagyon redundáns az átlalános résszel.]
 
 Az alkalmazások egymástól független taszkok konstrukciójából áll. Viszont ezeknek a taszkoknak ahhoz, hogy a feladatukat el tudják látni, gyakran kommunikálniuk kell egymással.
 A FreeRTOS három alap kommunikációs struktúrát kínál a felhasználónak:
@@ -169,6 +175,8 @@ Az eseményt kezelő taszk blokkoló _take_ utasítással várakozik Blokkolt á
 
 Todo: Példa
 
+[Kép]
+
 
 ### Interruptok egymásba ágyazása
 
@@ -195,6 +203,8 @@ Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy tas
 
 
 ### Kritikus szakasz
+
+[ToDo -> Itt átfogalmazni kicsit a dolgokat. Elég kusza a gondolatmenet.]
 
 A közös erőforrások használatakor gyakran szükség van egy adott műveletsor atomivá tételére, azaz arra, hogy a kijelölt műveletek futását semmi ne szakíthassa meg, látszólag egy utasításként fussanak le.
 
@@ -232,6 +242,8 @@ Beágyazott alkalmazások fejlesztése során is szükség van dinamikus memóri
 - Memóriatöredezettség léphet fel.
 
 Minden taszkhoz tartozik egy TCB (Task Control Block) és egy stack. A TCB struktúra a következő elemeket tartalmazza (a teljesség igénye nélkül):
+
+[Kép]
 
 |      Változó      |   Jelentés   |
 |:-----------------:|:------------:|

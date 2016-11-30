@@ -1,19 +1,19 @@
 # Teljesítménymérő metrikák
 
-Asztali alkalmazás fejlesztésekor a rendelkezésre teljesítmény és tárhely ma már nem számít akadálynak. Ha valamelyik erőforrás szűk keresztmetszetté válik, akkor alkatrészcserével általában megoldható.
+Asztali alkalmazás fejlesztésekor a rendelkezésre álló teljesítmény és tárhely ma már nem számít akadálynak. Ha valamelyik erőforrás szűk keresztmetszetté válik, akkor alkatrészcserével általában megszüntethető a probléma.
 
 Nem ez a helyzet beágyazott rendszerek esetén. A rendszer központi egységének számítási kapacitása általában nem haladja meg nagy mértékben az elégséges szintet, így különösen figyelni kell a fejlesztés során, hogy az implementált kód hatékony legyen. A rendelkezésre álló memória sem tekinthető korlátlannak, és gyakran a bővítés is nehézkes, esetleg nem megoldható. Az eszköz fogyasztása is fontos szempont, amit a szoftver szintén nagy mértékben befolyásolhat.
 
 Az operációs rendszer választása összetett folyamattá is bonyolódhat, mert mérlegelni kell az alkalmazásunk igényeit, az operációs rendszer támogatottságát (támogatott mikrokontrollerek, fórumok, gyártói támogatás), a becsülhető fejlesztési időt és az ezzel járó költségeket, illetve fizetős operációs rendszer esetén a rendszer árát.
 
-A választást az sem segíti előre, hogy nincs egyértelmű módszer az operációs rendszerek értékelésére. [lábjegyzet-> 
-Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN) 
+A választást az sem segíti előre, hogy nincs egyértelmű módszer az operációs rendszerek értékelésére. [lábjegyzet->
+Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN)
 az 1980-as évek végén hozott létre szabványt a folyamatirányító számítógépes rendszerek teljesítménymutatóinak mérésére (DIN 19242 szabvány-sorozat), a valós idejű operációs rendszerek értékelésére ez nem jelent megoldást.]
 
-Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehetőú legkisebb szintre csökkenteni.
+Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehető legkisebb szintre csökkenteni.
 A kulcsfontosságú szempontok az alábbiak:
 - Megismételhetőség: egy mérést meg kell tudnunk ismételni. Ehhez szükséges a pontos mérési összeállítás, a mérés körülményei, a használt eszközök és szoftverek.
-- Véletlenszerűség: a mérés során nem független események következhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell mérési folyamatok véletlenszerű futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben kövessék egymást).
+- Véletlenszerűség: a mérés során nem független események következhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell a mérési folyamatok véletlenszerű futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben kövessék egymást).
 - Vezérlés: a mérés során a vezérelhető paramétereket (melyek a mérést befolyásolhatják) lehetőségeinkhez mérten kézben kell tartani.
 - Szemléletesség: a mérés eredményének reprezentatívnak kell lennie. Számértékek esetén két mérés eredményét össze kell tudnunk hasonlítani és tudnunk kell relációt vonni a két érték közé.
 
@@ -27,12 +27,16 @@ A mikrokontrollerek területén a memória mérete korlátozott (ROM és RAM egy
 
 ## Késleltetés
 
-A rendszer késleltetése az az idő, ami egy esemény beérkezésétől a rendszer válaszáig eltelik. Ezt okozhatja a mikrovezérlő megszakítási mechanizmusához szükséges műveletek sora, az operációs rendszer ütemezőjének overhead-je, de a közben végrehajtandó feladat is nagy mértékben befolyásolja a nagyságát. 
+A rendszer késleltetése az az idő, ami egy esemény beérkezésétől a rendszer válaszáig eltelik. Ezt okozhatja a mikrovezérlő megszakítási mechanizmusához szükséges műveletek sora, az operációs rendszer ütemezőjének overhead-je, de a közben végrehajtandó feladat is nagy mértékben befolyásolja a nagyságát.
+
+[Kép]
 
 
 ## Jitter
 
 A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mért késleltetésekből határozható meg.
+
+[Kép]
 
 
 ## Rhealstone
@@ -90,7 +94,7 @@ Ezt a meghatározást 1990-ben annyival módosították, hogy a szemafor-váltá
 
 [Kép]
 
-A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös kizárást valósít meg (mutex).
+A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös kizárást (mutex) valósít meg.
 
 
 ### Deadlock-feloldási idő
@@ -108,14 +112,14 @@ A datagram-átviteli idő a taszkok között elérhető adatsebesség az operác
 
 [Kép]
 
-Az egy évvel később megjelent cikkben ezt a kategóriát is módosították kis mértékben. Egyrészt a megnevezést taszk közötti üzene-késleltetésre változtatták, másrészt nem a maximális adatsebesség meghatározása a mérés célja, hanem az adattovábbítást végző objektum kezelésének és az operációs rendszer járulékos műveleteinek hatékonyságának megmérése.
+Az egy évvel később megjelent cikkben ezt a kategóriát is módosították kis mértékben. Egyrészt a megnevezést taszk közötti üzenet-késleltetésre változtatták, másrészt nem a maximális adatsebesség meghatározása a mérés célja, hanem az adattovábbítást végző objektum kezelésének és az operációs rendszer járulékos műveleteinek hatékonyságának megmérése.
 
 [Kép]
 
 
 ### Rhealstone jellemzők összegzése
 
-Az elvégzett mérések mikroszekundum és milliszekumdum nagyságrendű értékeket adnak vissza. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetőek egy reprezentatív értékké. Az átváltásnak köszönhetően a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
+Az elvégzett mérések várhatóan mikroszekundum és milliszekumdum nagyságrendű értékeket adnak vissza. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetőek egy reprezentatív értékké. Az átváltásnak köszönhetően a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
 
 #### Objektív Rhealstone érték
 
@@ -145,7 +149,7 @@ A méréshez szükséges eszközök:
 
 ### Mérési elrendezés
 
-A jelgenerátor kimenetét a mérendő rendszer bemenetére, illetve mindkét számláló __count up__ bemenetére kötjük, míg mérendő rendszer kimenetét a kimeneti számláló __count down__ bemenetére kötjük.
+A jelgenerátor kimenetét a mérendő rendszer bemenetére, illetve mindkét számláló __count up__ bemenetére kötjük, míg a mérendő rendszer kimenetét a kimeneti számláló __count down__ bemenetére kötjük.
 
 [Kép]
 
@@ -171,7 +175,7 @@ A feladat megoldása során elsődlegesen az operációs rendszerek jellemzőit 
 
 Egy ipari alkalmazás szimulációját is megvalósítom, mely egy másik összehasonlítási alapot nyújt a dolgozathoz. Az alkalmazást felhasználom a terhelés alatti mérés megvalósításához is.
 
-A dolgozat további részeibena [referencia] fejezetben felsorolt összes jellemző meghatározására képes rendszert állítok össze, mellyel végrehajtom a méréseket. A meghatározandó jellemzők:
+A dolgozat további részeiben a [referencia] fejezetben felsorolt összes jellemző meghatározására képes rendszert állítok össze, mellyel végrehajtom a méréseket. A meghatározandó jellemzők:
 - Memóriaigény,
 - Késleltetés,
 - Jitter,
