@@ -11,13 +11,15 @@ Többféle operációs rendszert különböztetünk meg a futtatható folyamatok
 
 A legtöbb operációs rendszer látszólag lehetővé teszi több program egyidejű futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy időpillanatban futtatni. Az operációs rendszer ütemezője a felelős azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejű futás látszatát.
 
-[Kép]
+![parallel_run](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/01_parallel_run.png "Parallel run")
+
+![multitasking](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/02_multitasking.png "Multitasking")
 
 Az operációs rendszer típusát az ütemező döntési mechanizmusa határozza meg. Egy real time operációs rendszer ütemezője úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejűség, vagyis hogy a rendszernek egy szigorúan meghatározott időn belül reagálnia kell egy adott eseményre. A. valósidejű követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezője előre megjósolható döntéseket hoz.
 
 Valósidejű operációs rendszerek közül megkülönböztetjük a soft real-time és a hard real-time rendszereket.
 
-Soft real-time rendszer esetén nem probléma, ha nem érkezik válasz a megadott határidőn belül, az csak csak a rendszer minősítését rontja.
+Soft real-time rendszer esetén nem probléma, ha nem érkezik válasz a megadott határidőn belül, az csak a rendszer minősítését rontja.
 
 Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a feladatra, ha a határidőt nem tudja betartani. Például egy személygépjármű légzsákjának késedelmes nyitása akár halálos következményekkel is járhat.
 
@@ -199,13 +201,13 @@ Vegyünk egy esetet, mikor legalább három különböző prioritási szinten fu
 
 Vegyünk egy esetet, mikor legalább három, különböző prioritási szinten futó taszkot hozunk létre. Kezdetben csak a _TaskA_ képes futni, ami egy mutex segítségével megkapja egy erőforrás használati jogát. Közben a _TaskC_ futásra kész éllapotba kerül, ezért preemptálja a _TaskA_-t. A _TaskC_ is használná az erőforrást, de mivel azt már a _TaskA_ birtokolja, ezért várakozó állapotba kerül. Közben a _TaskB_ is futásra kész állapotba került, és mivel magasabb a prioritása, mint a _TaskA_-nak, ezért megkapja a futás jogát. A _TaskA_ csak a _TaskB_ befejeződése (vagy blokkolódása) esetén kerül újra futó állapotba. Miután a _TaskA_ befejezte az erőforrással a feladatait és felszabadítja azt, a _TaskC_ újból futásra kész állapotba kerül, és preemptálja a _TaskA_-t.
 
-[Kép]
+![priority_inversion](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/03_priority_inversion.png "Priority inversion")
 
 A vizsgált példa során a _TaskB_ késleltette a _TaskC_ futását azzal, hogy nem engedte a _TaskA_-nak az erőforrás felszabadítását. Így látszólag a _TaskB_ magasabb prioritással rendelkezett, mint _TaskC_. Erre mondjuk, hogy prioritás inverzió lépett fel.
 
 A prioritás inverzió problémájának egy megoldása a prioritás öröklés. Ekkor a magad prioritású taszk a saját prioritási szintjére emeli azt az alacsony prioritású taszkot, mely blokkolja a további futását. Amint a szükséges erőforrás felszabadul, az eredeti prioritási értékek kerülnek visszaállításra.
 
-[Kép]
+![priority_inheritance](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/04_priority_inheritance.png "Priority inheritance")
 
 
 #### Holtpont (Deadlock)

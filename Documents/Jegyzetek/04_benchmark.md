@@ -29,14 +29,13 @@ A mikrokontrollerek területén a memória mérete korlátozott (ROM és RAM egy
 
 A rendszer késleltetése az az idő, ami egy esemény beérkezésétől a rendszer válaszáig eltelik. Ezt okozhatja a mikrovezérlő megszakítási mechanizmusához szükséges műveletek sora, az operációs rendszer ütemezőjének overhead-je, de a közben végrehajtandó feladat is nagy mértékben befolyásolja a nagyságát.
 
-[Kép]
-
+![latency](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/01_latency.png "Latency")
 
 ## Jitter
 
 A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mért késleltetésekből határozható meg.
 
-[Kép]
+![jitter](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/02_jitter.png "Jitter")
 
 
 ## Rhealstone
@@ -59,7 +58,7 @@ A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képessé
 
 A taszváltási idő a két független, futásra kész, azonos prioritású taszkok váltásához szükséges átlagos időtartam.
 
-[Kép]
+![task_switching_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/03_task_switching_time.png "Task switching time")
 
 A taszkváltási idő alapvető jellemzője egy multitaszk rendszernek. A mérés a taszkokat nyilvántartó struktúrák hatékonyságáról ad képet. A taszkváltási időt a használt processzor architektúrája, utasításkészlete is befolyásolja.
 
@@ -70,7 +69,7 @@ A rendszerek a futtatható taszkokat általában valamilyen listában tárolják
 
 A preemptálási idő egy magasabb prioritású taszk érvényre jutásához szükséges átlagos időtartam.
 
-[Kép]
+![preemption_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/04_preemption_time.png "Preemption time")
 
 A preemptálási idő nagyban hasonlít a taszkváltási időhöz, azonban a járulékos utasítások miatt általában hosszabb időt jelent.
 
@@ -81,18 +80,18 @@ A megszakítás-késleltetési idő
 
 A megszakítás-késleltetési idő egy esemény beérkezése és a megszakítás kezelő rutin első utasítása között eltelt átlagos időtartam.
 
-[Kép]
+![interrupt_latency_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/05_interrupt_latency_time.png "Interrupt latency time")
 
 
 ### Szemafor-váltási idő
 
 Az 1989-es cikk szerint szemafor-váltási idő az az átlagos időtartam, ami egy szemafor elengedése és egy, a szemaforra várakozó taszk elindulása között eltelik.
 
-[Kép]
+![semaphore_shuffling_time_1](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/06_semaphore_shuffling_time_1.png "Semaphore shuffling time 1")
 
 Ezt a meghatározást 1990-ben annyival módosították, hogy a szemafor-váltási idő egy már birtokolt szemafor kérése és a kérés teljesítése között eltelt időtartam, a birtokló taszk futási idejétől eltekintve.
 
-[Kép]
+![semaphore_shuffling_time_2](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/07_semaphore_shuffling_time_2.png "Semaphore shuffling time 2")
 
 A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös kizárást (mutex) valósít meg.
 
@@ -101,7 +100,7 @@ A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös ki
 
 A deadlock-feloldási idő az az átlagos időtartam, ami egy olyan erőforrás eléréséhez szükséges, amit egy alacsonyabb prioritású taszk már birtokol.
 
-[Kép]
+![deadlock_breaking_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/08_deadlock_breaking_time.png "Deadlock breaking time")
 
 Vagyis a deadlock-feloldási idő a birtoklási probléma feloldásához szükséges összesített idő egy alacsony és egy magas prioritású taszk között.
 
@@ -110,11 +109,11 @@ Vagyis a deadlock-feloldási idő a birtoklási probléma feloldásához szüks�
 
 A datagram-átviteli idő a taszkok között elérhető adatsebesség az operációs rendszer objektumait kihasználva (vagyis nem megosztott memórián vagy pointeren keresztül). Az adatküldő taszknak kapnia kell értesítést az adat átvételéről.
 
-[Kép]
+![datagram_throughput_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/09_datagram_throughput_time.png "Datagram throughput time")
 
 Az egy évvel később megjelent cikkben ezt a kategóriát is módosították kis mértékben. Egyrészt a megnevezést taszk közötti üzenet-késleltetésre változtatták, másrészt nem a maximális adatsebesség meghatározása a mérés célja, hanem az adattovábbítást végző objektum kezelésének és az operációs rendszer járulékos műveleteinek hatékonyságának megmérése.
 
-[Kép]
+![intertask_message_latency](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/10_intertask_message_latency.png "Intertask message latency")
 
 
 ### Rhealstone jellemzők összegzése

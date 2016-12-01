@@ -175,7 +175,7 @@ Az eseményt kezelő taszk blokkoló _take_ utasítással várakozik Blokkolt á
 
 Todo: Példa
 
-[Kép]
+![deferred_interrupt](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/FreeRTOS/03_deferred_interrupt.png "Deferred interrupt")
 
 
 ### Interruptok egymásba ágyazása
