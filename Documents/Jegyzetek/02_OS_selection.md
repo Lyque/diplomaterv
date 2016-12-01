@@ -7,7 +7,7 @@ Az operációs rendszerek kiválasztásánál elsődleges szempont a hardverek t
 
 Az UBM Tech minden évben készít egy kutatást a beágyazott rendszereket piacán, melyben többek között a használt beágyazott operációs rendszerekkel kapcsolatban is publikál adatokat. A statisztika alapján a két leggyakrabban használt operációs rendszer a FreeRTOS és a uC/OS-II. A uC/OS új verziója, a uC/OS-III a listán hátrébb kapott helyet, de még így is befért a tíz vezető rendszer közé. Mindekettő operációs rendszer népszerűsége nőtt a 2014-es évhez képest.
 
-[Kép]
+![os_poularity](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/OS_selection/01_OS_popularity.png "OS popularity")
 
 Az STM32F4 Discovery kártyához elérhető szoftvercsomag tartalmazza a FreeRTOS rendszert, ami jelzi a rendszer támogatottságának mértékét. A FreeRTOS hivatalos oldalán megvásárolhatóak a rendszer használatát bemutató könyvek, illetve online elérhető leírások, amik szintén segítik a rendszer megismerését. Ezáltal az első megvizsgált rendszernek a FreeRTOS-t választottam.
 

@@ -33,7 +33,7 @@ A kártyán megtalálható több periféria, mely a különböző interfészek k
 
 Az STM32F4 Discovery fejlesztőeszközhöz több kiegészítő kártya is kapható, melyek célja a kipróbálható perifériák számának növelése. Egyik ilyen bővítőkártya az STM32F4DIS-BB, ami tartalmaz microSD-kártya foglalatot, az Ethernet interfész fizikai rétegét megvalósító IC-t, illetve a csatlakoztatáshoz szükséges RJ45-ös csatlakozót. Ezen kívül kivezetésre került egy DB9-es csatlakozó - mely az egyik soros kommunikációs portot teszi elérhetővé -, egy FPC csatlakozó - mely kamera csatlakoztatását teszi lehetővé -, illetve az egyik oldali csatlakozósorra ráköthető 3,5"-os TFT kijelző.
 
-![stm32f4_disco_bb](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Eval_Boards/02_STM32F4DIS_BB.jpg "STM32F4 Discovery BaseBoard")
+![stm32f4_disco_bb](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Eval_Boards/02_STM32F4DIS-BB.jpg "STM32F4 Discovery BaseBoard")
 
 ## Raspberry Pi 3
 
