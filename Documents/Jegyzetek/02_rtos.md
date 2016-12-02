@@ -79,7 +79,7 @@ Lehet preemptív és nem-preemptív is.
 
 A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a többszintű sorok használata, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért.
 
-[Kép]
+![multilevel_queue_scheduling](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/05_multilevel_queue_scheduling.png "Multi-level queue scheduling")
 
 
 ### Operációs rendszer által nyújtott szolgáltatások
@@ -130,20 +130,20 @@ Szemaforokat leggyakrabban szinkronizációs célból, vagy erőforrások védel
 
 Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
 
-[Kép]
+![binary_semaphore](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/06_binary_semaphore.png "Binary semaphore")
 
 Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történő kezelése, ezzel is minimalizálva a megszakítási rutin hosszát.
 
 Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a szemafor egy adott taszkban gyakrabban kerül jelzésre, mint ahogy feldolgozzuk, akkor jelzések veszhetnek el (amíg az egyik jelzés várakozik, addig az utána következő eseményeknek nincs lehetőségük várakozó állapotba kerülni).
 
-[Kép]
+![binary_semaphore_collision](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/07_binary_semaphore_collision.png "Binary semaphore collision")
 
 
 ##### Számláló szemafor
 
 A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül Blokkolt állapotba a jelző taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor, melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
 
-[Kép]
+![counting_semaphore](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/08_counting_semaphore.png "Counting semaphore")
 
 Két felhasználása elterjedt a számláló szemaforoknak:
 - Események számlálása: ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
@@ -154,7 +154,7 @@ Két felhasználása elterjedt a számláló szemaforoknak:
 
 Taszkok vagy taszkok és megszakítási rutinok között megosztott erőforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erőforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erőforrás szabad, akkor az igénylő taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erőforrással való munkát. A mutex-et a lehető legkorábban (az erőforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
 
-[Kép]
+![mutual_exclusion](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/09_mutual_exclusion.png "Mutual exclusion")
 
 Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelző taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
 
@@ -163,7 +163,7 @@ Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség 
 
 A sorok fix méretű adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzők a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként működnek.
 
-[Kép]
+![queue](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/10_queue.png "Queue")
 
 A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban.
 
@@ -216,7 +216,7 @@ Szemaforok és mutexek használata során alakulhat ki holtponti helyzet. Nézz�
 
 Induláskor a _TaskA_ kapja meg a futás jogát, és lefoglalja a _ResA_-t. Közben lejár a _TaskA_-nak kiosztott időszelet, és _TaskB_ kerül futó állapotba. A _TaskB_ lefoglalja a _ResB_ erőforrást, majd megpróbálja lefoglalni a _ResA_ erőforrást is. Mivel a _ResA_-t már a _TaskA_ használja, ezért a _TaskB_ várakozó állapotba kerül. A _TaskA_ újból megkapja a processzort, és hozzáférést kezdeményez a _ResB_ erőforráshoz. Mivel a _ResB_ erőforrást a _TaskB_ folyamat birtokolja, ezért a _TaskA_ is várakozó állapotba lép. Egyik folyamat sem tudja folytatni a feladatát, emiatt az erőforrásokat sem tudják felszabadítani.
 
-[Kép]
+![deadlock](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/RTOS/11_deadlock.png "Deadlock")
 
 A holtponti helyzetek elkerülésére és feloldására több szabály létezik, de beágyazott rendszereknél átgondolt tervezéssel, illetve időkorlát megadásával általában elkerülhető a kialakulásuk.
 

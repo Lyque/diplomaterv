@@ -150,7 +150,7 @@ A méréshez szükséges eszközök:
 
 A jelgenerátor kimenetét a mérendő rendszer bemenetére, illetve mindkét számláló __count up__ bemenetére kötjük, míg a mérendő rendszer kimenetét a kimeneti számláló __count down__ bemenetére kötjük.
 
-[Kép]
+![worst_case_response_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/11_worst_case_response_time.png "Worst-case response time")
 
 
 ### Mérési elv
