@@ -243,8 +243,6 @@ Beágyazott alkalmazások fejlesztése során is szükség van dinamikus memóri
 
 Minden taszkhoz tartozik egy TCB (Task Control Block) és egy stack. A TCB struktúra a következő elemeket tartalmazza (a teljesség igénye nélkül):
 
-[Kép]
-
 |      Változó      |   Jelentés   |
 |:-----------------:|:------------:|
 |   pxTopOfStack    | Az stack utolsó elemére mutató pointer|
@@ -268,6 +266,8 @@ Ezt az implementációt tartalmazza a __heap1.h__. A fájl a __pvPortMalloc()__ 
 
 A __pvPortMalloc()__ függvény a FreeRTOS heap-jét ossza fel kisebb területekre, majd ezeket rendeli hozzá az egyes taszkokhoz. A heap teljes méretét a __configTOTAL_HEAP_SIZE__ konfigurációs érték határozza meg a __FreeRTOSConfig.h__ fájlban. Nagy méretű tömböt definiálva már a memórifoglalás előtt látszólag sok memóriát fog felhasználni az alkalmazás, mivel a FreeRTOS ezt induláskor lefoglalja.
 
+![heap1](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/FreeRTOS/04_heap1.png "Heap1")
+
 
 ### Heap_2.c
 
@@ -278,6 +278,8 @@ A legjobban illeszkedő (best fit) algoritmus biztosítja, hogy a memóriakéré
 A megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
 
 A __heap_2.c__ fájl használata javasolt, ha az alkalmazás ismételve létrehoz és töröl taszkokat, és a taszkokhoz tartozó stack mérete nem változik.
+
+![heap2](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/FreeRTOS/05_heap2.png "Heap2")
 
 A __heap_2.c__ működése nem determinisztikus, de hatékonyabb, mint a _standard library_ implementációi.
 
