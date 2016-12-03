@@ -386,7 +386,7 @@ A GNU General Public Licence azzal a céllal jött létre, hogy garantálja egy 
 A licenc több módosításon keresztül ment. A két legutolsó változatot ismertetem a továbbiakban.
 
 
-### GNU GPLv2
+#### GNU GPLv2
 
 A GNU GPLv2 licenc megengedi a program szabad terjesztését és módosítását, amennyiben a terjesztett/módosított örökli az eredeti szerzői jogi megjegyzéseket. A garanciális kötelezettségek elutasításra kerülnek, de nem tiltja meg (akár ellenszolgáltatás fejében) a vállalásukat. 
 
@@ -679,7 +679,7 @@ with the library. If this is what you want to do, use the GNU Lesser
 General Public License instead of this License.
 ```
 
-### GNU GPLv3
+#### GNU GPLv3
 
 A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami a megérthetőséget hivatott szolgálni. 
 

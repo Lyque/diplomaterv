@@ -1,51 +1,455 @@
 %----------------------------------------------------------------------------
-\chapter{Elméleti áttekintõ}
+\chapter{Elméleti áttekintés}
 %----------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------
 \section{Általánosan használt licencek}
 %----------------------------------------------------------------------------
 
+A mindennapi életben naponta szembesülünk a különbözõ gyártók vagy fejlesztõk által elérhetõvé tett programokkal, melyek mindegyike tartalmaz valamilyen megkötést a program használatával kapcsolatban. Ezek között találhatóak egyedileg alkalmazott feltételek, de vannak elterjedt licencek, melyek például nyílt forráskódú szoftverek esetén gyakran alkalmaznak.
+
+%----------------------------------------------------------------------------
+\subsection{Zárt forráskódú szoftver}
+%----------------------------------------------------------------------------
+
+Zárt forráskódú szoftver esetén a forráskód kizárólag a gyártó/fejlesztõ kezében marad. A szoftver használatáért általában valamekkora összeget kell fizetni, amely gyakran magában foglalja a fellépõ problémák megoldásában való segítségnyújtást is. 
+Természetesen a zárt forráskód nem vonja kötelezõen maga után, hogy a felhasználónak fizetnie kell a szoftver használatáért. Sok gyártó a termékét ingyen elérhetõvé teszi (freeware). Ilyen esetben a jövedelemszerzési felhasználásból és/vagy a segítségnyújtásból származik a fejlesztést fedezõ bevétel.
+A gyártó a felhasználás feltételeit saját maga szabhatja meg, így ebben az esetben nem lehet általános elemzést végezni a licencekkel kapcsolatban.
+
+%----------------------------------------------------------------------------
+\subsection{Nyílt forráskódú szoftver}
+%----------------------------------------------------------------------------
+
+A szoftverek másik nagy csoportját alkotják a nyílt forráskódú szoftverek. Ekkor a forráskód publikusan elérhetõ. A nyílt forráskódú szoftverek esetén is lehetõség van egyéni licenc használatára, azonban a szoftverek többségénél elterjedt, általánosan használt licencekkel találkozunk.
+
+%----------------------------------------------------------------------------
+\subsubsection{MIT License}
+%----------------------------------------------------------------------------
+
+Az MIT licenc a legegyzerûbb licencek egyike. A licenc alá esõ forráskód szabadon másolható, módosítható, terjeszthetõ, akár más licenc alá helyezhetõ. 
+
+%----------------------------------------------------------------------------
+\subsubsection{Apache License 2.0}
+%----------------------------------------------------------------------------
+
+[ToDo]
+
+%----------------------------------------------------------------------------
+\subsubsection{BSD licenc}
+%----------------------------------------------------------------------------
+
+A BSD licenc eredetileg egy egyszerû és szabad felfogású licenc számítógép szoftverek számára, amit elõször 1980-ban használtak a BSD UNIX operációs rendszerhez. Az idõ elõrehaladtával több módosítást kellett végrehajtani a licenc szövegezésén.
+
+%----------------------------------------------------------------------------
+\paragraph{4-clause BSD (eredeti)}
+%----------------------------------------------------------------------------
+
+Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhasználás feltételeit. A licenc tartalmazza a szerzõi jog keletkezésének évét, a fejlesztõ szervezet nevét és a szerzõi jog tulajdonosának nevét. A licenc megengedi a szoftver használatát mind forrás, mind bináris formában, akár módosítással, akár anélkül, amennyiben a felhasználás feltételei teljesülnek. A szöveg azonban tartalmaz egy megkötést, amely a használat során gyakran kellemetlenségként jött elõ a felhasználók körében: amennyiben a szoftver bármilyen részére vagy a szoftver használatára hivatkozás történik egy reklámanyagban, úgy a szoftver fejlesztõjét fel kellett tüntetni a szövegben. Amennyiben több, eredeti BSD licenc alá esõ szoftvert tartalmazó rendszer került hivatkozásra, úgy az említett lista hamar nagy méretûvé válhatott. Ezen kellemetlenség miatt került elõször módosításra a BSD licenc.
+
+A négy pont az alábbi feltételeket szabja a feljhasználó számára:
+
+\begin{enumerate}
+\item A forráskódnak tartalmaznia kell az copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkozatot.
+\item Bináris formában történõ terjesztés esetén a a copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkoztatot a dokumentációban és/vagy valamely másik, a terjesztett szoftverhez adott anyagban fel kell tüntetni.
+\item Bármiféle hirdetési anyagban, ami a szoftver jellemzõire vagy használatára hivatkozik, fel kell tüntetnie az alábbi elismerést:
+\emph{Ez a termék a <szervezet> által fejlesztett szoftvert tartalmaz.}
+\item Sem a <szervezet> neve, sem a közremûködõ partneinek neve nem használható fel a szoftverbõl származó termék népszerûsítésére vagy ajánlására erre vonatkozó írásbeli engedély nélkül.
+\end{enumerate}
+
+A nyilatkozatban tisztázásra kerül, hogy a szerzõi jog tulajdonosa nem vonható felelõsségre a szoftver használatából, felhasználásából eredõ üzemkimaradás, adatvesztés, profitvesztés vagy egyéb veszteség bekövetkezése esetén.
+
+Ez a licencelési forma ma már nem elterjedt, inkább a módosított (3-clause BSD) vagy az egyszerûsített (2-clause BSD) licenc használata ajánlott.
+
+%----------------------------------------------------------------------------
+\paragraph{3-clause BSD (módosított)}
+%----------------------------------------------------------------------------
+
+Az elõzõ, eredeti verzióhoz képest a különbség, hogy eltávolították a hirdetésre vonatkozó elismerési feltételt, valamint a nyilatkozat szövegében a közremûködõket is mentesíti minden garanciális felelõsség alól.
+
+%----------------------------------------------------------------------------
+\paragraph{2-clause BSD (egyszerûsített)}
+%----------------------------------------------------------------------------
+
+Az egyszerûsített (vagy gyakran FreeBSD licencnek is nevezett) BSD licenc két pontban foglalja össze a felhasználás feltételeit, amit a módosított licencbõl a népszerûsítésre vonatkozó pont eltávolításával kaptak.
+
+%----------------------------------------------------------------------------
+\subsubsection{GNU GPL}
+%----------------------------------------------------------------------------
+
+A GNU General Public Licence azzal a céllal jött létre, hogy garantálja egy program szabad módosítását és terjesztését, illetve hogy az szabad szoftver maradjon a felhasználói számára. Az licenc az angol free kifejezést nem a termék árára, hanem annak szabad felhasználására használja.
+
+A licenc több módosításon keresztül ment. A két legutolsó változatot ismertetem a továbbiakban.
+
+%----------------------------------------------------------------------------
+\paragraph{GNU GPLv2}
+%----------------------------------------------------------------------------
+
+A GNU GPLv2 licenc megengedi a program szabad terjesztését és módosítását, amennyiben a terjesztett/módosított örökli az eredeti szerzõi jogi megjegyzéseket. A garanciális kötelezettségek elutasításra kerülnek, de nem tiltja meg (akár ellenszolgáltatás fejében) a vállalásukat. 
+
+Ha módosítás történt a programon, akkor fel kell tüntetni a módosító nevét és a módosítás dátumát. 
+
+A programtól elkülöníthetõ munkára nem kötelezõ kiterjeszteni a licenc hatályát, amennyiben az külön kerül terjesztésre. Ha az eredeti (szerzõi jogok alá esõ) munkával együtt kerül terjesztésre, akkor automatikusan kiterjesztésre kerülnek a jogok.
+
+A program terjeszthetõ futtatható, bináris formában is, amennyiben a forráskód publikusan elérhetõ marad.
+
+A felhasználó jogait tovább korlátozni nem lehet.
+
+Ha valamilyen okból kifolyólag (például bírói végzés folytán) a terjesztés csak bináris formában lehetséges, akkor a program nem terjeszthetõ.
+
+Ha valamely országban a terjesztés nem lehetséges, úgy a szerzõi jogok eredeti tulajdonosa földrajzi megkötést adhat a terjesztésre vonatkozóan, ami a licenc teljes értékû részét képezi.
+
+A programot más, szerzõi jogi szabályozásában különbözõ szoftverbe csak a szerzõtõl kapott engedély birtokában lehet.
+
+A GPLv2 licenc nem engedi meg, hogy a program része legyen szellemi tulajdont képezõ szoftvernek. Ebben az esetben az LGPL licenc használata javasolt.
+
+%----------------------------------------------------------------------------
+\paragraph{GNU GPLv3}
+%----------------------------------------------------------------------------
+
+A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami a megérthetõséget hivatott szolgálni. 
+
+A tartalmi változtatások megcélozzák a más licencekkel való használat megkönnyítését, a licenccel védett szoftverhez járó felhasználó termék módosított programmal való használatának biztosítását (tivoizáció[lábjegyzet] elkerülése), jobban specifikálja a jogok elvesztését, illetve azok visszaszerzésének lehetõségeit, illetve megjelenik a \emph{megkülönböztetõ} licenc definíciója, ami nem tartalmazza, vagy megtiltja valamely, az eredeti licencben foglalt jog gyakorlását.
+
+
+
+
+
+
+
+
+
+
+
 %----------------------------------------------------------------------------
 \section{Operációs rendszer feladatai}
 %----------------------------------------------------------------------------
+
+Az operációs rendszer elsõdleges feladata a használt processzor perifériáinak kezelése, azokhoz meghatározott interfész biztosítása. További feladata még a létrehozott taszkok ütemezése, a taszkok közötti kommunikáció és szinkronizáció megvalósítása.
 
 %----------------------------------------------------------------------------
 \subsection{Operációs rendszer definíciója}
 %----------------------------------------------------------------------------
 
+Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és szolgáltatásokat biztosít más programok (vagy alkalmazások) számára. Az alkalmazások valósítják meg azt a funkcionalitást, amire a számítógép felhasználójának szüksége van, vagy a számítógép felhasználója akar. Az operációs rendszer által nyújtott szolgálatások az alkalmazások feljesztését egyszerûsítik, ezáltal felgyorsítják a fejlesztést és karbantarthatóbbá teszik a szoftvert.
+
+Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyidejûleg kezelt felhasználók számának és az ütemezõ mûködésének függvényében. A továbbiakban csak a multitaszkot támogató operációs rendszerekkel foglalkozom.
+
 %----------------------------------------------------------------------------
 \subsubsection{Valós idejû operációs rendszer}
 %----------------------------------------------------------------------------
+
+A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/RTOS/01_parallel_run.png}}
+\caption{Látszólag a folyamatok párhuzamosan futnak.}
+\label{fig:01_parallel_run}
+\end{figure}
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/RTOS/02_multitasking.png}}
+\caption{A valóságban minden folyamat egy kis idõszeletet kap a processzortól.}
+\label{fig:02_multitasking}
+\end{figure}
+
+Az operációs rendszer típusát az ütemezõ döntési mechanizmusa határozza meg. Egy real time operációs rendszer ütemezõje úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejûség, vagyis hogy a rendszernek egy szigorúan meghatározott idõn belül reagálnia kell egy adott eseményre. A. valósidejû követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezõje elõre megjósolható döntéseket hoz.
+
+Valósidejû operációs rendszerek közül megkülönböztetjük a soft real-time és a hard real-time rendszereket.
+
+Soft real-time rendszer esetén nem probléma, ha nem érkezik válasz a megadott határidõn belül, az csak a rendszer minõsítését rontja.
+
+Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a feladatra, ha a határidõt nem tudja betartani. Például egy személygépjármû légzsákjának késedelmes nyitása akár halálos következményekkel is járhat.
 
 %----------------------------------------------------------------------------
 \subsection{Ütemezés}
 %----------------------------------------------------------------------------
 
-%----------------------------------------------------------------------------
-\subsection{Szolgáltatások}
-%----------------------------------------------------------------------------
+Az operációs rendszer egyik meghatározó része a használt ütemezõ mûködésének elve, mely meghatározza az eszköz alkalmasságát egy adott feladatra. Az ütemezõ dönti el, hogy a futásra kész taszkok közül melyik futhat a következõ ütemezési szakaszban. További feladata tasztváltáskor az éppen futó taszk állapotának elmentése és a futtatandó taszk állapotának betöltése. Az ütemezõ három okból futhat le:
+\begin{itemize}
+\item Egy taszk lemond a futás jogáról,
+\item Megszakítás érkezik (tick esemény, külsõ megszakítás),
+\item Egy tasz létrejött vagy befejezõdött.
+\end{itemize}
+
+A taszkváltási mód szerint kétféle mûködést különböztetünk meg:
+\begin{itemize}
+\item Preemptív ütemezés: ekkor az ütemezõ megszakíthatja az éppen futó taszkot, amennyiben magasabb prioritású taszk futásra kész állapotban várakozik,
+\item Nem-preemptív vagy kooperatív ütemezés: ebben az esetben az ütemezõ csak akkor futtat új taszkot, ha az éppen futó taszk befejezõdött vagy explicit lemond a futásról (blokkolódik vagy átadja a futás jogát).
+\end{itemize}
+
+A továbbiakban ismertetem néhány elterjedt ütemezési mechanizmus alapelvét.
 
 %----------------------------------------------------------------------------
-\subsubsection{Kommunikációs objektumok}
+\subsubsection{First-come first-served (Kiszolgálás beérkezési sorrendben)}
 %----------------------------------------------------------------------------
+
+A taszkok futtatása az érkezési sorrendben történik. A beérkezõ taszkok egy sorba kerülnek, ahonnan sorrendben kapják meg a CPU használat jogát.
+
+Az átlagos várakozási idõ nagy lehet, ha egy idõigényes folyamatra több gyors lefutású folyamat várakozik.
+
+Nem preemptív.
+
+%----------------------------------------------------------------------------
+\subsubsection{Shortest Job First (Legrövidebb feladat elõször)}
+%----------------------------------------------------------------------------
+
+A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes mûködés esetén az átalgos várakozási idõ optimális lesz.
+
+A gyakorlatban nehéz elõre megjósolni egy taszk futási idejét.
+
+Lehet preemptív és nem-preemptív is. Preemptív esetben Shortest Remaining Time First (Legrövidebb hátralevõ idejû elõször).
+
+%----------------------------------------------------------------------------
+\subsubsection{Prioritásos ütemezés}
+%----------------------------------------------------------------------------
+
+A következõ taszk kiválasztása a prioritása alapján történik. Növelni lehet a hatákonyságát más metódusok keverésével (például a prioritást a várható futási idejébõl határozzuk meg; a prioritást növeljük az idõ elteltével; a prioritást csökkentjük az eddigi futó állapotban töltött idõ arányában).
+
+Rossz tervezés esetén az alacsony prioritású feladatok nem jutnak processzoridõhöz (kiéheztetés - starvation).
+
+Lehet preemptív és nem-preemptív is.
+
+%----------------------------------------------------------------------------
+\subsubsection{Round Robin}
+%----------------------------------------------------------------------------
+
+Idõosztáson alapuló mechanizmus. A várakozási sor egy cirkuláris buffer. Minden taszk adott idõszeletet kap, majd az idõszelet lejártával a sorban következõ taszk kapja meg a futás jogát.
+
+Lehet preemptív és nem-preemptív is.
+
+%----------------------------------------------------------------------------
+\subsubsection{Hibrid ütemezés}
+%----------------------------------------------------------------------------
+
+A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a többszintû sorok használata, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/RTOS/05_multilevel_queue_scheduling.png}}
+\caption{Multilevel queue ütemezés.}
+\label{fig:05_multilevel_queue_scheduling}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsection{Operációs rendszer által nyújtott szolgáltatások}
+%----------------------------------------------------------------------------
+
+Az operációs rendszer felelõs az egyes taszkoknak szükséges memóriaterületek kezeléséért és a taszkok közötti kommunikáció megvalósításáért.
+
+%----------------------------------------------------------------------------
+\subsubsection{Memóriakezelés}
+%----------------------------------------------------------------------------
+
+Egy taszk létrehozásakor az operációs rendszer ossza ki a taszk számára a használható memóriaterület helyét és méretét, és ezt az információt a rendszernek tárolnia kell. Ha az adott taszk befejezi a futását (megszûnik), akkor az operációs rendszer feladata a taszkhoz tartozó memóriaterület felszabadítása is.
+
+ Amennyiben a taszk dinamikusan allokál memóriát futás közben, úgy ezen memória kezelése szintén az operációs rendszer feladatkörébe tartozik, viszont az egyszerûbb operációs rendszerek esetében a futás közben lefoglalt memória felszabadítása a taszk felelõsége.
 
 %----------------------------------------------------------------------------
 \subsubsection{Atomi mûvelet}
 %----------------------------------------------------------------------------
 
-%----------------------------------------------------------------------------
-\subsection{Felmerülõ problémák}
-%----------------------------------------------------------------------------
+Bizonyos mûveletek során szükség van a mûveletsor szigorúan egymás utáni futtatására. Ilyen eset például a megosztott adatterületre való írás, amikor ha taszkváltás következik be az adatterület írása közben, akkor a tartalmazott adatt érvénytelen értéket vehet fel. Az ilyen, \emph{oszthatatlan} mûveletek nevezzük atomi mûveleteknek. 
+
+A konzisztencia biztosítása céljából az atomi mûveleteket \emph{kritikus szakaszokba} kell ágyazni, ezzel jelezve az operációs rendszernek, hogy a mûveletek végrehajtása alatt nem következhet be taszkváltás, bizonyos esetekben megszakítás sem.
+
+Az operációs rendszerek a kritikus szakaszokat több szinten megvalósíthatják. Legszigorúbb esetben a megszakítások letiltásra kerülnek, és az ütemezõ a kritikus szakasz befejezéséig felfüggesztett állapotban van. A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemezõ letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástól, viszont a megszakítások nem kerülnek letiltásra.
+
+A kritikus szakaszt a lehetõ leggyorsabban el kell hagyni, mert különben a beérkezõ megszakítások és magasabb prioritású taszkok késleltetést szenvednek, ami rontja az alkalmazás hatékonyságát.
 
 %----------------------------------------------------------------------------
-\subsubsection{Prioritás inverzió (Priority Inversion)}
+\subsubsection{Kommunikációs objektumok}
 %----------------------------------------------------------------------------
+
+Az alkalmazások egymástól független taszkok konstrukciójából áll. Viszont ezeknek a taszkoknak ahhoz, hogy a feladatukat el tudják látni, gyakran kommunikálniuk kell egymással.
+
+A felsorolt kommunikációs objektumok listája nem teljes. Bizonyos operációs rendszerek ezektõl eltéró struktúrákat is használhatnak, és az itt felsorolt struktúrák implementációja is eltérhet a leírtaktól (természetesen az sem biztos, hogy implementálva van az adott objektum).
+
+%----------------------------------------------------------------------------
+\paragraph{Szemafor}
+%----------------------------------------------------------------------------
+
+Két szemafor típust különböztetünk meg:
+\begin{itemize}
+\item Bináris szemafor, amikor a szemafor két értéket vehet fel,
+\item Számláló szemafor, mikor a szemafor több állapotot is felvehet.
+\end{itemize}
+
+A szemaforon két mûvelet értelmezett:
+\begin{itemize}
+\item A szemafor jelzése (elterjedt elnevezések: give, signal, post, V() mûvelet[lábjegyzet-> Dijkstra holland, verhogen]), amikor a szemafor értéke növelésre kerül.
+\item A szemafor elvétele (elterjedt elnevezések: take, wait, pend, P() mûvelet [lábjegyzet-> proberen]), amikor a szemafor elõször tesztelésre kerül, hogy tartalmaz-e elemet, ha igen, akkor az értékét csökkentjük, ha nem, akkor várakozunk addig, amíg valamelyik másik taszk elérhetõvé nem teszi azt.
+\end{itemize}
+
+A szemafor látszólag egyszerûen helyettesíthetõ egy egyszerû változó (boolean vagy elõjel nélküli egész) használatával, viszont a beépített szemafor struktúra atomi mûveletként kerül kezelésre (így nem következik be ütemezés a szemafor tesztelése és állítása közben), illetve a rendszer automatikusan tudja kezelni a várakozó folyamatok állapotok közti mozgatását.
+
+Szemaforokat leggyakrabban szinkronizációs célból, vagy erõforrások védelmére használnak.
+
+%----------------------------------------------------------------------------
+\paragraph{Bináris szemafor}
+%----------------------------------------------------------------------------
+
+Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/06_binary_semaphore.png}}
+\caption{Szinkronizáció bináris szemafor segítségével.}
+\label{fig:06_binary_semaphore}
+\end{figure}
+
+Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történõ kezelése, ezzel is minimalizálva a megszakítási rutin hosszát.
+
+Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a szemafor egy adott taszkban gyakrabban kerül jelzésre, mint ahogy feldolgozzuk, akkor jelzések veszhetnek el (amíg az egyik jelzés várakozik, addig az utána következõ eseményeknek nincs lehetõségük várakozó állapotba kerülni).
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/07_binary_semaphore_collision.png}}
+\caption{Esemény bekövetkezésének elvesztése bináris szemafor használata során.}
+\label{fig:07_binary_semaphore_collision}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\paragraph{Számláló szemafor}
+%----------------------------------------------------------------------------
+
+A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül Blokkolt állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor, melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/08_counting_semaphore.png}}
+\caption{Számláló szemafor mûködésének szemléltetése.}
+\label{fig:08_counting_semaphore}
+\end{figure}
+
+Két felhasználása elterjedt a számláló szemaforoknak:
+\begin{itemize}
+\item Események számlálása: ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
+\item Erõforrás menedzsment: ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtolkolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma.
+\end{itemize}
+
+%----------------------------------------------------------------------------
+\paragraph{Mutex}
+%----------------------------------------------------------------------------
+
+Taszkok vagy taszkok és megszakítási rutinok között megosztott erõforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erõforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erõforrás szabad, akkor az igénylõ taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erõforrással való munkát. A mutex-et a lehetõ legkorábban (az erõforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/09_mutual_exclusion.png}}
+\caption{Mutex mûködésének szemléltetése.}
+\label{fig:09_mutual_exclusion}
+\end{figure}
+
+Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
+
+%----------------------------------------------------------------------------
+\paragraph{Sor (Queue)}
+%----------------------------------------------------------------------------
+
+A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként mûködnek.
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/10_queue.png}}
+\caption{Sor mûködésének szemléltetése.}
+\label{fig:10_queue}
+\end{figure}
+
+A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban.
+
+%----------------------------------------------------------------------------
+\paragraph{Üzenet (Message)}
+%----------------------------------------------------------------------------
+
+Az üzenet három dolgot tartalmaz:
+\begin{itemize}
+\item Az adatra mutató pointert,
+\item A mutatott adat méretét,
+\item Egy idõbélyegzõt, ami megmutatja, mikor került az pointer a tárolóba.
+\end{itemize}
+
+A pointer mutathat egy egész adatterületre vagy akár függvényre is. A küldõ és fogadó félnek tudnia kell, hogy az üzenet tartalma mire mutat.
+
+Mivel a kommunikáció során csak az adat referenciája kerül átvitelre, ezért különös figyelmet kell fordítani az adat konzisztenciájára.
+
+%----------------------------------------------------------------------------
+\paragraph{Események (Event flag)}
+%----------------------------------------------------------------------------
+
+Az események taszkok közötti szinkronizációra szolgálnak. Megvalósítható diszjunktív szinkronizáció, amikor több esemény küzül bármelyik bekövetkezése esetén a taszk futásra kész állapotba kerül (logikai VAGY), és megvalósítható konjuktív szinkronizáció, amikor az események mindegyikének bekövetkezése feltétele a taszk futásának (logikai ÉS).
+
+%----------------------------------------------------------------------------
+\subsection{Operációs rendszer használata esetén felmerülõ problémák}
+%----------------------------------------------------------------------------
+
+Operációs rendszer használatával bizonyos problémák is felmerülhetnek egy alkalmazás fejlesztése során. Ezek közül látunk példákat a továbbiakban.
+
+%----------------------------------------------------------------------------
+\subsubsection{Kiéheztetés (Starving)}
+%----------------------------------------------------------------------------
+
+Prioritásos ütemezés esetén, ha egy magas prioritású taszk folyamatosan futásra kész állapotban van, akkor az alacsony prioritású taszkok sosem kapnak processzoridõt. Ezt a jelenséget nevezzük kiéheztetésnek (starving), amit átgondolt tervezéssel könnyedén elkerülhetünk.
+
+%----------------------------------------------------------------------------
+\subsubsection{Prioritás inverzió (Priority inversion)}
+%----------------------------------------------------------------------------
+
+Vegyünk egy esetet, mikor legalább három különbözõ prioritási szinten futó taszkot hozunk létre. A legalacsonyabb prioritásútól a magasabb felé haladva nevezzük õket \emph{TaskA}-nak, \emph{TaskB}-nek és \emph{TaskC}-nek.
+
+Vegyünk egy esetet, mikor legalább három, különbözõ prioritási szinten futó taszkot hozunk létre. Kezdetben csak a \emph{TaskA} képes futni, ami egy mutex segítségével megkapja egy erõforrás használati jogát. Közben a \emph{TaskC} futásra kész éllapotba kerül, ezért preemptálja a \emph{TaskA}-t. A \emph{TaskC} is használná az erõforrást, de mivel azt már a \emph{TaskA} birtokolja, ezért várakozó állapotba kerül. Közben a \emph{TaskB} is futásra kész állapotba került, és mivel magasabb a prioritása, mint a \emph{TaskA}-nak, ezért megkapja a futás jogát. A \emph{TaskA} csak a \emph{TaskB} befejezõdése (vagy blokkolódása) esetén kerül újra futó állapotba. Miután a \emph{TaskA} befejezte az erõforrással a feladatait és felszabadítja azt, a \emph{TaskC} újból futásra kész állapotba kerül, és preemptálja a \emph{TaskA}-t.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/RTOS/03_priority_inversion.png}}
+\caption{Prioritás inverzió jelensége.}
+\label{fig:03_priority_inversion}
+\end{figure}
+
+A vizsgált példa során a \emph{TaskB} késleltette a \emph{TaskC} futását azzal, hogy nem engedte a \emph{TaskA}-nak az erõforrás felszabadítását. Így látszólag a \emph{TaskB} magasabb prioritással rendelkezett, mint \emph{TaskC}. Erre mondjuk, hogy prioritás inverzió lépett fel.
+
+A prioritás inverzió problémájának egy megoldása a prioritás öröklés. Ekkor a magad prioritású taszk a saját prioritási szintjére emeli azt az alacsony prioritású taszkot, mely blokkolja a további futását. Amint a szükséges erõforrás felszabadul, az eredeti prioritási értékek kerülnek visszaállításra.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/RTOS/04_priority_inheritance.png}}
+\caption{Prioritás öröklés, mint a prioritás inverzió egyik megoldása.}
+\label{fig:04_priority_inheritance}
+\end{figure}
 
 %----------------------------------------------------------------------------
 \subsubsection{Holtpont (Deadlock)}
 %----------------------------------------------------------------------------
 
+Szemaforok és mutexek használata során alakulhat ki holtponti helyzet. Nézzük azt az esetet, hogy van két, azonos prioritású taszk (a taszkok prioritása itt nem lényeges), melyek mûködésük során ugyan azt a két erõforrást használják. A két taszkot nevezzük \emph{TaskA}-nak és \emph{TaskB}-nek, a két erõforrást pedig \emph{ResA}-nak és \emph{ResB}-nek.
+
+Induláskor a \emph{TaskA} kapja meg a futás jogát, és lefoglalja a \emph{ResA}-t. Közben lejár a \emph{TaskA}-nak kiosztott idõszelet, és \emph{TaskB} kerül futó állapotba. A \emph{TaskB} lefoglalja a \emph{ResB} erõforrást, majd megpróbálja lefoglalni a \emph{ResA} erõforrást is. Mivel a \emph{ResA}-t már a \emph{TaskA} használja, ezért a \emph{TaskB} várakozó állapotba kerül. A \emph{TaskA} újból megkapja a processzort, és hozzáférést kezdeményez a \emph{ResB} erõforráshoz. Mivel a \emph{ResB} erõforrást a \emph{TaskB} folyamat birtokolja, ezért a \emph{TaskA} is várakozó állapotba lép. Egyik folyamat sem tudja folytatni a feladatát, emiatt az erõforrásokat sem tudják felszabadítani.
+
+\begin{figure}[h!]
+\center
+\resizebox{8cm}{!}{
+\includegraphics{figures/RTOS/11_deadlock.png}}
+\caption{Holtponti helyzet kialakulásának egy egyszerû példája.}
+\label{fig:11_deadlock}
+\end{figure}
+
+A holtponti helyzetek elkerülésére és feloldására több szabály létezik, de beágyazott rendszereknél átgondolt tervezéssel, illetve idõkorlát megadásával általában elkerülhetõ a kialakulásuk.
+
 %----------------------------------------------------------------------------
-\subsubsection{Kiéheztetés (Starving)}
+\subsubsection{Újrahívható függvények (Reentrant functions)}
 %----------------------------------------------------------------------------
+
+Egy függvény reentráns (újrahívható), ha biztonságosan meghívható több különbözõ taszkból vagy megszakításból.
+
+Minden taszk rendelkezik saját stack-kel és saját regiszterekkel. Ha egy függvény minden adatot a stack-jén vagy a regisztereiben tárol (vagyis nem használ globális és statikus változókat), akkor a függvény reentráns.

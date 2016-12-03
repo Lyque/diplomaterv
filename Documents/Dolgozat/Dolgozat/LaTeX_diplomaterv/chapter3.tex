@@ -1,3 +1,279 @@
 %----------------------------------------------------------------------------
 \chapter{Teljesítménymérõ metrikák}
 %----------------------------------------------------------------------------
+
+Asztali alkalmazás fejlesztésekor a rendelkezésre álló teljesítmény és tárhely ma már nem számít akadálynak. Ha valamelyik erõforrás szûk keresztmetszetté válik, akkor alkatrészcserével általában megszüntethetõ a probléma.
+
+Nem ez a helyzet beágyazott rendszerek esetén. A rendszer központi egységének számítási kapacitása általában nem haladja meg nagy mértékben az elégséges szintet, így különösen figyelni kell a fejlesztés során, hogy az implementált kód hatékony legyen. A rendelkezésre álló memória sem tekinthetõ korlátlannak, és gyakran a bõvítés is nehézkes, esetleg nem megoldható. Az eszköz fogyasztása is fontos szempont, amit a szoftver szintén nagy mértékben befolyásolhat.
+
+Az operációs rendszer választása összetett folyamattá is bonyolódhat, mert mérlegelni kell az alkalmazásunk igényeit, az operációs rendszer támogatottságát (támogatott mikrokontrollerek, fórumok, gyártói támogatás), a becsülhetõ fejlesztési idõt és az ezzel járó költségeket, illetve fizetõs operációs rendszer esetén a rendszer árát.
+
+A választást az sem segíti elõre, hogy nincs egyértelmû módszer az operációs rendszerek értékelésére. [lábjegyzet->
+Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN)
+az 1980-as évek végén hozott létre szabványt a folyamatirányító számítógépes rendszerek teljesítménymutatóinak mérésére (DIN 19242 szabvány-sorozat), a valós idejû operációs rendszerek értékelésére ez nem jelent megoldást.]
+
+Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehetõ legkisebb szintre csökkenteni.
+A kulcsfontosságú szempontok az alábbiak:
+\begin{itemize}
+\item Megismételhetõség: egy mérést meg kell tudnunk ismételni. Ehhez szükséges a pontos mérési összeállítás, a mérés körülményei, a használt eszközök és szoftverek.
+\item Véletlenszerûség: a mérés során nem független események következhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell a mérési folyamatok véletlenszerû futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben kövessék egymást).
+\item Vezérlés: a mérés során a vezérelhetõ paramétereket (melyek a mérést befolyásolhatják) lehetõségeinkhez mérten kézben kell tartani.
+\item Szemléletesség: a mérés eredményének reprezentatívnak kell lennie. Számértékek esetén két mérés eredményét össze kell tudnunk hasonlítani és tudnunk kell relációt vonni a két érték közé.
+\end{itemize}
+
+A továbbiakban különbözõ forrásokból vett szempontokat vizsgálok meg, majd azok alapján állítom fel a dolgozat során megfigyelt tulajdonságok listáját.
+
+%----------------------------------------------------------------------------
+\subsection{Memóriaigény}
+%----------------------------------------------------------------------------
+
+A mikrokontrollerek területén a memória mérete korlátozott (ROM és RAM egyaránt), ezért fontos, hogy a használt rendszer minél kisebb lenyomattal rendelkezzen.
+
+%----------------------------------------------------------------------------
+\subsection{Késleltetés}
+%----------------------------------------------------------------------------
+
+A rendszer késleltetése az az idõ, ami egy esemény beérkezésétõl a rendszer válaszáig eltelik. Ezt okozhatja a mikrovezérlõ megszakítási mechanizmusához szükséges mûveletek sora, az operációs rendszer ütemezõjének overhead-je, de a közben végrehajtandó feladat is nagy mértékben befolyásolja a nagyságát.
+
+\begin{figure}[h!]
+\center
+\resizebox{15cm}{!}{
+\includegraphics{figures/Benchmark/01_latency.png}}
+\caption{Az operációs rendszer késleltetésének szemléltetése.}
+\label{fig:Benchmark/01_latency}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsection{Jitter}
+%----------------------------------------------------------------------------
+
+A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mért késleltetésekbõl határozható meg.
+
+\begin{figure}[h!]
+\center
+\resizebox{15cm}{!}{
+\includegraphics{figures/Benchmark/02_jitter.png}}
+\caption{A késleltetés jitterének szemléltetése.}
+\label{fig:Benchmark/02_jitter}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsection{Rhealstone}
+%----------------------------------------------------------------------------
+
+1989-ben a Dr. Dobbs Journal cikkeként jelent meg egy javaslat, ami a valós idejû rendszerek objektív értékelését célozta meg. Rabindra P. Kar, az Intel Systems Group senior mérnöke ismertette a módszer elõnyeit és szempontjait, melynek a Rhealstone nevet adta.[lábjegyzet-> név eredete]
+
+A cikk megjelenésekor már léteztek teljesítménymérõ metódusok (Whetstone, Dhrystone), de ezek a fordító által generált kódot, illetve a hardware-t minõsítették. A Rhealstone metrika célja, hogy a fejlesztõket segítse az alkalmazásukhoz leginkább megfelelõ operációs rendszer kiválasztásában.
+
+A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képességeit:
+\begin{itemize}
+\item Taszkváltási idõ (Task switching time),
+\item Preemptálási idõ (Preemption time),
+\item Megszakítás-késleltetési idõ (Interrupt latency time),
+\item Szemafor-váltási idõ (Semaphore shuffling time),
+\item Deadlock-feloldási idõ (Deadlock breaking time) [lábjegyzet-> Nincs kialakult holtpont, igazából a prioritásinverzió jelenségét vizsgálja],
+\item Datagram-átviteli idõ (Datagram throughput time) [lábjegyzet-> Bár idõnek van feltüntetve, kB/sec-ben értendõ. Minden kategóriának a reciprokát kell venni a mréés végén, így Rhealstone/sec értéket kapva. Ha az 1kB-hoz tartozó idõt mérjük, akkor minden úgy történik, mint a többi kategóriánál.]
+\end{itemize}
+
+1990-ben megjelent egy második cikk is, amely amellett, hogy az egyes kategóriák példaprogramjait tartalmazta (iRMX operációs rendszerhez), pár kategória meghatározását megváltoztatták. Ezen változtatásokat az adott kategória részletezésekor ismertetem.
+
+%----------------------------------------------------------------------------
+\subsubsection{Taszkváltási idõ}
+%----------------------------------------------------------------------------
+
+A taszváltási idõ a két független, futásra kész, azonos prioritású taszkok váltásához szükséges átlagos idõtartam.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/03_task_switching_time.png}}
+\caption{A taszváltási idõ szemléltetése.}
+\label{fig:Benchmark/03_task_switching_time}
+\end{figure}
+
+A taszkváltási idõ alapvetõ jellemzõje egy multitaszk rendszernek. A mérés a taszkokat nyilvántartó struktúrák hatékonyságáról ad képet. A taszkváltási idõt a használt processzor architektúrája, utasításkészlete is befolyásolja.
+
+A rendszerek a futtatható taszkokat általában valamilyen listában tárolják, így különbözõ számú taszkkal elvégezve a mérést más eredményt kaphatunk.
+
+%----------------------------------------------------------------------------
+\subsubsection{Preemptálási idõ}
+%----------------------------------------------------------------------------
+
+A preemptálási idõ egy magasabb prioritású taszk érvényre jutásához szükséges átlagos idõtartam.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/04_preemption_time.png}}
+\caption{A preemptálási idõ szemléltetése.}
+\label{fig:Benchmark/04_preemption_time}
+\end{figure}
+
+A preemptálási idõ nagyban hasonlít a taszkváltási idõhöz, azonban a járulékos utasítások miatt általában hosszabb idõt jelent.
+
+%----------------------------------------------------------------------------
+\subsubsection{Megszakítás-késleltetési idõ}
+%----------------------------------------------------------------------------
+
+A megszakítás-késleltetési idõ egy esemény beérkezése és a megszakítás kezelõ rutin elsõ utasítása között eltelt átlagos idõtartam.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/05_interrupt_latency_time.png}}
+\caption{A megszakítás-késleltetési idõ szemléltetése.}
+\label{fig:Benchmark/05_interrupt_latency_time}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsubsection{Szemafor-váltási idõ}
+%----------------------------------------------------------------------------
+
+Az 1989-es cikk szerint szemafor-váltási idõ az az átlagos idõtartam, ami egy szemafor elengedése és egy, a szemaforra várakozó taszk elindulása között eltelik.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/06_semaphore_shuffling_time_1.png}}
+\caption{A szemafor-váltási idõ szemléltetése (1989-es meghatározás alapján).}
+\label{fig:Benchmark/06_semaphore_shuffling_time_1}
+\end{figure}
+
+Ezt a meghatározást 1990-ben annyival módosították, hogy a szemafor-váltási idõ egy már birtokolt szemafor kérése és a kérés teljesítése között eltelt idõtartam, a birtokló taszk futási idejétõl eltekintve.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/07_semaphore_shuffling_time_2.png}}
+\caption{A szemafor-váltási idõ szemléltetése (1990-es meghatározás alapján).}
+\label{fig:Benchmark/07_semaphore_shuffling_time_2}
+\end{figure}
+
+A mérés célja az overhead meghatározása, mikor egy szemafor kölcsönös kizárást (mutex) valósít meg.
+
+%----------------------------------------------------------------------------
+\subsubsection{Deadlock-feloldási idõ}
+%----------------------------------------------------------------------------
+
+A deadlock-feloldási idõ az az átlagos idõtartam, ami egy olyan erõforrás eléréséhez szükséges, amit egy alacsonyabb prioritású taszk már birtokol.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/08_deadlock_breaking_time.png}}
+\caption{A deadlock-feloldási idõ szemléltetése.}
+\label{fig:Benchmark/08_deadlock_breaking_time}
+\end{figure}
+
+Vagyis a deadlock-feloldási idõ a birtoklási probléma feloldásához szükséges összesített idõ egy alacsony és egy magas prioritású taszk között.
+
+%----------------------------------------------------------------------------
+\subsubsection{Datagram-átviteli idõ}
+%----------------------------------------------------------------------------
+
+A datagram-átviteli idõ a taszkok között elérhetõ adatsebesség az operációs rendszer objektumait kihasználva (vagyis nem megosztott memórián vagy pointeren keresztül). Az adatküldõ taszknak kapnia kell értesítést az adat átvételérõl.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/09_datagram_throughput_time.png}}
+\caption{A datagram-átviteli idõ szemléltetése.}
+\label{fig:Benchmark/09_datagram_throughput_time}
+\end{figure}
+
+Az egy évvel késõbb megjelent cikkben ezt a kategóriát is módosították kis mértékben. Egyrészt a megnevezést taszk közötti üzenet-késleltetésre változtatták, másrészt nem a maximális adatsebesség meghatározása a mérés célja, hanem az adattovábbítást végzõ objektum kezelésének és az operációs rendszer járulékos mûveleteinek hatékonyságának megmérése.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/10_intertask_message_latency.png}}
+\caption{A taszk közötti üzenet-késleltetési idõ szemléltetése.}
+\label{fig:Benchmark/10_intertask_message_latency}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsubsection{Rhealstone jellemzõk összegzése}
+%----------------------------------------------------------------------------
+
+Az elvégzett mérések várhatóan mikroszekundum és milliszekumdum nagyságrendû értékeket adnak vissza. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetõek egy reprezentatív értékké. Az átváltásnak köszönhetõen a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
+
+%----------------------------------------------------------------------------
+\paragraph{Objektív Rhealstone érték}
+%----------------------------------------------------------------------------
+
+Objektív értékelés esetén minden jellemzõ azonos súllyal szerepel a számolás során.
+
+[Képlet]
+
+%----------------------------------------------------------------------------
+\paragraph{Súlyozott Rhealstone érték}
+%----------------------------------------------------------------------------
+
+Az esetek döntõ többségében a vizsgált feladatok nem azonos gyakorisággal szerepelnek egy alkalmazásban, sõt, elõfordulhat, hogy valamely funkciót nem is használ az alkalmazás. Ekkor informatívabb eredményt kapunk, ha az egyes jellemzõkre kapott számértékeket különbözõ súllyal vesszük bele a végeredmény meghatározásába.
+
+[Képlet]
+
+%----------------------------------------------------------------------------
+\subsection{Legrosszabb válaszidõ}
+%----------------------------------------------------------------------------
+
+2001-ben a Nemzetközi Automatizálási Társaság (International Society of Automation - ISA) egy jelentésben fejtette ki azt az álláspontját, miszerint a késleltetés nem jellemzi a valós idejû rendszert, mert lehet, hogy a legtöbb esetben az elõírt idõn belül válaszol, de ritkán elõfordulhatnak késleltetések vagy kihagyott események, amiket a mérés során nem lehet detektálni.
+
+A Társaság egy olyan mérési összeállítást javasol a fejlesztõknek, ami egyszerûsége ellenére képes meghatározni a rendszer legrosszabb válaszidejét.
+
+A méréshez szükséges eszközök:
+\begin{itemize}
+\item Mérendõ rendszer (legalább egy be- és kimenettel),
+\item Jelgenerátor.
+\item Két darab digitális számláló.
+\end{itemize}
+
+%----------------------------------------------------------------------------
+\subsubsection{Mérési elrendezés}
+%----------------------------------------------------------------------------
+
+A jelgenerátor kimenetét a mérendõ rendszer bemenetére, illetve mindkét számláló \emph{count up} bemenetére kötjük, míg a mérendõ rendszer kimenetét a kimeneti számláló \emph{count down} bemenetére kötjük.
+
+\begin{figure}[h!]
+\center
+\resizebox{13cm}{!}{
+\includegraphics{figures/Benchmark/11_worst_case_response_time.png}}
+\caption{A legrosszabb válaszidõ mérési összeállítása.}
+\label{fig:Benchmark/11_worst_case_response_time}
+\end{figure}
+
+%----------------------------------------------------------------------------
+\subsubsection{Mérési elv}
+%----------------------------------------------------------------------------
+
+A mérés során azt a legkisebb frekvenciát keressük, amit a rendszer már nem tud követni, vagyis impulzusokat veszít. Ezáltal a kimenetén megjelenõ impulzusok száma különbözni fog a bemenetére adott impulzusok számától. A kapott frekvencia a a legrosszabb válaszidõ reciproka.
+
+%----------------------------------------------------------------------------
+\subsubsection{Mérés menete}
+%----------------------------------------------------------------------------
+
+\begin{enumerate}
+\item A rendszeren futó program a bemenetére érkezõ jelet a kimenetére másolja. A mérés során digitális és analóg I/O láb is használható.
+\item Mérési eszközök csatlakoztatása.
+\item Alacsony frekvenciáról indulva növeljük a bemeneti jel frekvenciáját. Az \emph{A} számláló folyamatosan számol felfele. Amíg a rendszer képes követni a bemenetet, addig a \emph{B} számláló 1 és 0 között váltakozik. Amikor a rendszer már nem képes követni a bemenetet, akkor a \emph{B} számláló elkezdt felfele számolni.
+\item Csökkentjük a bemeneti frekvencia értékét egészen addig, amíg a rendszer újból képessé nem válik a bemenet követésére. A kapott frekvencia a legrosszabb válaszidõ reciproka.
+\end{enumerate}
+
+A mérést célszerû elvégezni különbözõ terhelés mellett. Ha valamelyik funkció használata közben (adattároló vezérlése, hálózati kommunikáció, stb.) a \emph{B} számláló elindul, akkor az adott frekvencián a rendszer nem determinisztikus.
+
+%----------------------------------------------------------------------------
+\subsection{Vizsgált operációs rendszer jellemzõk}
+%----------------------------------------------------------------------------
+
+A feladat megoldása során elsõdlegesen az operációs rendszerek jellemzõit vizsgálom, ezért nem kerülnek külön tesztelésre az egyes hardverek elõnyei. Az egyes rendszer-jellemzõket terheletlenül és terhelés alatt is megmérem.
+
+Egy ipari alkalmazás szimulációját is megvalósítom, mely egy másik összehasonlítási alapot nyújt a dolgozathoz. Az alkalmazást felhasználom a terhelés alatti mérés megvalósításához is.
+
+A dolgozat további részeiben a [referencia] fejezetben felsorolt összes jellemzõ meghatározására képes rendszert állítok össze, mellyel végrehajtom a méréseket. A meghatározandó jellemzõk:
+\begin{itemize}
+\item Memóriaigény,
+\item Késleltetés,
+\item Jitter,
+\item Rhealstone értékek,
+\item Legrosszabb válaszidõ.
+\end{itemize}

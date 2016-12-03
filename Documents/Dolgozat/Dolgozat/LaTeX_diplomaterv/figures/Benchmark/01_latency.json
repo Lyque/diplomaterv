@@ -1,0 +1,14 @@
+{
+  signal: 
+[
+  {name: 'input',  wave: '0.1....0....1....', node: '..a...............'},
+  {name: 'output', wave: '0...1....0....1..', node: '....b.............'},
+  {       		   node: '..c.d............'}
+],
+    
+  edge:
+[
+  'a-c','b-d','c<->d Latency'
+],
+  config: { hscale: 1 }
+}

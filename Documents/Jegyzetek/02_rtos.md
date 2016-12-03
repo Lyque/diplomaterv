@@ -75,7 +75,7 @@ Időosztáson alapuló mechanizmus. A várakozási sor egy cirkuláris buffer. M
 Lehet preemptív és nem-preemptív is.
 
 
-### Hibrid ütemezés
+#### Hibrid ütemezés
 
 A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a többszintű sorok használata, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért.
 
