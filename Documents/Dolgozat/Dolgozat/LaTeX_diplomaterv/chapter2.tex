@@ -10,7 +10,7 @@
 \subsection{STM32F4~Discovery}
 %----------------------------------------------------------------------------
 
-Manapság egyre inkább teret nyernek maguknak az ARM alapú mikrokontrollerek, melyek nem csak nagy számítási kapacitásukkal, de egyre alacsonyabb árukkal szorítják ki versenytársaikat. Az egyik legelterjedtebb gyártó, az STMicroelectronics (továbbiakban STM) több fejlesztõkártyát is piacra bocsátott az elmúlt években, melyeken a különbözõ mikrokontrollerek képességeit ismerheti meg a fejlesztõ. A kapható fejlesztõkártyák amellett, hogy megkíméli a fejlesztõt a saját hardver tervezésétõl - így a tervezési hibából adódó problémák keresésétõl is -, a legtöbb esetben a gyártó széles körû támogatást is nyújt a termékhez (mintaprogramok, fórumok, stb.). 
+Manapság egyre inkább teret nyernek maguknak az ARM alapú mikrokontrollerek, melyek nem csak nagy számítási kapacitásukkal, de egyre alacsonyabb árukkal szorítják ki versenytársaikat. Az egyik legelterjedtebb gyártó, az STMicroelectronics (továbbiakban STM) több fejlesztõkártyát is piacra bocsátott az elmúlt években, melyeken a különbözõ mikrokontrollerek képességeit ismerheti meg a fejlesztõ. A kapható fejlesztõkártyák amellett, hogy megkíméli a fejlesztõt a saját hardver tervezésétõl -- így a tervezési hibából adódó problémák keresésétõl is --, a legtöbb esetben a gyártó széles körû támogatást is nyújt a termékhez (mintaprogramok, fórumok, stb.). 
 
 Az STM által gyártott fejlesztõkártyák közül ár-érték arányának köszönhetõen talán a leggyakrabban használt az STM32F407 Discovery kártya. A rajta található mikrokontroller rendelkezik a legtöbb alkalmazásban elõforduló perifériák mindegyikével. A teljesség igénye nélkül:
 
@@ -32,7 +32,7 @@ Az STM által gyártott fejlesztõkártyák közül ár-érték arányának köszönhetõen tal
 
 A nagyszámú periféria mellett a mikrokontroller számítási kapacitása is kimagaslik a hasonló árkategóriájú eszközök körébõl, köszönhetõen az akár 168 MHz-es órajelének, a beépített CRC és lebegõ pontos aritmetikai egységének, illetve a több perifériát is kezelni képes DMA-knak.
 
-Az eszköz 1MByte Flash memóriával és 192kbyte RAM-mal rendelkezik.
+Az eszköz 1~MByte Flash memóriával és 192~kbyte RAM-mal rendelkezik.
 
 A kártyán megtalálható több periféria, mely a különbözõ interfészek kipróbálását teszi lehetõvé (mint például gyorsulásszenzor, mikrofon).
 
@@ -47,7 +47,7 @@ A kártyán megtalálható több periféria, mely a különbözõ interfészek kipróbálását
 
 \subsubsection{STM32F4 Discovery - Base Board}
 
-Az STM32F4 Discovery fejlesztõeszközhöz több kiegészítõ kártya is kapható, melyek célja a kipróbálható perifériák számának növelése. Egyik ilyen bõvítõkártya az STM32F4DIS-BB, ami tartalmaz microSD-kártya foglalatot, az Ethernet interfész fizikai rétegét megvalósító IC-t, illetve a csatlakoztatáshoz szükséges RJ45-ös csatlakozót. Ezen kívül kivezetésre került egy DB9-es csatlakozó - mely az egyik soros kommunikációs portot teszi elérhetõvé -, egy FPC csatlakozó - mely kamera csatlakoztatását teszi lehetõvé -, illetve az egyik oldali csatlakozósorra ráköthetõ 3,5\"-os TFT kijelzõ.
+Az STM32F4 Discovery fejlesztõeszközhöz több kiegészítõ kártya is kapható, melyek célja a kipróbálható perifériák számának növelése. Egyik ilyen bõvítõkártya az STM32F4DIS-BB, ami tartalmaz microSD-kártya foglalatot, az Ethernet interfész fizikai rétegét megvalósító IC-t, illetve a csatlakoztatáshoz szükséges RJ45-ös csatlakozót. Ezen kívül kivezetésre került egy DB9-es csatlakozó -- mely az egyik soros kommunikációs portot teszi elérhetõvé --, egy FPC csatlakozó -- mely kamera csatlakoztatását teszi lehetõvé --, illetve az egyik oldali csatlakozósorra ráköthetõ 3,5~"-os TFT kijelzõ.
 
 \begin{figure}[h!]
 \center
@@ -61,7 +61,7 @@ Az STM32F4 Discovery fejlesztõeszközhöz több kiegészítõ kártya is kapható, melye
 \subsection{Raspberry~Pi~3}
 %----------------------------------------------------------------------------
 
-A Raspberry Pi Foundation 2008-ban alapították azzal a céllal, hogy a informatikai tudományok területén segítse az oktatást.
+A Raspberry Pi Foundation-t 2008-ban alapították azzal a céllal, hogy a informatikai tudományok területén segítse az oktatást.
 
 Az elsõ nagyteljesítményû, bankkártya méretû számítógépüket 2012 februárjában bocsájtották piacra, melynek ára töredéke volt az asztali számítógépekének. Azóta több verziója is kijött az eszköznek, melyet folyamatosan fejlesztettek mind teljesítményben, mind az integrált funkciók számában. 2015 novemberében a világ elsõ 5\,\$-os számítógépével jelentek meg a piacon, melynek a Raspberry~Pi~Zero nevet adták.
 
@@ -116,7 +116,7 @@ Az operációs rendszerek kiválasztásánál elsõdleges szempont a hardverek támogato
 \subsection{STM32F4~Discovery}
 %----------------------------------------------------------------------------
 
-Az UBM Tech minden évben készít egy kutatást a beágyazott rendszereket piacán, melyben többek között a használt beágyazott operációs rendszerekkel kapcsolatban is publikál adatokat. A statisztika alapján a két leggyakrabban használt operációs rendszer a FreeRTOS és a uC/OS-II. A uC/OS új verziója, a uC/OS-III a listán hátrébb kapott helyet, de még így is befért a tíz vezetõ rendszer közé. Mindekettõ operációs rendszer népszerûsége nõtt a 2014-es évhez képest.
+Az UBM Tech minden évben készít egy kutatást a beágyazott rendszereket piacán, melyben többek között a használt beágyazott operációs rendszerekkel kapcsolatban is publikál adatokat (a 2015-ös felmérés eredménye látható \afigref{01_OS_popularity}án). A statisztika alapján a két leggyakrabban használt operációs rendszer a \mbox{FreeRTOS} és a \mbox{uC/OS-II}. A uC/OS új verziója, a \mbox{uC/OS-III} a listán hátrébb kapott helyet, de még így is befért a tíz vezetõ rendszer közé. Mindhárom operációs rendszer népszerûsége nõtt a 2014-es évhez képest.
 
 \begin{figure}[h!]
 \center
@@ -126,9 +126,9 @@ Az UBM Tech minden évben készít egy kutatást a beágyazott rendszereket piacán, m
 \label{fig:01_OS_popularity}
 \end{figure}
 
-Az STM32F4 Discovery kártyához elérhetõ szoftvercsomag tartalmazza a FreeRTOS rendszert, ami jelzi a rendszer támogatottságának mértékét. A FreeRTOS hivatalos oldalán megvásárolhatóak a rendszer használatát bemutató könyvek, illetve online elérhetõ leírások, amik szintén segítik a rendszer megismerését. Ezáltal az elsõ megvizsgált rendszernek a FreeRTOS-t választottam.
+Az STM32F4 Discovery kártyához elérhetõ szoftvercsomag tartalmazza a \mbox{FreeRTOS} rendszert, ami jelzi a rendszer támogatottságának mértékét. A \mbox{FreeRTOS} hivatalos oldalán megvásárolhatóak a rendszer használatát bemutató könyvek, illetve online elérhetõ leírások, amik szintén segítik a rendszer megismerését. Ezáltal az elsõ megvizsgált rendszernek a \mbox{FreeRTOS}-t választottam.
 
-A Micrium uC/OS rendszerei oktatási célra ingyenesen elérhetõek, beleértve a rendszer dokumentációit is. A választott másik rendszer a uC/OS-III.
+A Micrium uC/OS rendszerei oktatási célra ingyenesen elérhetõek, beleértve a rendszer dokumentációit is. A választott másik rendszer a \mbox{uC/OS-III}.
 
 %----------------------------------------------------------------------------
 \subsection{Raspberry~Pi~3}
@@ -137,7 +137,7 @@ A Micrium uC/OS rendszerei oktatási célra ingyenesen elérhetõek, beleértve a ren
 A Raspberry Pi megjelenése óta támogatja különbözõ linux disztribúciók futtatását az eszközön, és a fejlesztõkártya második verziója óta a Windows 10 IoT Core is telepíthetõ rá. Az asztali alkalmazásfejlesztõk körében mind a linux, mind a Windows elterjedten használt operációs rendszer, ezért a Raspberry Pi 3-on ezt a két rendszert vizsgálom meg.
 
 %----------------------------------------------------------------------------
-\input{freertos}
+\input{FreeRTOS}
 %----------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------

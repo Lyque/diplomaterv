@@ -1,32 +1,32 @@
 %----------------------------------------------------------------------------
-\section{FreeRTOS}
+\section{\mbox{FreeRTOS}}
 %----------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------
 \subsection{Bevezetés}
 %----------------------------------------------------------------------------
 
-A FreeRTOS a Real Time Engineers Ltd. által fejlesztett valós idejû operációs rendszer. A fejlesztõk céljai között volt a rendszer erõforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebbõl adódóan csak az alap funkciók vannak megvalósítva, mint ütemezés, taszkok közötti kommunikáció lehetõsége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külsõ hardver használatára (ezeket vagy nekünk meg megírnunk, vagy harmadik féltõl származó kódot kell használnunk).
+A \mbox{FreeRTOS} a Real Time Engineers Ltd. által fejlesztett valósidejû operációs rendszer. A fejlesztõk céljai között volt a rendszer erõforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebbõl adódóan csak az alap funkciók vannak megvalósítva, mint ütemezés, taszkok közötti kommunikáció lehetõsége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külsõ hardver használatára (ezeket vagy nekünk meg megírnunk, vagy harmadik féltõl származó kódot kell használnunk).
 
-A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetõvé teszi GPL-tõl eltérõ licenccel ellátott modulok használatát, amennyiben azok a FreeRTOS-sal kizárólag a FreeRTOS API-n keresztül kommunikálnak.
+A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetõvé teszi GPL-tõl eltérõ licenccel ellátott modulok használatát, amennyiben azok a \mbox{FreeRTOS}-sal kizárólag a \mbox{FreeRTOS} API-n keresztül kommunikálnak.
 
 %----------------------------------------------------------------------------
 \subsection{Taszkok}
 %----------------------------------------------------------------------------
 
-A FreeRTOS nem korlátozza a létrehozható taszkok és prioritások számát, amíg a rendelkezésre álló memória lehetõvé teszi azok futtatását. A rendszer lehetõséget biztosít ciklikus és nem ciklikus taszkok futtatására egyaránt.
+A \mbox{FreeRTOS} nem korlátozza a létrehozható taszkok és prioritások számát, amíg a rendelkezésre álló memória lehetõvé teszi azok futtatását. A rendszer lehetõséget biztosít ciklikus és nem ciklikus taszkok futtatására egyaránt.
 
-A beágyazott rendszerek döntõ része egymagos processzorokat használ, amibõl az következik, hogy egyszerre csak egy taszk futhat. A taszkok eszerint két nagy csoportba oszthatóak: éppen futó taszk (\textbf{Fut} állapot), illetve az összes többi (\textbf{Nem fut} állapot).
+A beágyazott rendszerek döntõ része egymagos processzorokat használ, amibõl az következik, hogy egyszerre csak egy taszk futhat. A taszkok eszerint két nagy csoportba oszthatóak: éppen futó taszk (\textbf{Fut} állapot), illetve az összes többi (\textbf{Nem fut} állapot). Ez az egyszerûsített felosztás látható \afigref{01_FreeRTOS_states}án.
 
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
 \includegraphics{figures/FreeRTOS/01_FreeRTOS_states.png}}
-\caption{Taszk lehetséges állapotai a FreeRTOS rendszerben (egyszerûsített).}
+\caption{Taszk lehetséges állapotai a \mbox{FreeRTOS} rendszerben (egyszerûsített).}
 \label{fig:01_FreeRTOS_states}
 \end{figure}
 
-Annak, hogy egy taszk éppen miért nem fut, több oka lehet. Ez alapján a \textbf{Nem fut} állapot több állapotra felosztható.
+Annak, hogy egy taszk éppen miért nem fut, több oka lehet. Ez alapján a \textbf{Nem fut} állapot több állapotra felosztható (\figref{02_FreeRTOS_states_expanded}a).
 Ha egy taszk képes lenne futni, de például egy nagyobb prioritású taszk birtokolja a processzort, akkor a taszk állapota \textbf{Futásra kész}. Ha a taszk valamilyen eseményre vár (idõzítés, másik taszk szinkronizáló jele), akkor a taszk \textbf{Blokkolt} állapotban van. Az operációs rendszer lehetõséget ad arra, hogy a taszkokat függvényhívással \textbf{Felfüggesztett} állapotba kényszerítsük. Ekkor egy másik függvényhívással tudjuk visszahozni az ütemezendõ feladatok sorába a taszkot.
 
 A taszkok önként lemondhatnak a futásról (idõzítés, szinkronizáció, taskYIELD() függvény hívása), viszont futó állapotba csak az ütemezõ helyezheti.
@@ -35,7 +35,7 @@ A taszkok önként lemondhatnak a futásról (idõzítés, szinkronizáció, taskYIELD() 
 \center
 \resizebox{13cm}{!}{
 \includegraphics{figures/FreeRTOS/02_FreeRTOS_states_expanded.png}}
-\caption{Taszk lehetséges állapotai a FreeRTOS rendszerben.}
+\caption{Taszk lehetséges állapotai a \mbox{FreeRTOS} rendszerben.}
 \label{fig:02_FreeRTOS_states_expanded}
 \end{figure}
 
@@ -47,7 +47,7 @@ A processzor folyamatosan utasításokat hajt végre mûködése közben (eltekintve a 
 
 Az Idle taszk a legkisebb prioritással rendelkezik, így biztosítva, hogy elhagyja a Fut állapotot, amint egy magasabb prioritású taszk Futásra kész állapotba kerül.
 
-Taszk törlése esetén az Idle taszk végzi el a különbözõ erõforrások felszabadítását. Mivel a FreeRTOS nem biztosít védelmet egy taszk \emph{kiéheztetésével} szemben ezért fontos, hogy az alkalmazás tervezésekor biztosítsunk olyan idõszeletet, amikor másik, nagyobb prioritású taszk nem fut.
+Taszk törlése esetén az Idle taszk végzi el a különbözõ erõforrások felszabadítását. Mivel a \mbox{FreeRTOS} nem biztosít védelmet egy taszk \emph{kiéheztetésével} szemben ezért fontos, hogy az alkalmazás tervezésekor biztosítsunk olyan idõszeletet, amikor másik, nagyobb prioritású taszk nem fut.
 
 %----------------------------------------------------------------------------
 \paragraph{Idle hook függvény}
@@ -67,15 +67,15 @@ Az Idle hook általános felhasználása:
 %----------------------------------------------------------------------------
 
 \begin{enumerate}
-\item Az Idle hook függvény nem hívhat blokkoló vagy felfüggesztést indító függvényeket[lábjegyzet->A hook függvény blokkolása esetén felléphet az az eset, hogy nincs Futásra kész állapotban levõ taszk],
-\item Ha az alkalmazás valahol töröl egy taszkot, akkor az Idle hook függvénynek elfogadható idõn belül vissza kell térnie. [lábjegyzet->Az Idle taszk felelõs a kernel erõforrások felszabadításáért, ha egy taszk törlésre kerül. Ha az Idle taszk bentragad az Idle hook-ban, akkor ez a tisztítás nem tud bekövetkezni.]
+\item Az Idle hook függvény nem hívhat blokkoló vagy felfüggesztést indító függvényeket\footnote{Az \emph{idle hook} függvény blokkolása esetén felléphet az az eset, hogy nincs Futásra kész állapotban lévõ taszk.},
+\item Ha az alkalmazás valahol töröl egy taszkot, akkor az Idle hook függvénynek elfogadható idõn belül vissza kell térnie\footnote{Az Idle taszk felelõs a kernel erõforrások felszabadításáért, ha egy taszk törlésre kerül. Ha az Idle taszk bentragad az Idle hook-ban, akkor ez a tisztítás nem tud bekövetkezni.}.
 \end{enumerate}
 
 %----------------------------------------------------------------------------
 \subsection{Ütemezõ}
 %----------------------------------------------------------------------------
 
-A FreeRTOS által használt ütemezési mechanizmust Fix Prioritásos Preemptív Ütemezésnek hívjuk[lábjegyzet->A FreeRTOS kooperatív ütemezést is támogat, viszont a valós idejû futás eléréséhez a preemptív ütemezés szükséges, ezért a továbbiakban csak a preemptív ütemezéssel foglalkozunk.]. \emph{Fix prioritásos}, mivel a rendszer magától nem változtatja a prioritásokat, \emph{preemptív}, mert egy taszk Futásra kész állapotba lépésekor preemtálja az éppen futó taszkot, ha a futó taszk prioritása alacsonyabb.
+A \mbox{FreeRTOS} által használt ütemezési mechanizmust Fix Prioritásos Preemptív Ütemezésnek hívjuk\footnote{A \mbox{FreeRTOS} kooperatív ütemezést is támogat, viszont a valósidejû futás eléréséhez a preemptív ütemezés szükséges, ezért a továbbiakban csak a preemptív ütemezéssel foglalkozunk.}. \emph{Fix prioritásos}, mivel a rendszer magától nem változtatja a prioritásokat, \emph{preemptív}, mert egy taszk Futásra kész állapotba lépésekor preemtálja az éppen futó taszkot, ha a futó taszk prioritása alacsonyabb.
 
 [ToDo -> Itt átfogalmazni kicsit a dolgokat. Elég kusza a gondolatmenet.]
 
@@ -99,10 +99,7 @@ Rate Monotonic Scheduling (Gyakoriság Monoton Ütemezés) az a gyakran alkalmazott
 \subsection{Kommunikációs objektumok}
 %----------------------------------------------------------------------------
 
-[ToDo -> Átfogalmazni. Ne legyen nagyon redundáns az átlalános résszel.]
-
-Az alkalmazások egymástól független taszkok konstrukciójából áll. Viszont ezeknek a taszkoknak ahhoz, hogy a feladatukat el tudják látni, gyakran kommunikálniuk kell egymással.
-A FreeRTOS három alap kommunikációs struktúrát kínál a felhasználónak:
+A \mbox{FreeRTOS} három alap kommunikációs struktúrát kínál a felhasználónak:
 \begin{itemize}
 \item sor (\emph{queue}),
 \item szemafor (\emph{semaphore}),
@@ -117,14 +114,13 @@ A FreeRTOS három alap kommunikációs struktúrát kínál a felhasználónak:
 \subsubsection{Sorok (queues)}
 %----------------------------------------------------------------------------
 
-A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként mûködnek (First In First Out), bár a FreeRTOS lehetõvé teszi a sor elejére való írást is.
-A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban. Olvasáskor a paraméterként átadott memóriacímre kerül átmásolásra, ezért figyelni kell arra, hogy az átadott változó által elfoglalt memória legalább akkora legyen, mint a sor által tartalmazott adattípus mérete. Amennyiben a továbbítandó adattípus már nagynak tekinthetõ, akkor érdemes a memóriára mutató pointereket elhelyezni a sorban, ezzel csökkentve a RAM kihasználtságát (ekkor viszont különösen figyelni kell arra, hogy a kijelölt memóriaterület tolajdonosa egyértelmû legyen, vagyis ne történjen különbözõ taszkokból módosítás egyidõben, illetve biztosítani kell a memóriaterüet érvényességét). A FreeRTOS API kétféle függvényt használ olvasásra:
+A \mbox{FreeRTOS} lehetõvé teszi a sor végére és a sor elejére való írást is. A sorba való írás során másolat készül az eredeti változóról, és ez a másolat kerül tárolásra a sorban. Olvasáskor a paraméterként átadott memóriacímre kerül átmásolásra, ezért figyelni kell arra, hogy az átadott változó által elfoglalt memória legalább akkora legyen, mint a sor által tartalmazott adattípus mérete. Amennyiben a továbbítandó adattípus már nagynak tekinthetõ, akkor érdemes a memóriára mutató pointereket elhelyezni a sorban, ezzel csökkentve a RAM kihasználtságát (ekkor viszont különösen figyelni kell arra, hogy a kijelölt memóriaterület tulajdonosa egyértelmû legyen, vagyis ne történjen különbözõ taszkokból módosítás egyidõben, illetve biztosítani kell a memóriaterüet érvényességét). A \mbox{FreeRTOS} API kétféle függvényt használ olvasásra:
 \begin{itemize}
-\item Az egyik automatikusan eltávolítja a kiolvasott elemet a sorból (\textbf{xQueueReceive()}),
-\item A másik kiolvassa a soronkövetkezõ elemet, de azt nem távolítja el a sorból(\textbf{xQueuePeek()}).
+\item Az egyik automatikusan eltávolítja a kiolvasott elemet a sorból (\emph{xQueueReceive()}),
+\item A másik kiolvassa a soronkövetkezõ elemet, de azt nem távolítja el a sorból(\emph{xQueuePeek()}).
 \end{itemize}
 
-A FreeRTOS-ban minden kommunikációs struktúra a sor valamilyen speciális megvalósítása.
+A \mbox{FreeRTOS}-ban minden kommunikációs struktúra a sor valamilyen speciális megvalósítása.
 
 A sorok egy taszkhoz sem tartoznak, így egy sorba akár több taszk is írhat, illetve olvashat egy alkalmazáson belül.
 
@@ -138,7 +134,7 @@ Sorból való olvasás során az olvasó függvény paramétereként megadhatunk egy vára
 \item Nem érkezik adat a sorba, de a megadott várakozási idõ lejárt.
 \end{itemize}
 
-Egy sorból egyszerre több taszk is kezdeményezhet olvasást, ezért elõfordulhat az az eset, hogy több taszk is Blokkolt állapotban várja az adat érkezését. Ebben az esetben csak egy taszk kerülhet Futásra kész állapotba az érkezésének hatására. A rendszer a legnagyobb prioritású taszkot választja, vagy ha a várakozó taszkok azonos prioritásúak, akkor a legrégebben várakozót helyezi a Futásra kész állapotba.
+Egy sorból egyszerre több taszk is kezdeményezhet olvasást, ezért elõfordulhat az az eset, hogy több taszk is Blokkolt állapotban várja az adat érkezését. Ebben az esetben csak egy taszk kerülhet Futásra kész állapotba az adat érkezésének hatására. A rendszer a legnagyobb prioritású taszkot választja, vagy ha a várakozó taszkok azonos prioritásúak, akkor a legrégebben várakozót helyezi a Futásra kész állapotba.
 
 %----------------------------------------------------------------------------
 \paragraph{Írás sorba}
@@ -156,53 +152,14 @@ Egy sorba több taszk is kezdeményezhet írást egyidõben. Ekkor ha több taszk is B
 \subsubsection{Szemaforok}
 %----------------------------------------------------------------------------
 
-Két szemafor típust különböztetünk meg:
-\begin{itemize}
-\item Bináris szemafor, amikor a szemafor két értéket vehet fel,
-\item Számláló szemafor, mikor a szemafor több állapotot is felvehet.
-\end{itemize}
+A \mbox{FreeRTOS} rendszerben implementált szemaforok paraméterei között megadható a maximális tick szám, ameddig várakozhat a szemaforra az adott taszk. Ezen maximális idõtartam megadása az esetek nagy részében megoldást jelent a holtponti helyzetekre. A \mbox{FreeRTOS} bináris és számláló szemaforok használatát is támogatja.
 
-A szemaforon két mûvelet értelmezett:
-\begin{itemize}
-\item A szemafor jelzése (elterjedt elnevezések: give, signal, post, V() mûvelet[lábjegyzet-> Dijkstra holland, verhogen]), amikor a szemafor értéke növelésre kerül.
-\item A szemafor elvétele (elterjedt elnevezések: take, wait, pend, P() mûvelet [lábjegyzet-> proberen]), amikor a szemafor elõször tesztelésre kerül, hogy tartalmaz-e elemet, ha igen, akkor az értékét csökkentjük, ha nem, akkor várakozunk addig, amíg valamelyik másik taszk elérhetõvé nem teszi azt.
-\end{itemize}
-
-A FreeRTOS rendszerben implementált szemaforok paraméterei között megadható a maximális tick szám, ameddig várakozhat a szemaforra az adott taszk. Ezen maximális idõtartam megadása az esetek nagy részében megoldást jelent a holtponti helyzetekre.
-
-A szemafor látszólag egyszerûen helyettesíthetõ egy egyszerû változó (boolean vagy elõjel nélküli egész) használatával, viszont a beépített szemafor struktúra atomi mûveletként kerül kezelésre (így nem következik be ütemezés a szemafor tesztelése és állítása közben), illetve a rendszer automatikusan tudja kezelni a várakozó folyamatok állapotok közti mozgatását.
-
-%----------------------------------------------------------------------------
-\paragraph{Bináris szemafor}
-%----------------------------------------------------------------------------
-
-Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
-
-Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történõ kezelése, ezzel is minimalizálva a megszakítási rutin hosszát.
-
-Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a szemafor egy adott taszkban gyakrabban kerül jelzésre, mint ahogy feldolgozzuk, akkor jelzések veszhetnek el (amíg az egyik jelzés várakozik, addig az utána következõ eseményeknek nincs lehetõségük várakozó állapotba kerülni).
-
-%----------------------------------------------------------------------------
-\paragraph{Számláló szemafor}
-%----------------------------------------------------------------------------
-
-A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül Blokkolt állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor, melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
-
-Két felhasználása elterjedt a számláló szemaforoknak:
-\begin{itemize}
-\item Események számlálása: ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
-\item Erõforrás menedzsment: ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtolkolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma.
-\end{itemize}
 
 %----------------------------------------------------------------------------
 \subsubsection{Mutexek}
 %----------------------------------------------------------------------------
 
-Taszkok vagy taszkok és megszakítási rutinok között megosztott erõforrás kezelésekor a Mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erõforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erõforrás szabad, akkor az igénylõ taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erõforrással való munkát. A mutex-et a lehetõ legkorábban (az erõforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét.
-
-Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza.
-
-A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor implementációjából hiányzik.[lábjegyzet-> a FreeRTOS prioritás öröklési mechanizmusa csak egyszerû implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.]
+\mbox{FreeRTOS} alkalmazása esetén a bináris szemafort általában szinkronizáció céljára használunk, míg a közös erõforrást mutex segítségével védjük. A felhasználásból adódó különbségek miatt a mutex védett a prioritás inverzió problémájával szemben, míg a bináris szemafor implementációjából hiányzik\footnote{A \mbox{FreeRTOS} prioritás öröklési mechanizmusa csak egyszerû implementációt tartalmaz, és feltételezi, hogy csak egy taszk csak egy mutex-et birtokol egy adott pillanatban.}.
 
 %----------------------------------------------------------------------------
 \subsection{Megszakítás-kezelés}
@@ -212,7 +169,7 @@ Beágyazott rendszereknél gyakran kell a környezettõl származó eseményekre reagál
 
 Megszakítás használata esetén figyelni kell arra, hogy a megszakítási rutinokban csak \emph{FromISR}-re végzõdõ API függvényeket hívhatunk. Ellenkezõ esetben nem várt mûködés következhet be (blokkoljuk a megszakítási rutint, ami az alkalmazás fagyásához vezethet; kontextus-váltást okozunk, amibõl nem térünk vissza, így a megszakítási rutinból sosem lépünk ki, stb.).
 
-A FreeRTOS ütemezõje a (STM32-re épülõ rendszerekben) a SysTick interruptot használja az ütemezõ periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására Futásra kész állapotba kerül, akkor vagy a következõ ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszer az ütemezõ futtatására.
+A \mbox{FreeRTOS} ütemezõje a (STM32-re épülõ rendszerekben) a SysTick interruptot használja az ütemezõ periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására Futásra kész állapotba kerül, akkor vagy a következõ ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszer az ütemezõ futtatására.
 
 Az alacsonyabb prioritású megszakítások szintén nem tudnak érvényre jutni, így azok bekövetkezésérõl nem kapunk értesítést (az elsõ beérkezõ, alacsonyabb prioritású megszakítás jelzõ bitje bebillen az esemény hatására, de amennyiben több is érkezik a magasabb prioritású megszakítási rutin futása alatt, úgy azok elvesznek).
 Az említett problémák végett a megszakítási rutint a lehetõ legrövidebb idõ alatt be kell fejezni.
@@ -221,13 +178,11 @@ Az említett problémák végett a megszakítási rutint a lehetõ legrövidebb idõ alat
 \subsubsection{Késleltetett megszakítás-kezelés}
 %----------------------------------------------------------------------------
 
-A megszakítási rutint a lehetõ legrövidebb idõ alatt el kell hagyni, emiatt célszerû a kevésbé fontos mûveleteket egy kezelõ taszkban megvalósítani. A FreeRTOS a szemaforokon keresztül biztosít lehetõséget a megszakítás és taszk szinkronizációjára.
+A megszakítási rutint a lehetõ legrövidebb idõ alatt el kell hagyni, emiatt célszerû a kevésbé fontos mûveleteket egy kezelõ taszkban megvalósítani. A \mbox{FreeRTOS} a szemaforokon keresztül biztosít lehetõséget a megszakítás és taszk szinkronizációjára.
 
-A megszakítás hatására a megszakítási rutinban csak szükséges lépéseket végezzük el (például eseményjelzõ bitek törlése), majd egy szemaforon keresztül jelzi a feldolgozó taszknak az esemény bekövetkeztét. Ha a feldolgozás idõkritikus, akkor a feldolgozó szálhoz rendelt magas prioritással biztosítható, hogy az éppen futó taszkot preemtálja. Ekkor a megszakítási rutin végén az ütemezõ meghívásával a visszatérés utána azonnal feldolgozásra kerül az esemény.
+A megszakítás hatására a megszakítási rutinban csak szükséges lépéseket végezzük el (például eseményjelzõ bitek törlése), majd egy szemaforon keresztül jelzi a feldolgozó taszknak az esemény bekövetkeztét. Ha a feldolgozás idõkritikus, akkor a feldolgozó szálhoz rendelt magas prioritással biztosítható, hogy az éppen futó taszkot preemtálja. Ekkor a megszakítási rutin végén az ütemezõ meghívásával a visszatérés után azonnal feldolgozásra kerül az esemény.
 
-Az eseményt kezelõ taszk blokkoló \emph{take} utasítással várakozik Blokkolt állapoban a szemafor érkezésére. A jelzés hatására Futásra kész állapotba kerül, ahonnan az ütemezõ (az éppen futó taszkot preemtálva) Futó állapotba mozgatja. Az esemény feldolgozását követõen újra meghívja a blokkoló \emph{take} utasítást, így újból Blokkolt állapotba kerül az újabb esemény bekövetkezéséig.
-
-Todo: Példa
+Az eseményt kezelõ taszk blokkoló \emph{take} utasítással várakozik Blokkolt állapoban a szemafor érkezésére. A jelzés hatására Futásra kész állapotba kerül, ahonnan az ütemezõ (az éppen futó taszkot preemtálva) Futó állapotba mozgatja. Az esemény feldolgozását követõen újra meghívja a blokkoló \emph{take} utasítást, így újból Blokkolt állapotba kerül az újabb esemény bekövetkezéséig. A késleltetett megszakítás-kezelés elvét \afigref{03_deferred_interrupt}án láthatjuk.
 
 \begin{figure}[h!]
 \center
@@ -243,15 +198,15 @@ Todo: Példa
 
 Az STM32 mikrokontrollerek lehetõvé teszik prioritások hozzárendelését a megszakításokhoz. Ezáltal létrejöhet olyan állapot, amikor egy magasabb prioritású megszakítás érkezik egy alacsonyabb szintû megszakítási rutin futása közben. Ekkor a magasabb prioritású megszakítás késleltetés nélkül érvényre jut, és a magasabb prioritású megszakítási rutin befejeztével az alacsony prioritású folytatódik.
 
-A FreeRTOS rendszer konfigurációs fájlában (\emph{FreeRTOSConfig.h}) beállítható azon legmagasabb prioritás, amihez a FreeRTOS hozzáférhet. Ezáltal a megszkaításoknak két csoportja adódik:
+A \mbox{FreeRTOS} rendszer konfigurációs fájlában (\emph{\mbox{FreeRTOS}Config.h}) beállítható azon legmagasabb prioritás, amihez a \mbox{FreeRTOS} hozzáférhet. Ezáltal a megszakításoknak két csoportja adódik:
 \begin{itemize}
-\item A FreeRTOS által kezelt megszakítások,
-\item A FreeRTOS-tól teljesen független megszakítások.
+\item A \mbox{FreeRTOS} által kezelt megszakítások,
+\item A \mbox{FreeRTOS}-tól teljesen független megszakítások.
 \end{itemize}
 
-A FreeRTOS által kezelt prioritások kritikus szakaszba lépéskor letiltásra kerülnek, így azok nem szakíthatják meg az atomi utasításként futtatandó kódrészletet. Viszont a megszakítások ezen csoportja használhatja a \emph{FromISR}-re végzõdõ FreeRTOS API függvényeket.
+A \mbox{FreeRTOS} által kezelt prioritások kritikus szakaszba lépéskor letiltásra kerülnek, így azok nem szakíthatják meg az atomi utasításként futtatandó kódrészletet. Viszont a megszakítások ezen csoportja használhatja a \emph{FromISR}-re végzõdõ \mbox{FreeRTOS} API függvényeket.
 
-A FreeRTOS-tól független megszakítások kezelése teljes mértékben a fejlesztõ feladata. Az operációs rendszer nem tudja megakadályozni a futásukat, így a kritikus szakaszban is képesek futni. A kiemelkedõen idõkritikus kódrészleteket célszerû ezekben a megszakítási turinokban megvalósítani (például motorvezérlés). A FreeRTOS-tól független megszakítási rutinokban nem szabad API függvényeket használni!
+A \mbox{FreeRTOS}-tól független megszakítások kezelése teljes mértékben a fejlesztõ feladata. Az operációs rendszer nem tudja megakadályozni a futásukat, így a kritikus szakaszban is képesek futni. A kiemelkedõen idõkritikus kódrészleteket célszerû ezekben a megszakítási rutinokban megvalósítani. A \mbox{FreeRTOS}-tól független megszakítási rutinokban nem szabad API függvényeket használni!
 
 %----------------------------------------------------------------------------
 \subsection{Erõforrás-kezelés}
@@ -260,12 +215,12 @@ A FreeRTOS-tól független megszakítások kezelése teljes mértékben a fejlesztõ fel
 Multitaszk rendszerek esetén fennáll a lehetõsége, hogy egy taszk kikerül a Futó állapotból még mielõtt befejezné egy erõforrással a mûveleteket. Ha az erõforrást egy másik taszk is használni akarja, akkor inkonzisztencia léphet fel. Tipikus megjelenései a problémának:
 \begin{itemize}
 \item Periféria elérése,
-\item Egy közös adat olvasása, módosítása, majd visszaírása,[lábjegyzet-> magas szintû nyelv esetén (pl C) ez látszólag lehet egy utasítás, viszont a fordító által elõállított gépi kód több utasításból áll]
+\item Egy közös adat olvasása, módosítása, majd visszaírása,\footnote{Magas szintû programozási nyelv használata esetén (pl C) ez látszólag lehet egy utasítás, viszont a fordító által elõállított gépi kód több utasításból állhat.},
 \item Változó nem atomi elérése (például több tagú struktúra értékeinek megváltoztatása),
-\item Nem reentráns függvények, [lábjegyzet-> reentráns függvény]
+\item Nem reentráns függvények,
 \end{itemize}
 
-Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy taszk megkapja egy erõforrás kezelésének jogát, akkor más taszk nem férhet hozzá, egészen addig, amig a birtokló taszk be nem fejezte az erõforrással a feladatát, és az erõforrás felszabadítását mutex-en keresztül nem jelezte.
+Az adat inkonzisztencia elkerüléséhez használhatunk mutex-et. Amikor egy taszk megkapja egy erõforrás kezelésének jogát, akkor más taszk nem férhet hozzá, egészen addig, amig a birtokló taszk be nem fejezte az erõforrással a feladatát, és az erõforrás felszabadítását mutex-en keresztül nem jelezte.
 
 %----------------------------------------------------------------------------
 \subsubsection{Kritikus szakasz}
@@ -273,9 +228,7 @@ Az adat inkonzisztencia elkerüléséhez hasnzálhatunk mutex-et. Amikor egy taszk m
 
 [ToDo -> Itt átfogalmazni kicsit a dolgokat. Elég kusza a gondolatmenet.]
 
-A közös erõforrások használatakor gyakran szükség van egy adott mûveletsor atomivá tételére, azaz arra, hogy a kijelölt mûveletek futását semmi ne szakíthassa meg, látszólag egy utasításként fussanak le.
-
-A FreeRTOS támogatja a kritikus szakaszok használatát a \emph{taskENTER\_CRITICAL()} és \emph{taskEXIT\_CRITICAL()} makrók használatával.
+A \mbox{FreeRTOS} támogatja a kritikus szakaszok használatát a \emph{taskENTER\_CRITICAL()} és \emph{taskEXIT\_CRITICAL()} makrók használatával.
 
 A kritikus szakaszokat minden probléma nélkül egymásba lehet ágyazni, mivel a rendszerkernel nyílvántartja, hogy milyen mélyen van az alkalmazás a kritikus szakaszokban. A rendszer csak akkor hagyja el a kritikus szakaszt, ha a számláló nullára csökken, vagyis ha minden \emph{taskENTER\_CRITICAL()} híváshoz tartozik egy \emph{taskEXIT\_CRITICAL()} is.
 
@@ -295,7 +248,7 @@ A gatekeeper taszk alkalmazása a kölcsönös kizárás egy olyan megvalósítása, mely
 
 A gatekeeper taszk egyedüli birtokosa egy erõforrásnak, így csak a taszk tudja közvetlenül elérni az erõforrást, a többi taszk közvetetten, a gatekeeper taszk szolgáltatásain keresztül tudja használni az erõforrást.
 
-Amikor egy taszk használni akarja az erõforrást, akkor üzenetet küld a gatekeeper taszknak (általában sor használatával). Mivel egyedül a gatekeeper taszk jogosult elérni az erõforrást, és nincs szükség explicit mutex használatára.
+Amikor egy taszk használni akarja az erõforrást, akkor üzenetet küld a gatekeeper taszknak (általában sor használatával). Mivel egyedül a gatekeeper taszk jogosult elérni az erõforrást, ezért nincs szükség explicit mutex használatára.
 
 A gatekeeper taszk Blokkolt állapotban vár, amíg nem érkezik üzenet a sorba. Az üzenet beérkezése után elvégzi a megfelelõ mûveleteket az erõforráson, majd ha kiürült a sor, akkor ismét Blokkolt állapotba kerül.
 
@@ -309,15 +262,15 @@ Beágyazott alkalmazások fejlesztése során is szükség van dinamikus memóriafoglal
 \begin{itemize}
 \item Kisebb rendszerekben nem biztos, hogy elérhetõ,
 \item Az implementációjuk sok helyet foglalhat,
-\item Nem determinisztikus a lefutásuk; a végrehajtási idõ különbözhet különbözõ híváskor,
+\item Nem determinisztikus a lefutásuk; a végrehajtási idõ változhat különbözõ híváskor,
 \item Memóriatöredezettség léphet fel.
 \end{itemize}
 
-Minden taszkhoz tartozik egy TCB (\emph{Task Control Block}) és egy stack. A TCB struktúra a következõ elemeket tartalmazza (a teljesség igénye nélkül):
+Minden taszkhoz tartozik egy TCB (\emph{Task Control Block}) és egy stack. A TCB struktúra legfontosabb változói \atabref{FreeRTOS_tcb}ban láthatóak.
 
 \begin{table}[h!]
-\caption{A FreeRTOS TCB-jének fõbb változói.}
-\label{tab:freertos_tcb}
+\caption{A \mbox{FreeRTOS} TCB-jének fõbb változói.}
+\label{tab:FreeRTOS_tcb}
 \center
 \begin{tabular}{|p{3.5cm}|p{8cm}|}
 \hline
@@ -326,9 +279,9 @@ Változó & Jelentés \\
 \hline
 pxTopOfStack & Az stack utolsó elemére mutató pointer \\
 \hline
-xGenericListItem & A FreeRTOS a TCB ezen elemét helyezi az adott állapothoz tartozó listába (nem magát a \mbox{TCB-t}) \\
+xGenericListItem & A \mbox{FreeRTOS} a TCB ezen elemét helyezi az adott állapothoz tartozó listába (nem magát a \mbox{TCB-t}) \\
 \hline
-xEventListItem & A FreeRTOS a TCB ezen elemét helyezi az adott eseményhez tartozó listába (nem magát a \mbox{TCB-t}) \\
+xEventListItem & A \mbox{FreeRTOS} a TCB ezen elemét helyezi az adott eseményhez tartozó listába (nem magát a \mbox{TCB-t}) \\
 \hline
 uxPriority & A taszk prioritása \\
 \hline
@@ -345,17 +298,19 @@ ulRunTimeCounter & A taszk \textbf{Fut} állapotban töltött idejét tárolja futási
 \end{tabular}
 \end{table}
 
-Az egyes alkalmazások különböznek memória-allokációs igényükben és az erõírt idõzítési korlátokban, ezért nincs olyan memória-allokációs séma, amely minden alkalmazásban megállná a helyét. A FreeRTOS több allokációs algoritmust is a fejlesztõ rendelekezésére bocsát, amibõl az alkalmazásnak megfelelõ kiválasztásával lehet elérni a megfelelõ mûködést.
+Az egyes alkalmazások különböznek memória-allokációs igényükben és az erõírt idõzítési korlátokban, ezért nincs olyan memória-allokációs séma, amely minden alkalmazásban megállná a helyét. A \mbox{FreeRTOS} több allokációs algoritmust is a fejlesztõ rendelekezésére bocsát, amibõl az alkalmazásnak megfelelõ kiválasztásával lehet elérni a megfelelõ mûködést.
 
 %----------------------------------------------------------------------------
 \subsubsection{Heap\_1.c}
 %----------------------------------------------------------------------------
 
-Kisebb beágyazott alkalmazásoknál gyakran még az ütemezõ indulása elõtt létrehozunk minden taszkot és kommunikációs objektumot. Ilyenkor elég a memóriát lefoglalni az alkalmazás indulása elõtt, és a futás alatt minden memória lefoglalva marad. Ez azt is jelenti, hogy nem kell komplex algoritmusokat megvalósítani a determinisztikusság biztosítására és a Memóriatöredezettség ellkerülésére, hanem elég a kódméretet és az egyszerûséget szem elõtt tartani.
+Kisebb beágyazott alkalmazásoknál gyakran még az ütemezõ indulása elõtt létrehozunk minden taszkot és kommunikációs objektumot. Ilyenkor elég a memóriát lefoglalni az alkalmazás indulása elõtt. Ez azt is jelenti, hogy nem kell komplex algoritmusokat megvalósítani a determinisztikusság biztosítására és a memóriatöredezettség elkerülésére, hanem elég a kódméretet és az egyszerûséget szem elõtt tartani.
 
 Ezt az implementációt tartalmazza a \emph{heap\_1.h}. A fájl a \emph{pvPortMalloc()} egyszerû megvalósítását tartalmazza, azonban a \emph{pvPortFree()} nincs implementálva. A \emph{heap\_1.c} nem fenyegeti a rendszer determinisztikusságát.
 
-A \emph{pvPortMalloc()} függvény a FreeRTOS heap-jét ossza fel kisebb területekre, majd ezeket rendeli hozzá az egyes taszkokhoz. A heap teljes méretét a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs érték határozza meg a \emph{FreeRTOSConfig.h} fájlban. Nagy méretû tömböt definiálva már a memórifoglalás elõtt látszólag sok memóriát fog felhasználni az alkalmazás, mivel a FreeRTOS ezt induláskor lefoglalja.
+A \emph{pvPortMalloc()} függvény a \mbox{FreeRTOS} heap-jét ossza fel kisebb területekre, majd ezeket rendeli hozzá az egyes taszkokhoz. A heap teljes méretét a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs érték határozza meg a \emph{\mbox{FreeRTOS}Config.h} fájlban. Nagy méretû tömböt definiálva már a memórifoglalás elõtt látszólag sok memóriát fog felhasználni az alkalmazás, mivel a \mbox{FreeRTOS} ezt induláskor lefoglalja.
+
+\Afigref{04_heap1}án láthatjuk az induláskor rendelkezésre álló üres heap-et, illetve különbözõ számú taszk esetén a heap használatát.
 
 \begin{figure}[h!]
 \center
@@ -369,13 +324,9 @@ A \emph{pvPortMalloc()} függvény a FreeRTOS heap-jét ossza fel kisebb területekr
 \subsubsection{Heap\_2.c}
 %----------------------------------------------------------------------------
 
-A \emph{heap\_2.c} szintén a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs értéket használja, viszont a \emph{pvPortMalloc()} mellett már implementálva van a \emph{pvPortFree()} is. A memóriafoglalás során a legjobban illeszkedõ területbõl oszt ki a taszk számára memóriát.
+A \emph{heap\_2.c} szintén a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs értéket használja, viszont a \emph{pvPortMalloc()} mellett már implementálva van a \emph{pvPortFree()} is. A legjobban illeszkedõ (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb esõ, elegendõ nagyságú blokkból legyen kiszolgálva.Fontos megjegyezni, hogy a megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
 
-A legjobban illeszkedõ (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb esõ, elgendõ nagyságú blokkból legyen kiszolgálva.
-
-A megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
-
-A \emph{heap\_2.c} fájl használata javasolt, ha az alkalmazás ismételve létrehoz és töröl taszkokat, és a taszkokhoz tartozó stack mérete nem változik.
+A \emph{heap\_2.c} fájl használata javasolt, ha az alkalmazás ismételve létrehoz és töröl taszkokat, és a taszkokhoz tartozó stack mérete nem változik (\figref{05_heap2}a).
 
 \begin{figure}[h!]
 \center
