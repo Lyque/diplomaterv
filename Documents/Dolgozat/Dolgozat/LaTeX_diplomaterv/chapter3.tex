@@ -12,12 +12,12 @@ A választást az sem segíti elõre, hogy nincs egyértelmû módszer az operációs ren
 
 Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehetõ legkisebb szintre csökkenteni.
 A kulcsfontosságú szempontok az alábbiak:
-\begin{itemize}
-\item Megismételhetõség: egy mérésnek megismételhetõnek kell lennie. Ehhez szükséges a pontos mérési összeállítás, a mérés körülményei, a használt eszközök és szoftverek.
-\item Véletlenszerûség: a mérés során nem független események követhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell a mérési folyamatok véletlenszerû futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben fussanak le).
-\item Vezérlés: a mérés során a vezérelhetõ paramétereket (melyek a mérést befolyásolhatják) lehetõségeinkhez mérten kézben kell tartani.
-\item Szemléletesség: a mérés eredményének reprezentatívnak kell lennie. Számértékek esetén két mérés eredményét össze kell tudnunk hasonlítani és tudnunk kell relációt vonni a két érték közé.
-\end{itemize}
+\begin{description}
+\item[$\bullet$\ Megismételhetõség:] egy mérésnek megismételhetõnek kell lennie. Ehhez szükséges a pontos mérési összeállítás, a mérés körülményei, a használt eszközök és szoftverek.
+\item[$\bullet$\ Véletlenszerûség:] a mérés során nem független események követhetik egymást, amik a mérés eredményét befolyásolják. Ezeket csak ritkán lehet teljes mértékben kiküszöbölni, ezért törekedni kell a mérési folyamatok véletlenszerû futtatására (például méréssorozat esetén az egyes folyamatok ne mindig ugyan abban a sorrendben fussanak le).
+\item[$\bullet$\ Vezérlés:] a mérés során a vezérelhetõ paramétereket (melyek a mérést befolyásolhatják) lehetõségeinkhez mérten kézben kell tartani.
+\item[$\bullet$\ Szemléletesség:] a mérés eredményének reprezentatívnak kell lennie. Számértékek esetén két mérés eredményét össze kell tudnunk hasonlítani és tudnunk kell relációt vonni a két érték közé.
+\end{description}
 
 A továbbiakban különbözõ forrásokból vett szempontokat vizsgálok meg, majd azok alapján állítom fel a dolgozat során megfigyelt tulajdonságok listáját.
 
@@ -66,7 +66,7 @@ A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mért késlel
 
 1989-ben a Dr. Dobbs Journal cikkeként jelent meg egy javaslat, ami a valósidejû rendszerek objektív értékelését célozta meg. Rabindra P. Kar, az Intel Systems Group senior mérnöke ismertette a módszer elõnyeit és szempontjait, melynek a Rhealstone nevet adta\footnote{A név a Whetstone és Dhrystone módszerek elnevezéseit követve, mint szójáték ered.}.
 
-A cikk megjelenésekor már léteztek teljesítménymérõ metódusok (például Whetstone, Dhrystone), de ezek a fordító által generált kódot, illetve a hardware-t minõsítették. A Rhealstone metrika célja, hogy a fejlesztõket segítse az alkalmazásukhoz leginkább megfelelõ operációs rendszer kiválasztásában.
+A cikk megjelenésekor már léteztek teljesítménymérõ metódusok (például Whetstone, Dhrystone), de ezek a fordító által generált kódot, illetve a hardvert minõsítették. A Rhealstone metrika célja, hogy a fejlesztõket segítse az alkalmazásukhoz leginkább megfelelõ operációs rendszer kiválasztásában.
 
 A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képességeit:
 \begin{itemize}
@@ -74,8 +74,8 @@ A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képességeit:
 \item Preemptálási idõ (Preemption time),
 \item Megszakítás-késleltetési idõ (Interrupt latency time),
 \item Szemafor-váltási idõ (Semaphore shuffling time),
-\item Deadlock-feloldási idõ (Deadlock breaking time)\footnote{A vizsgálat során nem alakul ki tényleges holtpont. A mérés a prioritás-inverzió jelenségét szimulálja, de az eredeti forrás tiszteletére megtartottam a terminológiát.},
-\item Datagram-átviteli idõ (Datagram throughput time)\footnote{Bár a kategória neve idõnek nevezi a mért mennyiséget, az eredeti dokumentum alapján a mérés kB/sec-ben értelmezett adatot eredményez. Ha az 1~kB átviteléhez szükséges idõt mérjük, akkor viszont megoldódik ez a probléma.}.
+\item Deadlock-feloldási idõ\footnote{A vizsgálat során nem alakul ki tényleges holtpont. A mérés a prioritás-inverzió jelenségét szimulálja, de az eredeti forrás tiszteletére megtartottam a terminológiát.} (Deadlock breaking time),
+\item Datagram-átviteli idõ\footnote{Bár a kategória neve idõnek nevezi a mért mennyiséget, az eredeti dokumentum alapján a mérés $\sfrac{kB}{sec}$-ben értelmezett adatot eredményez. Ha az 1~kB átviteléhez szükséges idõt mérjük, akkor viszont megoldódik ez a probléma.} (Datagram throughput time).
 \end{itemize}
 
 1990-ben megjelent egy második cikk is, amelyben amellett, hogy az egyes kategóriák példaprogramjait közölték (iRMX operációs rendszerhez), pár kategória meghatározását megváltoztatták. Ezen változtatásokat az adott kategória részletezésekor ismertetem.
@@ -84,7 +84,7 @@ A Rhealstone hat kategóriában vizsgálja meg az operációs rendszer képességeit:
 \subsubsection{Taszkváltási idõ}
 %----------------------------------------------------------------------------
 
-A taszváltási idõ a két független, futásra kész, azonos prioritású taszkok váltásához szükséges átlagos idõtartam.
+A taszkváltási idõ a két független, futásra kész, azonos prioritású taszkok váltásához szükséges átlagos idõtartam.
 
 \begin{figure}[h!]
 \center

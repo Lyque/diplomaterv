@@ -49,8 +49,8 @@ Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhaszná
 A négy pont az alábbi feltételeket szabja a feljhasználó számára:
 
 \begin{enumerate}
-\item A forráskódnak tartalmaznia kell az copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkozatot.
-\item Bináris formában történõ terjesztés esetén a a copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkoztatot a dokumentációban és/vagy valamely másik, a terjesztett szoftverhez adott anyagban fel kell tüntetni.
+\item A forráskódnak tartalmaznia kell a copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkozatot.
+\item Bináris formában történõ terjesztés esetén a copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkoztatot a dokumentációban és/vagy valamely másik, a terjesztett szoftverhez adott anyagban fel kell tüntetni.
 \item Bármiféle hirdetési anyagban, ami a szoftver jellemzõire vagy használatára hivatkozik, fel kell tüntetnie az alábbi elismerést:
 \emph{Ez a termék a <szervezet> által fejlesztett szoftvert tartalmaz.}
 \item Sem a <szervezet> neve, sem a közremûködõ partneinek neve nem használható fel a szoftverbõl származó termék népszerûsítésére vagy ajánlására erre vonatkozó írásbeli engedély nélkül.
@@ -98,7 +98,7 @@ Ha valamilyen okból kifolyólag (például bírói végzés folytán) a terjesztés csak 
 
 Ha valamely országban a terjesztés nem lehetséges, úgy a szerzõi jogok eredeti tulajdonosa földrajzi megkötést adhat a terjesztésre vonatkozóan, ami a licenc teljes értékû részét képezi.
 
-A programot más, szerzõi jogi szabályozásában különbözõ szoftverbe csak a szerzõtõl kapott engedély birtokában lehet.
+A programot más, szerzõi jogi szabályozásában különbözõ szoftverbe beépíteni csak a szerzõtõl kapott engedély birtokában lehet.
 
 A GPLv2 licenc nem engedi meg, hogy a program része legyen szellemi tulajdont képezõ szoftvernek. Ebben az esetben az LGPL licenc használata javasolt.
 
@@ -108,7 +108,7 @@ A GPLv2 licenc nem engedi meg, hogy a program része legyen szellemi tulajdont ké
 
 A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami az érthetõséget hivatott szolgálni. 
 
-A tartalmi változtatások megcélozzák a más licencekkel való kompatibilitást, a licenccel védett szoftverhez járó felhasználói termék módosított programmal való használatának biztosítását (tivoizáció\footnote{A TiVo egy digitális videórögzítõ eszközöket gyártó cég, ami az eladott termékeiben GPLv2 licenc alá esõ szoftverek használt. A Series~1 termékét módosított szoftverrel is lehetett használni, viszont a 2000-es évek elején piacra dobott Series~2 DVR box-ban már digitális védelmet használtak, ami meggátolta a módostott rendszerek alkalmazását.} elkerülése), jobban specifikálja a jogok elvesztését, illetve azok visszaszerzésének lehetõségeit, illetve megjelenik a \emph{megkülönböztetõ} licenc definíciója. Megkülönböztetõ licencnek tekintendõ minden olyan licenc, ami nem tartalmazza, vagy megtiltja valamely, az eredeti licencben foglalt jog gyakorlását.
+A tartalmi változtatások megcélozzák a más licencekkel való kompatibilitást, a licenccel védett szoftverhez járó felhasználói termék módosított programmal való használatának biztosítását (tivoizáció\footnote{A TiVo egy digitális videórögzítõ eszközöket gyártó cég, ami az eladott termékeiben GPLv2 licenc alá esõ szoftverek használt. A Series~1 termékét módosított szoftverrel is lehetett használni, viszont a 2000-es évek elején piacra dobott Series~2 DVR box-ban már digitális védelmet használtak, ami meggátolta a módosított rendszerek alkalmazását.} elkerülése), jobban specifikálja a jogok elvesztését, illetve azok visszaszerzésének lehetõségeit, illetve megjelenik a \emph{megkülönböztetõ} licenc definíciója. Megkülönböztetõ licencnek tekintendõ minden olyan licenc, ami nem tartalmazza az eredeti jogokat, vagy megtiltja valamely, az eredeti licencben foglalt jog gyakorlását.
 
 %----------------------------------------------------------------------------
 \section{Operációs rendszer feladatai}
@@ -125,7 +125,7 @@ Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és sz
 Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyidejûleg kezelt felhasználók számának és az ütemezõ mûködésének függvényében. A továbbiakban csak a multitaszkot támogató operációs rendszerekkel foglalkozom.
 
 %----------------------------------------------------------------------------
-\subsubsection{Valós idejû operációs rendszer}
+\subsubsection{Valósidejû operációs rendszer}
 %----------------------------------------------------------------------------
 
 A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát (\figref{02_multitasking}a).
@@ -146,7 +146,7 @@ A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futt
 \label{fig:02_multitasking}
 \end{figure}
 
-Az operációs rendszer típusát az ütemezõ döntési mechanizmusa határozza meg. Egy real time operációs rendszer ütemezõje úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejûség, vagyis hogy a rendszernek egy szigorúan meghatározott idõn belül reagálnia kell egy adott eseményre. A. valósidejû követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezõje elõre megjósolható döntéseket hoz.
+Az operációs rendszer típusát az ütemezõ döntési mechanizmusa határozza meg. Egy real-time operációs rendszer ütemezõje úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejûség, vagyis hogy a rendszernek egy szigorúan meghatározott idõn belül reagálnia kell egy adott eseményre. A. valósidejû követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezõje elõre megjósolható döntéseket hoz.
 
 Valósidejû operációs rendszerek közül megkülönböztetjük a soft real-time és a hard real-time rendszereket.
 
@@ -158,18 +158,18 @@ Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a feladatr
 \subsection{Ütemezés}
 %----------------------------------------------------------------------------
 
-Az operációs rendszer egyik meghatározó része a használt ütemezõ mûködésének elve, mely meghatározza az eszköz alkalmasságát egy adott feladatra. Az ütemezõ dönti el, hogy a futásra kész taszkok közül melyik futhat a következõ ütemezési szakaszban. További feladata tasztváltáskor az éppen futó taszk állapotának elmentése és a futtatandó taszk állapotának betöltése. Az ütemezõ három okból futhat le:
+Az operációs rendszer egyik meghatározó része a használt ütemezõ mûködésének elve, mely meghatározza az eszköz alkalmasságát egy adott feladatra. Az ütemezõ dönti el, hogy a futásra kész taszkok közül melyik futhat a következõ ütemezési szakaszban. További feladata taszkváltáskor az éppen futó taszk állapotának elmentése és a futtatandó taszk állapotának betöltése. Az ütemezõ három okból futhat le:
 \begin{itemize}
 \item Egy taszk lemond a futás jogáról,
 \item Megszakítás érkezik (tick esemény, külsõ megszakítás),
-\item Egy tasz létrejött vagy befejezõdött.
+\item Egy taszk létrejött vagy befejezõdött.
 \end{itemize}
 
 A taszkváltási mód szerint kétféle mûködést különböztetünk meg:
-\begin{itemize}
-\item Preemptív ütemezés: ekkor az ütemezõ megszakíthatja az éppen futó taszkot, amennyiben magasabb prioritású taszk futásra kész állapotban várakozik,
-\item Nem-preemptív vagy kooperatív ütemezés: ebben az esetben az ütemezõ csak akkor futtat új taszkot, ha az éppen futó taszk befejezõdött vagy explicit lemond a futásról (blokkolódik vagy átadja a futás jogát).
-\end{itemize}
+\begin{description}
+\item[$\bullet$\ Preemptív ütemezés:] ekkor az ütemezõ megszakíthatja az éppen futó taszkot, amennyiben magasabb prioritású taszk futásra kész állapotban várakozik,
+\item[$\bullet$\ Nem-preemptív vagy kooperatív ütemezés:] ebben az esetben az ütemezõ csak akkor futtat új taszkot, ha az éppen futó taszk befejezõdött vagy explicit lemond a futásról (blokkolódik vagy átadja a futás jogát).
+\end{description}
 
 A továbbiakban ismertetem néhány elterjedt ütemezési mechanizmus alapelvét.
 
@@ -209,13 +209,11 @@ Lehet preemptív és nem-preemptív is.
 
 Idõosztáson alapuló mechanizmus. A várakozási sor egy cirkuláris buffer. Minden taszk adott idõszeletet kap, majd az idõszelet lejártával a sorban következõ taszk kapja meg a futás jogát.
 
-Lehet preemptív és nem-preemptív is.
-
 %----------------------------------------------------------------------------
 \subsubsection{Hibrid ütemezés}
 %----------------------------------------------------------------------------
 
-A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a többszintû sorok használata, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért (\figref{05_multilevel_queue_scheduling}a).
+A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a \emph{multilevel queue}, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért (\figref{05_multilevel_queue_scheduling}a).
 
 \begin{figure}[h!]
 \center
@@ -232,7 +230,7 @@ A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési 
 Az operációs rendszer felelõs az egyes taszkoknak szükséges memóriaterületek kezeléséért és a taszkok közötti kommunikáció megvalósításáért.
 
 %----------------------------------------------------------------------------
-\subsubsection{Memóriakezelés}
+\subsubsection{Memória-kezelés}
 %----------------------------------------------------------------------------
 
 Egy taszk létrehozásakor az operációs rendszer osztja ki a taszk számára a használható memóriaterület helyét és méretét, és ezt az információt a rendszernek tárolnia kell. Ha az adott taszk befejezi a futását (megszûnik), akkor az operációs rendszer feladata a taszkhoz tartozó memóriaterület felszabadítása is.
@@ -243,11 +241,11 @@ Egy taszk létrehozásakor az operációs rendszer osztja ki a taszk számára a haszn
 \subsubsection{Atomi mûvelet}
 %----------------------------------------------------------------------------
 
-Bizonyos mûveletek során szükség van a mûveletsor szigorúan egymás utáni futtatására. Ilyen eset például a megosztott adatterületre való írás, amikor ha taszkváltás következik be az adatterület írása közben, akkor a tartalmazott adatt érvénytelen értéket vehet fel. Az ilyen, \emph{oszthatatlan} mûveletek nevezzük atomi mûveleteknek. 
+Bizonyos mûveletek során szükség van a mûveletsor szigorúan egymás utáni futtatására. Ilyen eset például a megosztott adatterületre való írás, amikor ha taszkváltás következik be az adatterület írása közben, akkor a tartalmazott adat érvénytelen értéket vehet fel. Az ilyen, \emph{oszthatatlan} mûveleteket nevezzük atomi mûveleteknek. 
 
 A konzisztencia biztosítása céljából az atomi mûveleteket \emph{kritikus szakaszokba} kell ágyazni, ezzel jelezve az operációs rendszernek, hogy a mûveletek végrehajtása alatt nem következhet be taszkváltás, bizonyos esetekben megszakítás sem.
 
-Az operációs rendszerek a kritikus szakaszokat több szinten megvalósíthatják. Legszigorúbb esetben a megszakítások letiltásra kerülnek, és az ütemezõ a kritikus szakasz befejezéséig felfüggesztett állapotban van. A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemezõ letiltása. Ekkor a kódrészlet védett a más taszkok általi preemtálástól, viszont a megszakítások nem kerülnek letiltásra.
+Az operációs rendszerek a kritikus szakaszokat több szinten megvalósíthatják. Legszigorúbb esetben a megszakítások letiltásra kerülnek, és az ütemezõ a kritikus szakasz befejezéséig felfüggesztett állapotban van. A kritikus szakasz megvalósításának egy kevésbé drasztikus módja az ütemezõ letiltása. Ekkor a kódrészlet védett a más taszkok általi preemptálástól, viszont a megszakítások nem kerülnek letiltásra.
 
 A kritikus szakaszt a lehetõ leggyorsabban el kell hagyni, mert különben a beérkezõ megszakítások és magasabb prioritású taszkok késleltetést szenvednek, ami rontja az alkalmazás hatékonyságát.
 
@@ -271,11 +269,11 @@ Két szemafor típust különböztetünk meg:
 
 A szemaforon két mûvelet értelmezett:
 \begin{itemize}
-\item A szemafor jelzése (elterjedt elnevezések: give, signal, post, V() mûvelet\footnote{A jelölés a holland \emph{verhogen} (növelés) szóból származik.}, amikor a szemafor értéke növelésre kerül.
-\item A szemafor elvétele (elterjedt elnevezések: take, wait, pend, P() mûvelet\footnote{A jelölés a holland \emph{proberen} (tesztelés) szóból származik.}, amikor a szemafor elõször tesztelésre kerül, hogy tartalmaz-e elemet, ha igen, akkor az értékét csökkentjük, ha nem, akkor várakozunk addig, amíg valamelyik másik taszk elérhetõvé nem teszi azt.
+\item A szemafor jelzése (elterjedt elnevezések: give, signal, post, V() mûvelet\footnote{A jelölés a holland \emph{verhogen} (növelés) szóból származik.}), amikor a szemafor értéke növelésre kerül.
+\item A szemafor elvétele (elterjedt elnevezések: take, wait, pend, P() mûvelet\footnote{A jelölés a holland \emph{proberen} (tesztelés) szóból származik.}), amikor a szemafor elõször tesztelésre kerül, hogy tartalmaz-e elemet, ha igen, akkor az értékét csökkentjük, ha nem, akkor várakozunk addig, amíg valamelyik másik taszk elérhetõvé nem teszi azt.
 \end{itemize}
 
-A szemafor látszólag egyszerûen helyettesíthetõ egy egyszerû változó (boolean vagy elõjel nélküli egész) használatával, viszont a beépített szemafor struktúra atomi mûveletként kerül kezelésre (így nem következik be ütemezés a szemafor tesztelése és állítása közben), illetve a rendszer automatikusan tudja kezelni a várakozó folyamatok állapotok közti mozgatását.
+A szemafor látszólag egyszerûen helyettesíthetõ egy egyszerû változó (boolean vagy elõjel nélküli egész) használatával, viszont a beépített szemafor struktúra atomi mûveletként kerül kezelésre, illetve a rendszer automatikusan tudja kezelni a várakozó folyamatok állapotok közti mozgatását.
 
 Szemaforokat leggyakrabban szinkronizációs célból, vagy erõforrások védelmére használnak.
 
@@ -283,9 +281,9 @@ Szemaforokat leggyakrabban szinkronizációs célból, vagy erõforrások védelmére ha
 \paragraph{Bináris szemafor}
 %----------------------------------------------------------------------------
 
-Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
+Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására alkalmas (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
 
-Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történõ kezelése, ezzel is minimalizálva a megszakítási rutin hosszát. Erre láthatunk példás \afigref{06_binary_semaphore}án.
+Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történõ kezelése, ezzel is minimalizálva a megszakítási rutin hosszát. Erre láthatunk példát \afigref{06_binary_semaphore}án.
 
 \begin{figure}[h!]
 \center
@@ -309,7 +307,7 @@ Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a 
 \paragraph{Számláló szemafor}
 %----------------------------------------------------------------------------
 
-A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül Blokkolt állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor (\figref{08_counting_semaphore}a), melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
+A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül \emph{Blokkolt} állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor (\figref{08_counting_semaphore}a), melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
 
 \begin{figure}[h!]
 \center
@@ -320,10 +318,10 @@ A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el ne
 \end{figure}
 
 Két felhasználása elterjedt a számláló szemaforoknak:
-\begin{itemize}
-\item Események számlálása: ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
-\item Erõforrás menedzsment: ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtokolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma.
-\end{itemize}
+\begin{description}
+\item[$\bullet$\ Események számlálása:] ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
+\item[$\bullet$\ Erõforrás menedzsment:] ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtokolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma.
+\end{description}
 
 %----------------------------------------------------------------------------
 \paragraph{Mutex}
@@ -345,7 +343,7 @@ Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból a
 \paragraph{Sor (Queue)}
 %----------------------------------------------------------------------------
 
-A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként mûködnek. A sor mûködését láthatjuk \afigref{10_queue}án.
+A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk a sor létrehozásakor kerülnek meghatározásra. Alapértelmezetten FIFO-ként mûködik, aminek bemutatását láthatjuk \afigref{10_queue}án.
 
 \begin{figure}[h!]
 \center
@@ -365,7 +363,7 @@ Az üzenet három dolgot tartalmaz:
 \begin{itemize}
 \item Az adatra mutató pointert,
 \item A mutatott adat méretét,
-\item Egy idõbélyegzõt, ami megmutatja, mikor került az pointer a tárolóba.
+\item Egy idõbélyegzõt, ami megmutatja, mikor került a pointer a tárolóba.
 \end{itemize}
 
 A pointer mutathat egy egész adatterületre vagy akár függvényre is. A küldõ és fogadó félnek tudnia kell, hogy az üzenet tartalma mire mutat.
@@ -398,7 +396,7 @@ Vegyünk egy esetet, mikor legalább három, különbözõ prioritási szinten futó tasz
 
 Kezdetben csak a \emph{TaskA} képes futni, ami egy mutex segítségével megkapja egy erõforrás használati jogát. Közben a \emph{TaskC} futásra kész állapotba kerül, ezért preemptálja a \emph{TaskA}-t. A \emph{TaskC} is használná az erõforrást, de mivel azt már a \emph{TaskA} birtokolja, ezért várakozó állapotba kerül. Közben a \emph{TaskB} is futásra kész állapotba került, és mivel magasabb a prioritása, mint a \emph{TaskA}-nak, ezért megkapja a futás jogát. A \emph{TaskA} csak a \emph{TaskB} befejezõdése (vagy blokkolódása) esetén kerül újra futó állapotba. Miután a \emph{TaskA} befejezte az erõforrással a feladatait és felszabadítja azt, a \emph{TaskC} újból futásra kész állapotba kerül, és preemptálja a \emph{TaskA}-t.
 
-A magyarázat illusztációja \afigref{03_priority_inversion}án látható.
+A magyarázat illusztrációja \afigref{03_priority_inversion}án látható.
 
 \begin{figure}[h!]
 \center
