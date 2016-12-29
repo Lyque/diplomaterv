@@ -76,8 +76,6 @@ A preemptálási idő nagyban hasonlít a taszkváltási időhöz, azonban a já
 
 ### Megszakítás-késleltetési idő
 
-A megszakítás-késleltetési idő
-
 A megszakítás-késleltetési idő egy esemény beérkezése és a megszakítás kezelő rutin első utasítása között eltelt átlagos időtartam.
 
 ![interrupt_latency_time](https://github.com/Lyque/diplomaterv/raw/master/Documents/Jegyzetek/Figures/Benchmark/05_interrupt_latency_time.png "Interrupt latency time")
