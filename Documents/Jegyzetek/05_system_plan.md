@@ -21,7 +21,7 @@ Az ipari alkalmazás egy helyi és egy távoli állomás megfigyelését teszi l
 
 ### Mérőkártya
 
-Az mérőkártya egy vezérlő hardvertől független felépítést kapott. Az egyes perifériák vezetékeken keresztül csatlakoznak a kártyához.
+Az mérőkártya a vezérlő hardvertől független felépítést kapott. Az egyes perifériák vezetékekkel csatlakoznak a kártyához.
 
 Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázatba szedve:
 
