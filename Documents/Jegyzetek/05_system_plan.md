@@ -50,3 +50,18 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | 1 I<sup>2</sup>C (2 pin) | | | |
 | 1 UART (2 pin) | | | |
 | &sum; &lceil;log<sub>2</sub>N&rceil;+14 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
+
+#### Taszkok számának becslése
+
+| Azonosító | Becsült taszkok száma |
+|:---------:|:---------------------:|
+| Idle | 1 |
+| Webszerver | 3 |
+| Késleltetés + Jitter | 1 |
+| Rhealstone | 6 |
+| Kapcsolók | 1 |
+| LED-ek | 1 |
+| SD kártya | 1 |
+| Bluetooth | 1 |
+| ADC-k | 1 |
+| &sum; | 16 |
