@@ -29,7 +29,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 |:-----:|:-------:|:------------:|
 | Kapcsolók: 2 GPIO | <sup>1</sup>MCP9700A: 1 ADC | ADS7924: 1 I<sup>2</sup>C |
 | LED-ek: 2 GPIO | <sup>1</sup>Potméter: 1 ADC |  |
-| Input: 1 Interrupt | SDCard: SDIO |  |
+| Input: 1 Interrupt | SDCard: SDIO + egyéb|  |
 | <sup>2</sup>Output: &lceil;log<sub>2</sub>N&rceil;+1 GPIO | BLE112: 1 UART |  |
 <sup>1</sup>: Jumperrel választható, hogy az STM ADc-jére, vagy az ADS7942-re csatlakozzon.
 
@@ -49,7 +49,8 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | 2db ADC (2 pin) | | | |
 | 1 I<sup>2</sup>C (2 pin) | | | |
 | 1 UART (2 pin) | | | |
-| &sum; &lceil;log<sub>2</sub>N&rceil;+14 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
+| SDCard (11 pin) | | | |
+| &sum; &lceil;log<sub>2</sub>N&rceil;+25 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
 
 #### Taszkok számának becslése
 
