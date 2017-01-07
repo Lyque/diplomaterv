@@ -27,10 +27,10 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 
 | Közös | STM32F4 | Raspberry Pi |
 |:-----:|:-------:|:------------:|
-| Kapcsolók: 2 GPIO | <sup>1</sup>MCP9700A: 1 ADC | ADS7924: 1 I<sup>2</sup>C |
+| Kapcsolók: 2 GPIO | <sup>1</sup>MCP9700A: 1 ADC | ADS7924: 1 I<sup>2</sup>C+Reset |
 | LED-ek: 2 GPIO | <sup>1</sup>Potméter: 1 ADC |  |
 | Input: 1 Interrupt | SDCard: SDIO + egyéb|  |
-| <sup>2</sup>Output: &lceil;log<sub>2</sub>N&rceil;+1 GPIO | BLE112: 1 UART |  |
+| <sup>2</sup>Output: &lceil;log<sub>2</sub>N&rceil;+1 GPIO | BLE112: 1 UART+Reset |  |
 <sup>1</sup>: Jumperrel választható, hogy az STM ADc-jére, vagy az ADS7942-re csatlakozzon.
 
 <sup>2</sup>: N a taszkok száma (Idle taszkkal együtt).
@@ -50,7 +50,8 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | 1 I<sup>2</sup>C (2 pin) | | | |
 | 1 UART (2 pin) | | | |
 | SDCard (11 pin) | | | |
-| &sum; &lceil;log<sub>2</sub>N&rceil;+25 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
+| Reset-ek (2 pin) | | | |
+| &sum; &lceil;log<sub>2</sub>N&rceil;+27 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
 
 #### Taszkok számának becslése
 
@@ -66,3 +67,31 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | Bluetooth | 1 |
 | ADC-k | 1 |
 | &sum; | 16 |
+
+
+
+--------------------------------------------------
+
+# ToDo
+
+## Schematic+Footprint
+
+- Potméter __[DONE]__
+- Induktivitás (?)
+
+
+## Design
+
+- Potméter __[DONE]__
+- BLE112
+    - Tápszűrés
+    - Debugger/Programmer bekötése
+    - UART bekötése
+- ADS9724 __[DONE]__
+- MCP9700A __[DONE]__
+- Párhuzamos LED-ek __[DONE]__
+- LED-ek __[DONE]__
+- POWER LED-ek __[DONE]__
+- Kapcsolók __[DONE]__
+- SDCard módosítása
+    - VDD átnevezése

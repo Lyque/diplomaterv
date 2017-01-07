@@ -31,5 +31,6 @@ Projects/TrueSTUDIO/*/.settings
 
 # Altium history and logs
 
-**/Altium/**/History/
+**/Altium/**/History
 **/Altium/**/*.LOG
+**/Altium/**/__Previews
