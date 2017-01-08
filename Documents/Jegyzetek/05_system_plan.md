@@ -83,15 +83,18 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 ## Design
 
 - Potméter __[DONE]__
-- BLE112
-    - Tápszűrés
-    - Debugger/Programmer bekötése
-    - UART bekötése
+- BLE112 __[DONE]__
+    - Tápszűrés __[DONE]__
+    - Debugger/Programmer bekötése __[DONE]__
+    - UART bekötése __[DONE]__
 - ADS9724 __[DONE]__
 - MCP9700A __[DONE]__
 - Párhuzamos LED-ek __[DONE]__
 - LED-ek __[DONE]__
 - POWER LED-ek __[DONE]__
 - Kapcsolók __[DONE]__
-- SDCard módosítása
-    - VDD átnevezése
+- SDCard módosítása __[DONE]__
+    - VDD átnevezése __[DONE]__
+- Polaritásvédelmet átgondolni
+    - GND3 és GND5 nincs használva -> át kell tervezni
+        - Talán elég a power subschematicból kihozni a két segédföldet, és az egyes blokkokba azt bevezetni. (Természetesen a több feszültséget használó blokkok külön földet igényelnek!)
