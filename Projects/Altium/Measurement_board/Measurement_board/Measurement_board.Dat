@@ -1,0 +1,42 @@
+﻿Field=#~Integer~#~50|Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Designator~String~Designator~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|Field=Value~String~Value~100|Field=FARNELL~String~FARNELL~100|Field=LOMEX~String~LOMEX~100|Field=RET~String~RET~100|ReportField=Currency~<none>|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~Measurement_board.PrjPcb|ReportField=ProjectFullPath~C:\Users\Lyque\My Tresors\Diplomaterv\Github\Projects\Altium\Measurement_board\Measurement_board\Measurement_board.PrjPcb|ReportField=Title~Bill of Materials For Project [Measurement_board.PrjPcb] (No PCB Document Selected)|ReportField=TotalQuantity~160|ReportField=ReportTime~0:34:55|ReportField=ReportDate~2017. 02. 09.|ReportField=ReportDateTime~2017. 02. 09. 0:34:55|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=Address1~|ReportField=Address2~|ReportField=Address3~|ReportField=Address4~|ReportField=Application_BuildNumber~|ReportField=ApprovedBy~|ReportField=Author~|ReportField=CheckedBy~|ReportField=CompanyName~|ReportField=CurrentDate~2017. 02. 09.|ReportField=CurrentTime~0:29:31|ReportField=Date~|ReportField=DocumentFullPathAndName~C:\Users\Lyque\My Tresors\Diplomaterv\Github\Projects\Altium\Measurement_board\Measurement_board\Measurement_board.SchDoc|ReportField=DocumentName~Measurement_board.SchDoc|ReportField=DocumentNumber~|ReportField=DrawnBy~|ReportField=Engineer~|ReportField=ImagePath~|ReportField=ModifiedDate~2017. 02. 04.|ReportField=Organization~|ReportField=ProjectName~Measurement_board.PrjPcb|ReportField=Revision~|ReportField=Rule~|ReportField=SheetNumber~|ReportField=SheetTotal~|ReportField=Time~|ReportField=Title~|ReportField=DataSourceFileName~Measurement_board.PrjPcb|ReportField=DataSourceFullPath~C:\Users\Lyque\My Tresors\Diplomaterv\Github\Projects\Altium\Measurement_board\Measurement_board\Measurement_board.PrjPcb|ReportField=PCBConfigurationName~Sources|ReportField=Item~|ReportField=ItemRevision~|ReportField=ItemAndRevision~|ReportField=ItemRevisionBase~|ReportField=ItemRevisionLevel1~|ReportField=ItemRevisionLevel2~|ReportField=ItemRevisionLevel1AndBase~|ReportField=ItemRevisionLevel2AndLevel1~
+1|100n||C1, C4, C5, C10, C11, C12, C13, C14, C15, C17, C18, C20, C21, C22, C24, C25, C26, C31, C33, C35|0805C|CAPACITOR|20|100n|||
+2|1u||C2, C6|0805C|CAPACITOR|2|1u|||
+3|100p||C3, C34, C36|0805C|CAPACITOR|3|100p|||
+4|1u/16V||C7, C8, C9, C29|CA|ELECTROLYTIC_CAPACITOR|4|1u/16V|||
+5|1n||C16|0805C|CAPACITOR|1|1n|||
+6|10u/16V||C19, C30|CA|ELECTROLYTIC_CAPACITOR|2|10u/16V|||
+7|1u||C23, C27|CA|ELECTROLYTIC_CAPACITOR|2|1u|||
+8|0.1u/16V||C28|CA|ELECTROLYTIC_CAPACITOR|1|0.1u/16V|||
+9|0.1u||C32|0805C|CAPACITOR|1|0.1u|||
+10|HDR1X2||CON1, CON8, CON9, CON10, CON11, CON14|HDR1X2RAST|HDR1X2|6||||
+11|HDR1X3||CON2, CON17|HDR1X3RAST|HDR1X3|2||||
+12|CCDEBUG||CON3|HDR2X5_CC|CCDEBUG|1||||
+13|HDR1X10||CON4, CON5, CON6, CON7|HDR1X10RAST|HDR1X10|4||||
+14|HDR1X1||CON12|HDR1X1|HDR1X1|1||||
+15|HDR1X6||CON13|HDR1X6RAST|HDR1X6|1||||
+16|BNC||CON15|BNC_THD|BNC|1||||
+17|DC_Jack||CON16|DC_JACK|DC_Jack|1||||
+18|SDCard||CON18|SDCard|SDCard|1||||
+19|HDR1X11||CON19|HDR1X11RAST|HDR1X11|1||||
+20|LED||D1, D2, D3, D4, D5, D6, D7, D8, D9, D10|0805LED|LED|10||||
+21|Multifuse||F1|1210FUSE|Multifuse|1||||
+22|1uH||L1|0805L|Inductor|1|1uH|||
+23|2N7002||Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9|SOT23|2N7002|9||||
+24|IRLR024||Q10|TO-252AA|IRLR024|1||||
+25|5||R1|0805R|RESISTOR|1|5|||
+26|4k7||R2, R3, R6|0805R|RESISTOR|3|4k7|||
+27|22||R4, R5, R7, R10, R11, R13, R14, R15, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R37, R38, R39, R40, R46, R47, R53, R54, R69, R70, R71, R72, R73, R74, R75, R76|0805R|RESISTOR|40|22|||
+28|2k7||R8, R16, R42, R43, R44, R45, R57|0805R|RESISTOR|7|2k7|||
+29|10k||R9|0805R|RESISTOR|1|10k|||
+30|10||R12, R35, R36, R48, R49, R50, R51, R52, R59, R60|0805R|RESISTOR|10|10|||
+31|1k8||R33, R34|0805R|RESISTOR|2|1k8|||
+32|3k3||R41, R58|0805R|RESISTOR|2|3k3|||
+33|270||R55|0805R|RESISTOR|1|270|||
+34|390||R56|0805R|RESISTOR|1|390|||
+35|47k||R61, R62, R63, R64, R65, R66, R67, R68|0805R|RESISTOR|8|47k|||
+36|10k||R77|TRIM_POT|Trim_pot|1|10k|||
+37|DPDT Switch||SW1, SW2|DPDT|DPDT_Switch|2||||
+38|ADS7924||U1|QFN16 - HAND|ADS7924|1||2496420||
+39|BLE112||U2|BLE112|BLE112|1||||
+40|LM317||U3|DPAK-3|LM317|1||||
+41|MCP9700A||U4|TO-92|MCP9700A|1||||
