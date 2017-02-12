@@ -15,6 +15,8 @@ Projects/TrueSTUDIO/*/.settings
 # Temporary files
 
 *~
+**/Thumbs.db
+**/*.log
 
 # LaTeX compile files
 
@@ -29,6 +31,8 @@ Projects/TrueSTUDIO/*/.settings
 **/LaTeX_diplomaterv/*.thm
 **/LaTeX_diplomaterv/*.gz
 
-# Altium history
+# Altium history and logs
 
-**/Altium/**/History/
+**/Altium/**/History
+**/Altium/**/*.LOG
+**/Altium/**/__Previews

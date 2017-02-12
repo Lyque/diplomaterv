@@ -1,0 +1,30 @@
+Solid Edge Translation to STEP
+Date: szombat,január 14,2017 01:18du.
+Output File: C:\Users\Lyque\My Tresors\Diplomaterv\Github\Projects\Altium\Measurement_board\Model_files\Pin_headers\hdr6x1rast.stp
+Author: Unknown
+Organization: Unknown
+Source System: Solid Edge
+
+Hardware:
+Processor: Intel(R) Core(TM) i3 CPU       M 390  @ 2.67GHz
+Operating System: Windows 8 Professional
+Installed Memory: 3.79 GB
+
+Software Information
+Parasolid Version: 29.0.122
+PSBodyShop Version: 29.0.68
+Step Adapter Version: 2.0.152
+Solid Edge Version: 109.00.00.111 x64
+
+STEP Export Options
+Export Format: AP214
+Export Construction Sheets: Off
+Export Construction Solids: Off
+Export Construction Wires: Off
+Export Displayed Parts Only: Off
+Export Units: Millimeters
+Export Part Component Names As Unicode: Off
+
+Phase 1 of 1 Translating Parasolid to foreign data types...
+Translation process completed
+Time required to translate:00 : 00 : 00
