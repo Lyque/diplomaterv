@@ -15,8 +15,11 @@ Projects/TrueSTUDIO/*/.settings
 # Temporary files
 
 *~
-**/Thumbs.db
 **/*.log
+
+# OS Specific files
+
+Thumbs.db
 
 # LaTeX compile files
 
