@@ -31,7 +31,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | LED-ek: 2 GPIO | <sup>1</sup>Potméter: 1 ADC |  |
 | Input: 1 Interrupt | SDCard: SDIO + egyéb|  |
 | <sup>2</sup>Output: &lceil;log<sub>2</sub>N&rceil;+1 GPIO | BLE112: 1 UART+Reset |  |
-<sup>1</sup>: Jumperrel választható, hogy az STM ADc-jére, vagy az ADS7942-re csatlakozzon.
+<sup>1</sup>: Jumperrel választható, hogy az STM ADC-jére, vagy az ADS7942-re csatlakozzon.
 
 <sup>2</sup>: N a taszkok száma (Idle taszkkal együtt).
 
@@ -53,6 +53,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | Reset-ek (2 pin) | | | |
 | &sum; &lceil;log<sub>2</sub>N&rceil;+27 pin | &sum; &lceil;log<sub>2</sub>N&rceil;+1 pin | &sum; 1 pin | &sum; 2 pin |
 
+
 #### Taszkok számának becslése
 
 | Azonosító | Becsült taszkok száma |
@@ -69,6 +70,55 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | &sum; | 16 |
 
 
+#### STM32F4 lábkiosztás
+
+| Funkció | Mikrovezérlő láb | Láb funkció |
+|:-------:|:----------------:|:-----------:|
+| ETH_TX_EN | PB11 | ETH_TX_EN |
+| ETH_TXD0 | PB12 | ETH_TXD0 |
+| ETH_TXD1 | PB13 | ETH_TXD1 |
+| ETH_RXD0 | PC4 | ETH_RXD0 |
+| ETH_RXD1 | PC5 | ETH_RXD1 |
+| ETH_CRS_DV | PA7 | ETH_CRS_DV |
+| ETH_MDIO | PA2 | ETH_MDIO |
+| ETH_MDC | PC1 | ETH_MDC |
+| ETH_REF_CLK | PA1 | ETH_REF_CLK |
+| NRST | PE2 | GPIO_OUT |
+|  |  |  |
+| NCD | PB15 | GPIO_IN |
+| DAT1 | PC9 | SDIO_D1 |
+| DAT0 | PC8 | SDIO_D0 |
+| CLK | PC12 | SDIO_CK |
+| CMD | PD2 | SDIO_CMD |
+| CD/DAT3 | PC11 | SDIO_D3 |
+| DAT2 | PC10 | SDIO_D2 |
+|  |  |  |
+| UART6_TX | PC6 | UART6_TX |
+| UART6_RX | PC7 | UART6_RX |
+|  |  |  |
+| BLE_TX | PA9 | UART1_TX |
+| BLE_RX | PA10 | UART1_RX |
+|  |  |  |
+| ADC_SCL | PB6 | I2C1_SCL |
+| ADC_SDA | PB7 | I2C1_SDA |
+|  |  |  |
+| TERM | PC2 | ADC1_IN12 |
+| POT | PC3 | ADC2_IN13 |
+|  |  |  |
+| IN | PC13 | GPIO_IN |
+| ID3 | PD7 | GPIO_OUT |
+| ID2 | PD6 | GPIO_OUT |
+| ID1 | PD5 | GPIO_OUT |
+| ID0 | PD4 | GPIO_OUT |
+| OUT | PD3 | GPIO_OUT |
+|  |  |  |
+| BLE_RST | PE4 | GPIO_OUT |
+| ADC_RST | PE5 | GPIO_OUT |
+|  |  |  |
+| LED0 | PD8 | GPIO_OUT |
+| LED1 | PD9 | GPIO_OUT |
+| SW0 | PD10 | GPIO_IN |
+| SW1 | PD11 | GPIO_IN |
 
 --------------------------------------------------
 
@@ -77,7 +127,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 ## Schematic+Footprint
 
 - Potméter __[DONE]__
-- Induktivitás (?)
+- Induktivitás __[DONE]__
 
 
 ## Design
@@ -96,5 +146,6 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 - SDCard módosítása __[DONE]__
     - VDD átnevezése __[DONE]__
 - Polaritásvédelmet átgondolni
-    - GND3 és GND5 nincs használva -> át kell tervezni
-        - Talán elég a power subschematicból kihozni a két segédföldet, és az egyes blokkokba azt bevezetni. (Természetesen a több feszültséget használó blokkok külön földet igényelnek!)
+    - GND3 és GND5 nincs használva -> át kell tervezni __[DONE]__
+        - Talán elég a power subschematicból kihozni a két segédföldet, és az egyes blokkokba azt bevezetni. (Természetesen a több feszültséget használó blokkok külön földet igényelnek!) __[DONE]__
+        - GND3 el lett távolítva (feleseleges és egyben logikátlan is) __[DONE]__
