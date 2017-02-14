@@ -71,6 +71,18 @@ void HAL_MspInit(void)
   /* USER CODE END MspInit 1 */
 }
 
+void HAL_LED_MspInit()
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+	/*Configure GPIO pins : PD12 PD13 PD14 PD15 */
+	GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+}
+
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
 
