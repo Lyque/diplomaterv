@@ -59,7 +59,6 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | Azonosító | Becsült taszkok száma |
 |:---------:|:---------------------:|
 | Idle | 1 |
-| Webszerver | 3 |
 | Késleltetés + Jitter | 1 |
 | Rhealstone | 6 |
 | Kapcsolók | 1 |
