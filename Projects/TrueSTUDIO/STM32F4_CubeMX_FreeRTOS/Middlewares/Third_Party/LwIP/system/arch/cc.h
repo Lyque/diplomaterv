@@ -34,6 +34,7 @@
 
 #include "cpu.h"
 #include <stdlib.h>
+#include <sys/time.h>
 
 typedef unsigned   char    u8_t;
 typedef signed     char    s8_t;
