@@ -34,10 +34,9 @@
 #include "stm32f4xx_hal.h"
 #include "cmsis_os.h"
 #include "fatfs.h"
-#include "lwip.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "measure_config.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -56,7 +55,9 @@ osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+osThreadId reverseTaskHandle;
+osThreadId uart6TaskHandle;
+osSemaphoreId uart6_xSemaphore = NULL;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,7 +74,8 @@ void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+void StartReverseTask(void const * argument);
+void StartUART6Task(void const * argument);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -122,8 +124,18 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+//  osThreadDef(reverseTask, StartReverseTask, osPriorityNormal, 0, 128);
+//  osThreadDef(UART6Task, StartUART6Task, osPriorityNormal, 0, 1024);
+//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+//  reverseTaskHandle = osThreadCreate(osThread(reverseTask), NULL);
+//  uart6TaskHandle = osThreadCreate(osThread(UART6Task), NULL);
+  ThreadDef(DEFAULTTASKID, StartDefaultTask, osPriorityNormal, 0, 128);
+  ThreadDef(REVERSETASKID, StartReverseTask, osPriorityNormal, 0, 128);
+  ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 1024);
+  defaultTaskHandle = osThreadCreate(Thread(DEFAULTTASKID), NULL);
+  reverseTaskHandle = osThreadCreate(Thread(REVERSETASKID), NULL);
+  uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -356,16 +368,17 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_1|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_12|GPIO_PIN_13 
+                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PE2 PE4 PE5 */
   GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5;
@@ -376,7 +389,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -386,10 +399,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD8 PD9 PD1 PD3 
-                           PD4 PD6 PD7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_1|GPIO_PIN_3 
-                          |GPIO_PIN_4|GPIO_PIN_6|GPIO_PIN_7;
+  /*Configure GPIO pins : PD8 PD9 PD12 PD13 
+                           PD14 PD15 PD3
+                           PD4 PD5 PD6 PD7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_12|GPIO_PIN_13 
+                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -401,10 +416,54 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+	osSemaphoreRelease(uart6_xSemaphore);
+}
 
+void StartUART6Task(void const * argument)
+{
+	uint8_t data[1];
+	uint16_t size = sizeof(data)/sizeof(uint8_t);
+
+	osSemaphoreDef(SEM);
+	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
+
+	while(1)
+	{
+		HAL_UART_Receive_IT(&huart6, data, size);
+		if(osSemaphoreWait(uart6_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+			HAL_UART_Transmit(&huart6, data, size, 100);
+		}
+		else
+		{
+			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+		}
+	}
+}
+
+void StartReverseTask(void const * argument)
+{
+	uint32_t i=0;
+	for(;;)
+	  {
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+		for(i=0;i<14000000;i++){};//osDelay(100);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		osDelay(200);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+		osDelay(300);
+	  }
+}
 /* USER CODE END 4 */
 
 /* StartDefaultTask function */
@@ -413,24 +472,39 @@ void StartDefaultTask(void const * argument)
   /* init code for FATFS */
   MX_FATFS_Init();
 
-  /* init code for LWIP */
-  MX_LWIP_Init();
-
   /* USER CODE BEGIN 5 */
-  HAL_LED_MspInit();
   /* Infinite loop */
   for(;;)
   {
-	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-    osDelay(200);
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+    osDelay(400);
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-    osDelay(200);
+    osDelay(500);
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-	osDelay(200);
-	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15|GPIO_PIN_5);
-	osDelay(200);
+    osDelay(600);
   }
   /* USER CODE END 5 */ 
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+/* USER CODE BEGIN Callback 0 */
+
+/* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+/* USER CODE BEGIN Callback 1 */
+
+/* USER CODE END Callback 1 */
 }
 
 /**

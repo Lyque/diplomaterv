@@ -75,6 +75,29 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+// Modifikált cuccni
+#define     __IO    volatile
+
+typedef struct
+{
+  __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
+  __IO uint32_t OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
+  __IO uint32_t OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
+  __IO uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
+  __IO uint32_t IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
+  __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
+  __IO uint32_t BSRR;     /*!< GPIO port bit set/reset register,      Address offset: 0x18      */
+  __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
+  __IO uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
+} GPIO_TypeDef;
+
+#define PERIPH_BASE           0x40000000U
+#define AHB1PERIPH_BASE       (PERIPH_BASE + 0x00020000U)
+#define GPIOD_BASE            (AHB1PERIPH_BASE + 0x0C00U)
+#define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
+
+#define GPIO_PIN_15                ((uint16_t)0x8000U)
+
 #ifndef __VFP_FP__
 	#error This port can only be used when the project options are configured to enable hardware floating point support.
 #endif
@@ -470,6 +493,20 @@ void xPortPendSVHandler( void )
 	"	msr psp, r0							\n"
 	"	isb									\n"
 	"										\n"
+	// ToDo: Ide jöhet az aktuális taszk azonosítójának kitevése a lábakra.
+	"	push {r0, r1, r2}								\n"
+	"	ldr	r0, pxCurrentTCBConst						\n" /* Get the location of the current TCB. */
+	"	ldr	r2, [r0]									\n"
+	"   movw r0, #0x0C14								\n"
+	"	movt r0, #0x4002								\n"
+	"   ldr r1, [r2, #52]								\n"
+	" 	lsl r1, r1, #4									\n"
+	" 	and r1, r1, #0x000000F0							\n"
+	" 	ldr r2, [r0, #0]								\n"
+	" 	and r2, r2, #0xFFFFFF0F							\n"
+	" 	orr r2, r2, r1									\n"
+	" 	str r2, [r0, #0]								\n"
+	"	pop {r0, r1, r2}								\n"
 	#ifdef WORKAROUND_PMU_CM001 /* XMC4000 specific errata workaround. */
 		#if WORKAROUND_PMU_CM001 == 1
 	"			push { r14 }				\n"
@@ -501,7 +538,30 @@ void xPortSysTickHandler( void )
 			the PendSV interrupt.  Pend the PendSV interrupt. */
 			portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
 		}
+		else
+		{
+			// ToDo: Ide jöhet az aktuális taszk azonosítójának kitevése a lábakra.
+			__asm volatile
+			(
+			"	push {r0, r1, r2}								\n"
+			"	ldr	r0, pxCurrentTCBConstCust					\n" /* Get the location of the current TCB. */
+			"	ldr	r2, [r0]									\n"
+			"   movw r0, #0x0C14								\n"
+			"	movt r0, #0x4002								\n"
+			"   ldr r1, [r2, #52]								\n"
+			" 	lsl r1, r1, #4									\n"
+			" 	and r1, r1, #0x000000F0							\n"
+			" 	ldr r2, [r0, #0]								\n"
+			" 	and r2, r2, #0xFFFFFF0F							\n"
+			" 	orr r2, r2, r1									\n"
+			" 	str r2, [r0, #0]								\n"
+			"	pop {r0, r1, r2}								\n"
+			"	.align 2										\n"
+			"pxCurrentTCBConstCust: .word pxCurrentTCB			\n"
+			);
+		}
 	}
+
 	portCLEAR_INTERRUPT_MASK_FROM_ISR( 0 );
 }
 /*-----------------------------------------------------------*/

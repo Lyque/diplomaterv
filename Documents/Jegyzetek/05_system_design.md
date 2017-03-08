@@ -108,7 +108,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | IN | PC13 | GPIO_IN |
 | ID3 | PD7 | GPIO_OUT |
 | ID2 | PD6 | GPIO_OUT |
-| ID1 | PD1 | GPIO_OUT |
+| ID1 | PD5 | GPIO_OUT |
 | ID0 | PD4 | GPIO_OUT |
 | OUT | PD3 | GPIO_OUT |
 |  |  |  |
