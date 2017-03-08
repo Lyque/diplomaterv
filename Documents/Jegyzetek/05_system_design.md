@@ -16,7 +16,7 @@ A kiegészítő hardver tervezése során a fő szempont a mérés folyamatának
 
 ### Ipari alkalmazás
 
-Az ipari alkalmazás egy helyi és egy távoli állomás megfigyelését teszi lehetővé. A helyi állomáson egy potméter, egy hőmérő, kapcsolók és indikátor LED-ek találhatóak, míg a távoli állomáson egy TI SensorTag méri a hőmérsékletet, páratartalmat és a fényviszonyokat. Amért adatokat az eszközön futó webszerver jeleníti meg, illetve az indikátor LED-ek állapotai ugyanezen felületen állíthatóak.
+Az ipari alkalmazás egy helyi és egy távoli állomás megfigyelését teszi lehetővé. A helyi állomáson egy potméter, egy hőmérő, kapcsolók és indikátor LED-ek találhatóak, míg a távoli állomáson egy TI SensorTag méri a hőmérsékletet, páratartalmat és a fényviszonyokat. Amért adatokat az eszközön futó webszerver jeleníti meg (Raspberry PI esetén, STM32-t soros kommunikáció segítségével, grafikus alkalmazással lehet vezérelni), illetve az indikátor LED-ek állapotai ugyanezen felületen állíthatóak.
 
 
 ### Mérőkártya
