@@ -74,17 +74,6 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 
 | Funkció | Mikrovezérlő láb | Láb funkció |
 |:-------:|:----------------:|:-----------:|
-| ETH_TX_EN | PB11 | ETH_TX_EN |
-| ETH_TXD0 | PB12 | ETH_TXD0 |
-| ETH_TXD1 | PB13 | ETH_TXD1 |
-| ETH_RXD0 | PC4 | ETH_RXD0 |
-| ETH_RXD1 | PC5 | ETH_RXD1 |
-| ETH_CRS_DV | PA7 | ETH_CRS_DV |
-| ETH_MDIO | PA2 | ETH_MDIO |
-| ETH_MDC | PC1 | ETH_MDC |
-| ETH_REF_CLK | PA1 | ETH_REF_CLK |
-| NRST | PE2 | GPIO_OUT |
-|  |  |  |
 | NCD | PB15 | GPIO_IN |
 | DAT1 | PC9 | SDIO_D1 |
 | DAT0 | PC8 | SDIO_D0 |
