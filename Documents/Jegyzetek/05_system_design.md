@@ -110,6 +110,64 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 
 --------------------------------------------------
 
+# Teljesítménymérő szálak terve
+
+## Memóriaméret
+
+Az operációs rendszerek memóriaigényét az egyes fordítások után kapott eredmények alapján táblázatba foglalom, ami alapján összehasonlíthatóak a rendszerek. Ez a módszer csak az STM esetén járható út, mivel Raspberry PI-n az operációs rendszerek mérete várhatóan nagyságrendekkel nagyobb, mint az egyes alkalmazásoké.
+
+
+## Késleltetés
+
+A késleltetés mérése során a kimeneti láb változtatását a megszakítási rutinban hajtom végre. Ekkor az esetleges szemafor átadása nem okoz többletkésleltetést.
+
+
+## Jitter
+
+A jitter meghatározása több késleltetés-mérés alapján történik
+
+
+## Rhealstone
+
+### Taszkváltási idő
+
+A taszkváltási idő méréséhez három, azonos prioritású taszkot hozok létre, melyek végtelen ciklusban futnak. Egyéb hasznos feladatot nem látnak el a taszkok.
+
+
+### Preemptálási idő
+
+A preemptálási idő méréséhez három, különböző prioritású taszkot hozok létre. A legalacsonyabb prioritású taszk végtelen ciklusban fut, a közepes prioritású taszk rövid futási idő után várakozik, míg a legmagasabb prioritású taszk szintén rövid idő után hosszabb ideig várakozik. 
+
+
+### Megszakítás-késleltetési idő
+
+A megszakítás-késleltetési idő nagyon hasonlít a késleltetési időhöz, viszont itt a megszakítás kezelő rutin első utasításáig eltelt időt mérem. Ehhez a beágyazott operációs rendszereknél elterjedt szemfarorral történik a kezelő rutin várakoztatása.
+
+
+### Szemafor-váltási idő
+
+A szemafor-váltási idő méréséhez két, különböző prioritású taszkot hozok létre. Az alacsony prioritású taszk lefoglalja a szemafort, majd egy hosszú lefutású ciklusba lép. Közben a magasabb prioritású taszk futásra kész állapotba lép, és preemptálja az alacsony prioritásút. A magas prioritású taszk is megpróbálja lefoglalni a szemafort, de mivel azt már az alacsonyabb prioritású taszk birtokolja, ezért várakozó állapotba lép. Az alacsony prioritású taszk a ciklus lefutása után visszaadja a szemafort, amit a magas prioritású taszk futása követ. A szemafor felszabadulása és a magas prioritású taszk indulása között eltelt időt mérem. A mérés során mindkét definíció szerinti adatok kinyerhetőek.
+
+
+### Deadlock-feloldási idő
+
+A deadlock-feloldási idő mérése során három, különböző prioritású taszkot hozok létre. Az alacsony prioritású taszk lefoglalja az erőforrást (mutex), majd egy hosszú lefutású cilusba lép. Közben a közepes prioritású taszk elkezdi a futását (ezzel preemptálva az alacsony prioritású taszkot), és szintén egy hosszú lefutású cilusba lép. Ezalatt a legmagasabb prioritású taszk kerül futó állapotba, és megpróbálja lefoglalni a közös erőforrást. Az erőforrás igénylésétől a megszerzéséig szükséges időt mérem a mérés során.
+
+
+### Datagram-átviteli idő
+
+A datagram-átviteli idő mérése során két, különböző prioritású taszkot hozok létre. Az alacsony prioritású taszk a futás elején lefoglalja a szemafort. Közben a magasabb prioritású taszk futásra kész állapotba kerül, és elkezd feltölteni egy 1kB nagyságú objektumot. Az objektummal végzett művelet megkezdését egy kimeneti láb magas szintre állításával jelzi. Mikor végzett a tároló feltöltésével, megpróbálja lefoglalni a szemafort, ezzel átadva a processzort az alacsony prioritású taszknak. Az alacsony prioritású taszk kiüríti a tárolót, majd felszabadítja a szemafort, amit újra a magas prioritású taszk futása követ. A mérési folyamat befejeztét a kimeneti láb alacsony szintre állításával jelzi.
+
+Az üzenet-késleltetési idő nem kerül meghatározásra a dolgozatban.
+
+
+### Legrosszabb válaszidő
+
+A legrosszabb válaszidő méréséhez a megszakítás-késleltetési idő szoftverét használom, mivel a megszakítás operációs-rendszereknél használt kezelését az valósítja meg.
+
+
+--------------------------------------------------
+
 # ToDo
 
 ## Schematic+Footprint
