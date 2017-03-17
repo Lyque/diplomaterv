@@ -151,7 +151,7 @@ A szemafor-váltási idő méréséhez két, különböző prioritású taszkot 
 
 ### Deadlock-feloldási idő
 
-A deadlock-feloldási idő mérése során három, különböző prioritású taszkot hozok létre. Az alacsony prioritású taszk lefoglalja az erőforrást (mutex), majd egy hosszú lefutású cilusba lép. Közben a közepes prioritású taszk elkezdi a futását (ezzel preemptálva az alacsony prioritású taszkot), és szintén egy hosszú lefutású cilusba lép. Ezalatt a legmagasabb prioritású taszk kerül futó állapotba, és megpróbálja lefoglalni a közös erőforrást. Az erőforrás igénylésétől a megszerzéséig szükséges időt mérem a mérés során.
+A deadlock-feloldási idő mérése során három, különböző prioritású taszkot hozok létre. Az alacsony prioritású taszk lefoglalja az erőforrást (mutex), majd egy hosszú lefutású ciklusba lép. Közben a közepes prioritású taszk elkezdi a futását (ezzel preemptálva az alacsony prioritású taszkot), és szintén egy hosszú lefutású cilusba lép. Ezalatt a legmagasabb prioritású taszk kerül futó állapotba, és megpróbálja lefoglalni a közös erőforrást. Az erőforrás igénylésétől a megszerzéséig szükséges időt mérem a mérés során.
 
 
 ### Datagram-átviteli idő

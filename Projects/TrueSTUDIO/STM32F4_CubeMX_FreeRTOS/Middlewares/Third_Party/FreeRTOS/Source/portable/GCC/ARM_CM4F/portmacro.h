@@ -118,15 +118,26 @@ typedef unsigned long UBaseType_t;
 /*-----------------------------------------------------------*/
 
 /* Scheduler utilities. */
-#define portYIELD() 															\
-{																				\
-	/* Set a PendSV to request a context switch. */								\
-	portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;								\
-																				\
-	/* Barriers are normally not required but do ensure the code is completely	\
-	within the specified behaviour for the architecture. */						\
-	__asm volatile( "dsb" );													\
-	__asm volatile( "isb" );													\
+#define portYIELD() 																				\
+{																									\
+	/* Ütemezõ azonosítójának kitétele a lábakra */													\
+	__asm volatile																					\
+	(																								\
+	"	push {r0, r1, r2}								\n"											\
+	"   movw r0, #0x0C14								\n" /* GPIOD címének betöltése */			\
+	"	movt r0, #0x4002								\n"											\
+	" 	ldr r2,[r0, #0]									\n"											\
+	" 	and r2, r2, #0xFFFFFF0F							\n"											\
+	" 	str r2, [r0, #0]								\n" /* Null értékek kiírása a lábakra */	\
+	"	pop {r0, r1, r2}								\n"											\
+	);																								\
+	/* Set a PendSV to request a context switch. */													\
+	portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;													\
+																									\
+	/* Barriers are normally not required but do ensure the code is completely						\
+	within the specified behaviour for the architecture. */											\
+	__asm volatile( "dsb" );																		\
+	__asm volatile( "isb" );																		\
 }
 
 #define portNVIC_INT_CTRL_REG		( * ( ( volatile uint32_t * ) 0xe000ed04 ) )

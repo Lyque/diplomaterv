@@ -36,10 +36,65 @@
 #include "fatfs.h"
 
 /* USER CODE BEGIN Includes */
+// ToDo: Szemaforral indítani az egyes méréseket, ezzel tehermentesíteni a processzort.
 #include "measure_config.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+/* Private variables ---------------------------------------------------------*/
+osThreadId startMeasureTaskHandle;
+
+#if defined(MEAS_TASK_SWITCHING_TIME) || defined(MEAS_PREEMPTION_TIME) || defined(MEAS_SEMAPHORE_SHUFFLING_TIME) || defined(MEAS_DEADLOCK_BREAKING_TIME) || defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+osSemaphoreId measureSemaphoreA_xSemaphore = NULL;
+osSemaphoreId measureSemaphoreB_xSemaphore = NULL;
+osSemaphoreId measureSemaphoreC_xSemaphore = NULL;
+#endif
+
+#if defined(MEAS_TASK_SWITCHING_TIME)
+osThreadId switchingTimeTaskAHandle;
+osThreadId switchingTimeTaskBHandle;
+osThreadId switchingTimeTaskCHandle;
+#endif
+
+#if defined(MEAS_PREEMPTION_TIME)
+osThreadId preemptionTimeTaskAHandle;
+osThreadId preemptionTimeTaskBHandle;
+osThreadId preemptionTimeTaskCHandle;
+#endif
+
+#if defined(MEAS_INTERRUPT_LATENCY_TIME)
+osThreadId interruptLatencyTimeTaskHandle;
+osSemaphoreId interruptLatency_xSemaphore = NULL;
+#endif
+
+#if defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
+osThreadId semaphoreShufflingTimeTaskAHandle;
+osThreadId semaphoreShufflingTimeTaskBHandle;
+osSemaphoreId semaphoreShuffling_xSemaphore = NULL;
+#endif
+
+#if defined(MEAS_DEADLOCK_BREAKING_TIME)
+osThreadId deadlockBreakingTimeTaskAHandle;
+osThreadId deadlockBreakingTimeTaskBHandle;
+osThreadId deadlockBreakingTimeTaskCHandle;
+osMutexId deadlockBreaking_xMutex = NULL;
+#endif
+
+#if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+osThreadId datagramThroughputTimeTaskAHandle;
+osThreadId datagramThroughputTimeTaskBHandle;
+osSemaphoreId datagramThroughput_xSemaphore = NULL;
+osMessageQId datagramThrougput_xMessage = NULL;
+#endif
+
+#if defined(BLINKING_LED)
+osThreadId forwardLEDTaskHandle;
+osThreadId reverseLEDTaskHandle;
+#endif
+
+#if defined(MEAS_W_LOAD)
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 
@@ -51,31 +106,68 @@ HAL_SD_CardInfoTypedef SDCardInfo;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart6;
 
-osThreadId defaultTaskHandle;
-
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
-osThreadId reverseTaskHandle;
 osThreadId uart6TaskHandle;
 osSemaphoreId uart6_xSemaphore = NULL;
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
+#if defined(MEAS_W_LOAD)
 static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
-void StartDefaultTask(void const * argument);
+#endif
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-void StartReverseTask(void const * argument);
+void StartStartMeasureTask(void const * argument);
+
+#if defined(MEAS_TASK_SWITCHING_TIME)
+void StartSwitchingTimeTaskA(void const * argument);
+void StartSwitchingTimeTaskB(void const * argument);
+void StartSwitchingTimeTaskC(void const * argument);
+#endif
+
+#if defined(MEAS_PREEMPTION_TIME)
+void StartPreemptionTimeTaskA(void const * argument);
+void StartPreemptionTimeTaskB(void const * argument);
+void StartPreemptionTimeTaskC(void const * argument);
+#endif
+
+#if defined(MEAS_INTERRUPT_LATENCY_TIME)
+void StartInterruptLatencyTimeTask(void const * argument);
+#endif
+
+#if defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
+void StartSemaphoreShufflingTimeTaskA(void const * argument);
+void StartSemaphoreShufflingTimeTaskB(void const * argument);
+#endif
+
+#if defined(MEAS_DEADLOCK_BREAKING_TIME)
+void StartDeadlockBreakingTimeTaskA(void const * argument);
+void StartDeadlockBreakingTimeTaskB(void const * argument);
+void StartDeadlockBreakingTimeTaskC(void const * argument);
+#endif
+
+#if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+void StartDatagramThroughputTimeTaskA(void const * argument);
+void StartDatagramThroughputTimeTaskB(void const * argument);
+#endif
+
+#if defined(BLINKING_LED)
+void StartForwardLEDTask(void const * argument);
+void StartReverseLEDTask(void const * argument);
+#endif
+
+#if defined(MEAS_W_LOAD)
 void StartUART6Task(void const * argument);
+#endif
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -99,12 +191,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+#if defined(MEAS_W_LOAD)
   MX_ADC1_Init();
   MX_SDIO_SD_Init();
   MX_USART6_UART_Init();
   MX_ADC2_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
+#endif
 
   /* USER CODE BEGIN 2 */
 
@@ -112,10 +206,25 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
+#if defined(MEAS_DEADLOCK_BREAKING_TIME)
+  osMutexDef(DEADLOCKMUT);
+  deadlockBreaking_xMutex = osMutexCreate(osMutex(DEADLOCKMUT));
+#endif
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
+#if defined(MEAS_TASK_SWITCHING_TIME) || defined(MEAS_PREEMPTION_TIME) || defined(MEAS_SEMAPHORE_SHUFFLING_TIME) || defined(MEAS_DEADLOCK_BREAKING_TIME) || defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+  osSemaphoreDef(MEASSEMA);
+  osSemaphoreDef(MEASSEMB);
+  osSemaphoreDef(MEASSEMC);
+  measureSemaphoreA_xSemaphore = osSemaphoreCreate(osSemaphore(MEASSEMA), 1);
+  measureSemaphoreB_xSemaphore = osSemaphoreCreate(osSemaphore(MEASSEMB), 1);
+  measureSemaphoreC_xSemaphore = osSemaphoreCreate(osSemaphore(MEASSEMC), 1);
+  osSemaphoreWait(measureSemaphoreA_xSemaphore, 0);
+  osSemaphoreWait(measureSemaphoreB_xSemaphore, 0);
+  osSemaphoreWait(measureSemaphoreC_xSemaphore, 0);
+#endif
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -124,18 +233,66 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-//  osThreadDef(reverseTask, StartReverseTask, osPriorityNormal, 0, 128);
-//  osThreadDef(UART6Task, StartUART6Task, osPriorityNormal, 0, 1024);
-//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-//  reverseTaskHandle = osThreadCreate(osThread(reverseTask), NULL);
-//  uart6TaskHandle = osThreadCreate(osThread(UART6Task), NULL);
-  ThreadDef(DEFAULTTASKID, StartDefaultTask, osPriorityNormal, 0, 128);
-  ThreadDef(REVERSETASKID, StartReverseTask, osPriorityNormal, 0, 128);
+  ThreadDef(STARTMEASURETASKID, StartStartMeasureTask, osPriorityNormal, 0, 128);
+  startMeasureTaskHandle = osThreadCreate(Thread(STARTMEASURETASKID), NULL);
+
+#if defined(MEAS_TASK_SWITCHING_TIME)
+  ThreadDef(SWITCHINGTIMETASKAID, StartSwitchingTimeTaskA, osPriorityNormal, 0, 128);
+  ThreadDef(SWITCHINGTIMETASKBID, StartSwitchingTimeTaskB, osPriorityNormal, 0, 128);
+  ThreadDef(SWITCHINGTIMETASKCID, StartSwitchingTimeTaskC, osPriorityNormal, 0, 128);
+  switchingTimeTaskAHandle = osThreadCreate(Thread(SWITCHINGTIMETASKAID), NULL);
+  switchingTimeTaskBHandle = osThreadCreate(Thread(SWITCHINGTIMETASKBID), NULL);
+  switchingTimeTaskCHandle = osThreadCreate(Thread(SWITCHINGTIMETASKCID), NULL);
+#endif
+
+#if defined(MEAS_PREEMPTION_TIME)
+  ThreadDef(PREEMPTIONTIMETASKAID, StartPreemptionTimeTaskA, osPriorityNormal, 0, 128);
+  ThreadDef(PREEMPTIONTIMETASKBID, StartPreemptionTimeTaskB, osPriorityAboveNormal, 0, 128);
+  ThreadDef(PREEMPTIONTIMETASKCID, StartPreemptionTimeTaskC, osPriorityRealtime, 0, 128);
+  preemptionTimeTaskAHandle = osThreadCreate(Thread(PREEMPTIONTIMETASKAID), NULL);
+  preemptionTimeTaskBHandle = osThreadCreate(Thread(PREEMPTIONTIMETASKBID), NULL);
+  preemptionTimeTaskCHandle = osThreadCreate(Thread(PREEMPTIONTIMETASKCID), NULL);
+#endif
+
+#if defined(MEAS_INTERRUPT_LATENCY_TIME)
+  ThreadDef(INTERRUPTLATENCYTIMETASKID, StartInterruptLatencyTimeTask, osPriorityRealtime, 0, 128);
+  interruptLatencyTimeTaskHandle = osThreadCreate(Thread(INTERRUPTLATENCYTIMETASKID), NULL);
+#endif
+
+#if defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
+  ThreadDef(SEMAPHORESHUFFLINGTIMETASKAID, StartSemaphoreShufflingTimeTaskA, osPriorityNormal, 0, 128);
+  ThreadDef(SEMAPHORESHUFFLINGTIMETASKBID, StartSemaphoreShufflingTimeTaskB, osPriorityAboveNormal, 0, 128);
+  semaphoreShufflingTimeTaskAHandle = osThreadCreate(Thread(SEMAPHORESHUFFLINGTIMETASKAID), NULL);
+  semaphoreShufflingTimeTaskBHandle = osThreadCreate(Thread(SEMAPHORESHUFFLINGTIMETASKBID), NULL);
+#endif
+
+#if defined(MEAS_DEADLOCK_BREAKING_TIME)
+  ThreadDef(DEADLOCKBREAKINGTIMETASKAID, StartDeadlockBreakingTimeTaskA, osPriorityNormal, 0, 128);
+  ThreadDef(DEADLOCKBREAKINGTIMETASKBID, StartDeadlockBreakingTimeTaskB, osPriorityAboveNormal, 0, 128);
+  ThreadDef(DEADLOCKBREAKINGTIMETASKCID, StartDeadlockBreakingTimeTaskC, osPriorityRealtime, 0, 128);
+  deadlockBreakingTimeTaskAHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKAID), NULL);
+  deadlockBreakingTimeTaskBHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKBID), NULL);
+  deadlockBreakingTimeTaskCHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKCID), NULL);
+#endif
+
+#if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+  ThreadDef(DATAGRAMTHROUGHPUTTIMETASKAID, StartDatagramThroughputTimeTaskA, osPriorityNormal, 0, 1280);
+  ThreadDef(DATAGRAMTHROUGHPUTTIMETASKBID, StartDatagramThroughputTimeTaskB, osPriorityNormal, 0, 1280);
+  datagramThroughputTimeTaskAHandle = osThreadCreate(Thread(DATAGRAMTHROUGHPUTTIMETASKAID), NULL);
+  datagramThroughputTimeTaskBHandle = osThreadCreate(Thread(DATAGRAMTHROUGHPUTTIMETASKBID), NULL);
+#endif
+
+#if defined(BLINKING_LED)
+  ThreadDef(FORWARDLEDTASKID, StartForwardLEDTask, osPriorityLow, 0, 128);
+  ThreadDef(REVERSELEDTASKID, StartReverseLEDTask, osPriorityLow, 0, 128);
+  forwardLEDTaskHandle = osThreadCreate(Thread(FORWARDLEDTASKID), NULL);
+  reverseLEDTaskHandle = osThreadCreate(Thread(REVERSELEDTASKID), NULL);
+#endif
+
+#if defined(MEAS_W_LOAD)
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 1024);
-  defaultTaskHandle = osThreadCreate(Thread(DEFAULTTASKID), NULL);
-  reverseTaskHandle = osThreadCreate(Thread(REVERSETASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
+#endif
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -209,6 +366,7 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 }
 
+#if defined(MEAS_W_LOAD)
 /* ADC1 init function */
 static void MX_ADC1_Init(void)
 {
@@ -352,6 +510,7 @@ static void MX_USART6_UART_Init(void)
   }
 
 }
+#endif
 
 /** Configure pins as 
         * Analog 
@@ -366,12 +525,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
+#if defined(MEAS_W_LOAD)
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
+#endif
 
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+
+#if defined(MEAS_W_LOAD)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5, GPIO_PIN_RESET);
 
@@ -415,6 +578,36 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+#else
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+#endif
+
+  /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PD3 PD4 PD5 PD6 PD7 */
+    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+#if defined(BLINKING_LED)
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_RESET);
+  /*Configure GPIO pins :PD12 PD13 PD14 PD15*/
+    GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+#endif
+#endif
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
@@ -423,9 +616,336 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+#if defined(MEAS_LATENCY)
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, HAL_GPIO_ReadPin(GPIOC, GPIO_Pin));
+#elif defined(MEAS_INTERRUPT_LATENCY_TIME)
+	if(GPIO_Pin == GPIO_PIN_13)
+		osSemaphoreRelease(interruptLatency_xSemaphore);
+#endif
+
+}
+#endif
+
+#if defined(MEAS_TASK_SWITCHING_TIME)
+void StartSwitchingTimeTaskA(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreB_xSemaphore);
+			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY/2;i++){}
+		}
+	}
+}
+
+void StartSwitchingTimeTaskB(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreC_xSemaphore);
+			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY/2;i++){}
+		}
+	}
+}
+
+void StartSwitchingTimeTaskC(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreC_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY/2;i++){}
+		}
+	}
+}
+#endif
+
+#if defined(MEAS_PREEMPTION_TIME)
+void StartPreemptionTimeTaskA(void const * argument)
+{
+	int i = 0;
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreB_xSemaphore);
+			for(i=0;i<LOW_PRIORITY_TASK_LOOP_DELAY;i++){}
+		}
+	}
+}
+
+void StartPreemptionTimeTaskB(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreC_xSemaphore);
+			osDelay(11);
+			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
+		}
+	}
+}
+
+void StartPreemptionTimeTaskC(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreC_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osDelay(23);
+			for(i=0;i<HIGH_PRIORITY_TASK_LOOP_DELAY;i++){}
+		}
+	}
+}
+#endif
+
+#if defined(MEAS_INTERRUPT_LATENCY_TIME)
+void StartInterruptLatencyTimeTask(void const * argument)
+{
+	osSemaphoreDef(INTSEM);
+	interruptLatency_xSemaphore = osSemaphoreCreate(osSemaphore(INTSEM), 1);
+
+	while(1)
+	{
+		if(osSemaphoreWait(interruptLatency_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			__asm volatile
+			(
+			"	push {r0, r1, r2}								\n"
+			"   movw r0, #0x0810								\n"/* GPIOC címének betöltése */
+			"	movt r0, #0x4002								\n"
+			"   ldr r1, [r0, #0]								\n"/* PORTC értékének betöltése */
+			" 	lsr r1, r1, #10									\n"/* Bit helyre mozgatása */
+			" 	and r1, r1, #0x00000008							\n"/* Maszkolások */
+			"   movw r0, #0x0C14								\n"/* GPIOD címének betöltése */
+			"	movt r0, #0x4002								\n"
+			" 	ldr r2, [r0, #0]								\n"
+			" 	and r2, r2, #0xFFFFFFF7							\n"
+			" 	orr r2, r2, r1									\n"
+			" 	str r2, [r0, #0]								\n"/* Érték kihelyezése a lábra */
+			"	pop {r0, r1, r2}								\n"
+			);
+		}
+	}
+}
+#endif
+
+#if defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
+void StartSemaphoreShufflingTimeTaskA(void const * argument)
+{
+	int i = 0;
+
+	osSemaphoreDef(SEMSHUFSEM);
+	semaphoreShuffling_xSemaphore = osSemaphoreCreate(osSemaphore(SEMSHUFSEM), 1);
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreB_xSemaphore);
+			if(osSemaphoreWait(semaphoreShuffling_xSemaphore, portMAX_DELAY) == osOK)
+			{
+				for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
+				osSemaphoreRelease(semaphoreShuffling_xSemaphore);
+			}
+		}
+	}
+}
+
+void StartSemaphoreShufflingTimeTaskB(void const * argument)
+{
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osDelay(10);
+			if(osSemaphoreWait(semaphoreShuffling_xSemaphore, portMAX_DELAY) == osOK)
+			{
+				osSemaphoreRelease(semaphoreShuffling_xSemaphore);
+			}
+		}
+	}
+}
+#endif
+
+#if defined(MEAS_DEADLOCK_BREAKING_TIME)
+void StartDeadlockBreakingTimeTaskA(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreB_xSemaphore);
+			if(osMutexWait(deadlockBreaking_xMutex, portMAX_DELAY) == osOK)
+			{
+				for(i=0;i<LOW_PRIORITY_TASK_LOOP_DELAY;i++){}
+				osMutexRelease(deadlockBreaking_xMutex);
+			}
+		}
+	}
+}
+
+void StartDeadlockBreakingTimeTaskB(void const * argument)
+{
+	int i = 0;
+
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osSemaphoreRelease(measureSemaphoreC_xSemaphore);
+			osDelay(11);
+			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
+		}
+	}
+}
+
+void StartDeadlockBreakingTimeTaskC(void const * argument)
+{
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreC_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			osDelay(23);
+			if(osMutexWait(deadlockBreaking_xMutex, portMAX_DELAY) == osOK)
+			{
+				osMutexRelease(deadlockBreaking_xMutex);
+			}
+		}
+	}
+}
+#endif
+
+#if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+void StartDatagramThroughputTimeTaskA(void const * argument)
+{
+	osSemaphoreDef(DATAGRAMSEM);
+	datagramThroughput_xSemaphore = osSemaphoreCreate(osSemaphore(DATAGRAMSEM), 1);
+	osMessageQDef(DATAGRAMMES, 128, uint32_t);
+	datagramThrougput_xMessage = osMessageCreate(osMessageQ(DATAGRAMMES), NULL);
+
+	uint32_t i = 0;
+	uint32_t temp;
+	osEvent event;
+
+	while(1)
+	{
+		if(osSemaphoreWait(datagramThroughput_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
+			{
+				osSemaphoreRelease(measureSemaphoreB_xSemaphore);
+				for(i=0;i<128;i++)
+				{
+					event = osMessageGet(datagramThrougput_xMessage, portMAX_DELAY);
+					if(event.status == osEventMessage)
+					{
+						temp = (uint32_t)event.value.p;
+						if(temp != i)
+							return;
+						// Láb állítása
+					}
+				}
+				osSemaphoreRelease(datagramThroughput_xSemaphore);
+				portYIELD();
+			}
+		}
+	}
+}
+
+void StartDatagramThroughputTimeTaskB(void const * argument)
+{
+	uint32_t i = 0;
+	while(1)
+	{
+		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			// OUT láb magasba állítása
+			__asm volatile
+			(
+			"	push {r0, r1, r2}								\n"
+			"   movw r0, #0x0C14								\n" /* GPIOD címének betöltése */
+			"	movt r0, #0x4002								\n"
+			" 	ldr r2,[r0, #0]									\n"
+			" 	orr r2, r2, #0x00000008							\n"
+			" 	str r2, [r0, #0]								\n" /* Null értékek kiírása a lábakra */
+			"	pop {r0, r1, r2}								\n"
+			);
+			for(i=0;i<128;i++)
+			{
+				osMessagePut(datagramThrougput_xMessage, i, portMAX_DELAY);
+			}
+			if(osSemaphoreWait(datagramThroughput_xSemaphore, portMAX_DELAY) == osOK)
+				osSemaphoreRelease(datagramThroughput_xSemaphore);
+			// OUT láb alacsonyba állítása
+			__asm volatile
+			(
+			"	push {r0, r1, r2}								\n"
+			"   movw r0, #0x0C14								\n" /* GPIOD címének betöltése */
+			"	movt r0, #0x4002								\n"
+			" 	ldr r2,[r0, #0]									\n"
+			" 	and r2, r2, #0xFFFFFFF7							\n"
+			" 	str r2, [r0, #0]								\n" /* Null értékek kiírása a lábakra */
+			"	pop {r0, r1, r2}								\n"
+			);
+		}
+	}
+}
+
+#endif
+
+#if defined(BLINKING_LED)
+void StartForwardLEDTask(void const * argument)
+{
+	while(1)
+	  {
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+		osDelay(400);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		osDelay(500);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+		osDelay(600);
+	  }
+}
+
+void StartReverseLEDTask(void const * argument)
+{
+	while(1)
+	  {
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+		osDelay(100);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		osDelay(200);
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+		osDelay(300);
+	  }
+}
+#endif
+
+#if defined(MEAS_W_LOAD)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-	osSemaphoreRelease(uart6_xSemaphore);
+	if (UartHandle->Instance == USART6)
+		osSemaphoreRelease(uart6_xSemaphore);
 }
 
 void StartUART6Task(void const * argument)
@@ -436,6 +956,7 @@ void StartUART6Task(void const * argument)
 	osSemaphoreDef(SEM);
 	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
 
+	osSemaphoreWait(uart6_xSemaphore, 0);
 	while(1)
 	{
 		HAL_UART_Receive_IT(&huart6, data, size);
@@ -450,38 +971,27 @@ void StartUART6Task(void const * argument)
 		}
 	}
 }
-
-void StartReverseTask(void const * argument)
-{
-	uint32_t i=0;
-	for(;;)
-	  {
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-		for(i=0;i<14000000;i++){};//osDelay(100);
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-		osDelay(200);
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-		osDelay(300);
-	  }
-}
+#endif
 /* USER CODE END 4 */
 
-/* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
+/* StartStartMeasureTask function */
+void StartStartMeasureTask(void const * argument)
 {
   /* init code for FATFS */
+#if defined(MEAS_W_LOAD)
   MX_FATFS_Init();
+#endif
 
   /* USER CODE BEGIN 5 */
+
   /* Infinite loop */
-  for(;;)
+  while(1)
   {
-    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-    osDelay(400);
-    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-    osDelay(500);
-    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-    osDelay(600);
+#if defined(MEAS_TASK_SWITCHING_TIME) || defined(MEAS_PREEMPTION_TIME) || defined(MEAS_SEMAPHORE_SHUFFLING_TIME) || defined(MEAS_DEADLOCK_BREAKING_TIME) || defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
+	  osSemaphoreRelease(measureSemaphoreA_xSemaphore);
+#endif
+
+    osDelay(100);
   }
   /* USER CODE END 5 */ 
 }

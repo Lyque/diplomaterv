@@ -35,6 +35,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
 #include "cmsis_os.h"
+#include "measure_config.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -151,11 +152,11 @@ void SysTick_Handler(void)
 	__asm volatile
 	(
 	"	push {r0, r1, r2}								\n"
-	"   movw r0, #0x0C14								\n"
+	"   movw r0, #0x0C14								\n" /* GPIOD címének betöltése */
 	"	movt r0, #0x4002								\n"
 	" 	ldr r2,[r0, #0]									\n"
 	" 	and r2, r2, #0xFFFFFF0F							\n"
-	" 	str r2, [r0, #0]								\n"
+	" 	str r2, [r0, #0]								\n" /* Null értékek kiírása a lábakra */
 	"	pop {r0, r1, r2}								\n"
 	);
   /* USER CODE END SysTick_IRQn 0 */
@@ -186,6 +187,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
 
+#if defined(MEAS_W_LOAD)
 /**
 * @brief This function handles USART1 global interrupt.
 */
@@ -199,7 +201,9 @@ void USART1_IRQHandler(void)
 
   /* USER CODE END USART1_IRQn 1 */
 }
+#endif
 
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
 /**
 * @brief This function handles EXTI line[15:10] interrupts.
 */
@@ -213,7 +217,9 @@ void EXTI15_10_IRQHandler(void)
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
+#endif
 
+#if defined(MEAS_W_LOAD)
 /**
 * @brief This function handles USART6 global interrupt.
 */
@@ -227,6 +233,7 @@ void USART6_IRQHandler(void)
 
   /* USER CODE END USART6_IRQn 1 */
 }
+#endif
 
 /* USER CODE BEGIN 1 */
 
