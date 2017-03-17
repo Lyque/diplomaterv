@@ -22,9 +22,9 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_DATAGRAM_THROUGHPUT_TIME
+#define MEAS_LATENCY
 //#define BLINKING_LED
-//#define MEAS_W_LOAD
+#define MEAS_W_LOAD
 
 /**
  * A task ID-k A-tól O-ig mehetnek.
@@ -80,7 +80,12 @@
 #endif
 
 #if defined(MEAS_W_LOAD)
-#define UART6TASKID						c
+#define SWITCHCHANGEDTASKID				c
+#define TEMPMEASTASKID					d
+#define POTMETERMEASTASKID				e
+#define BLETASKID						f
+#define UART6TASKID						g
+#define SDCARDTASKID					h
 #endif
 
 #define LOW_PRIORITY_TASK_LOOP_DELAY		500000

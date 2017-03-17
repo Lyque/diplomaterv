@@ -93,7 +93,7 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | TERM | PC2 | ADC1_IN12 |
 | POT | PC3 | ADC2_IN13 |
 |  |  |  |
-| IN | PC13 | GPIO_IN |
+| IN | PC13 | GPIO_IN (IT) |
 | ID3 | PD7 | GPIO_OUT |
 | ID2 | PD6 | GPIO_OUT |
 | ID1 | PD5 | GPIO_OUT |
@@ -105,8 +105,8 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 |  |  |  |
 | LED0 | PD8 | GPIO_OUT |
 | LED1 | PD9 | GPIO_OUT |
-| SW0 | PD10 | GPIO_IN |
-| SW1 | PD11 | GPIO_IN |
+| SW0 | PD10 | GPIO_IN (IT) |
+| SW1 | PD11 | GPIO_IN (IT) |
 
 --------------------------------------------------
 

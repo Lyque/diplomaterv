@@ -203,7 +203,7 @@ void USART1_IRQHandler(void)
 }
 #endif
 
-#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME) || defined(MEAS_W_LOAD)
 /**
 * @brief This function handles EXTI line[15:10] interrupts.
 */
@@ -212,7 +212,13 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
 
   /* USER CODE END EXTI15_10_IRQn 0 */
+#if defined(MEAS_W_LOAD)
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
+#endif
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+#endif
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */
