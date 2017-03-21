@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    serial = new QSerialPort(this);
+    this->serial = new QSerialPort(this);
     settings = new SettingsDialog;
 
     this->ledOn.load(":/images/led_on.png");
@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->switch0Indicator->setPixmap(this->switchOff);
     ui->switch1Indicator->setPixmap(this->switchOff);
 
-    ui->tempLocalBar->setValue(50);
-    ui->tempRemoteBar->setValue(50);
+    ui->tempLocalBar->setValue(32000);
+    ui->tempRemoteBar->setValue(32000);
     ui->potmeterDial->setValue(2047);
 
     ui->actionConnect->setEnabled(true);
@@ -39,9 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initActionsConnections();
 
-    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+    connect(this->serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                 this, &MainWindow::handleError);
-    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+    connect(this->serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+    connect(this, SIGNAL(led0ChangedSignal(bool)), this, SLOT(led0ChangedSlot(bool)));
+    connect(this, SIGNAL(led1ChangedSignal(bool)), this, SLOT(led1ChangedSlot(bool)));
+    connect(this, SIGNAL(switch0ChangedSignal(bool)), this, SLOT(switch0ChangedSlot(bool)));
+    connect(this, SIGNAL(switch1ChangedSignal(bool)), this, SLOT(switch1ChangedSlot(bool)));
+    connect(this, SIGNAL(localTempChangedSignal(int)), this, SLOT(localTempChangedSlot(int)));
 }
 
 MainWindow::~MainWindow()
@@ -52,14 +57,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::openSerialPort()
 {
+    QByteArray message = "conn    :";
+    char value[5];
+
+    value[0] = 0xAA;
+    value[1] = 0xAA;
+    value[2] = 0xAA;
+    value[3] = 0xAA;
+    value[4] = '\n';
+
+    message.append(value, 5);
+
     SettingsDialog::Settings p = settings->settings();
-    serial->setPortName(p.name);
-    serial->setBaudRate(p.baudRate);
-    serial->setDataBits(p.dataBits);
-    serial->setParity(p.parity);
-    serial->setStopBits(p.stopBits);
-    serial->setFlowControl(p.flowControl);
-    if (serial->open(QIODevice::ReadWrite)) {
+    this->serial->setPortName(p.name);
+    this->serial->setBaudRate(p.baudRate);
+    this->serial->setDataBits(p.dataBits);
+    this->serial->setParity(p.parity);
+    this->serial->setStopBits(p.stopBits);
+    this->serial->setFlowControl(p.flowControl);
+    if (this->serial->open(QIODevice::ReadWrite)) {
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
         ui->actionSettings->setEnabled(false);
@@ -75,11 +91,13 @@ void MainWindow::openSerialPort()
         ui->presVal->setEnabled(true);
         ui->lightVal->setEnabled(true);
 
+        writeData(message);
+
         showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
                           .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
                           .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
     } else {
-        QMessageBox::critical(this, tr("Error"), serial->errorString());
+        QMessageBox::critical(this, tr("Error"), this->serial->errorString());
 
         showStatusMessage(tr("Open error"));
     }
@@ -87,8 +105,8 @@ void MainWindow::openSerialPort()
 
 void MainWindow::closeSerialPort()
 {
-    if (serial->isOpen())
-        serial->close();
+    if (this->serial->isOpen())
+        this->serial->close();
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionSettings->setEnabled(true);
@@ -109,18 +127,71 @@ void MainWindow::closeSerialPort()
 
 void MainWindow::writeData(const QByteArray &data)
 {
-    serial->write(data);
+    this->serial->write(data);
 }
 
 void MainWindow::readData()
 {
-    QByteArray data = serial->readAll();
+    if(this->serial->canReadLine())
+    {
+        while(this->serial->bytesAvailable() && this->serial->canReadLine())
+        {
+            QByteArray data = this->serial->readLine(15);
+
+            if(data.length() == 14)
+            {
+                // ToDo: Felbontani a beérkezett csomagot, majd feldolgozni azt.
+                QList<QByteArray> splitted = data.split(':');
+                if(splitted.length() == 2)
+                {
+                    QByteArray entity = splitted.at(0).simplified();
+                    QByteArray value = splitted.at(1).simplified();
+
+                    if(entity == "led0")
+                    {
+                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                            emit this->led0ChangedSignal(true);
+                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                            emit this->led0ChangedSignal(false);
+                    }
+                    else if(entity == "led1")
+                    {
+                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                            emit this->led1ChangedSignal(true);
+                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                            emit this->led1ChangedSignal(false);
+                    }
+                    else if(entity == "switch0")
+                    {
+                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                            emit this->switch0ChangedSignal(true);
+                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                            emit this->switch0ChangedSignal(false);
+                    }
+                    else if(entity == "switch1")
+                    {
+                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                            emit this->switch1ChangedSignal(true);
+                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                            emit this->switch1ChangedSignal(false);
+                    }
+                    else if(entity == "loctemp")
+                    {
+                        int tempVal;
+
+                        memcpy(&tempVal,value,4);
+                        emit this->localTempChangedSignal(tempVal);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        QMessageBox::critical(this, tr("Critical Error"), serial->errorString());
+        QMessageBox::critical(this, tr("Critical Error"), this->serial->errorString());
         closeSerialPort();
     }
 }
@@ -141,47 +212,104 @@ void MainWindow::showStatusMessage(const QString &message)
 void MainWindow::on_led0CheckBox_toggled(bool checked)
 {
     QByteArray message = "led0    :";
-    char value[4];
+    char value[5];
 
     if(checked)
     {
-        value[0] = 0xFF;
-        value[1] = 0xFF;
-        value[2] = 0xFF;
-        value[3] = 0xFF;
+        value[0] = 0xAA;
+        value[1] = 0xAA;
+        value[2] = 0xAA;
+        value[3] = 0xAA;
     }
     else
     {
-        value[0] = 0x00;
-        value[1] = 0x00;
-        value[2] = 0x00;
-        value[3] = 0x00;
+        value[0] = 0x55;
+        value[1] = 0x55;
+        value[2] = 0x55;
+        value[3] = 0x55;
     }
 
-    message.append(value, 4);
+    value[4] = '\n';
+
+    message.append(value, 5);
     writeData(message);
 }
 
 void MainWindow::on_led1CheckBox_toggled(bool checked)
 {
     QByteArray message = "led1    :";
-    char value[4];
+    char value[5];
 
     if(checked)
     {
-        value[0] = 0xFF;
-        value[1] = 0xFF;
-        value[2] = 0xFF;
-        value[3] = 0xFF;
+        value[0] = 0xAA;
+        value[1] = 0xAA;
+        value[2] = 0xAA;
+        value[3] = 0xAA;
     }
     else
     {
-        value[0] = 0x00;
-        value[1] = 0x00;
-        value[2] = 0x00;
-        value[3] = 0x00;
+        value[0] = 0x55;
+        value[1] = 0x55;
+        value[2] = 0x55;
+        value[3] = 0x55;
     }
 
-    message.append(value, 4);
+    value[4] = '\n';
+
+    message.append(value, 5);
     writeData(message);
+}
+
+void MainWindow::led0ChangedSlot(bool isOn)
+{
+    if(isOn)
+    {
+        ui->led0Indicator->setPixmap(this->ledOn);
+    }
+    else
+    {
+        ui->led0Indicator->setPixmap(this->ledOff);
+    }
+}
+
+void MainWindow::led1ChangedSlot(bool isOn)
+{
+    if(isOn)
+    {
+        ui->led1Indicator->setPixmap(this->ledOn);
+    }
+    else
+    {
+        ui->led1Indicator->setPixmap(this->ledOff);
+    }
+}
+
+void MainWindow::switch0ChangedSlot(bool isOn)
+{
+    if(isOn)
+    {
+        ui->switch0Indicator->setPixmap(this->switchOn);
+    }
+    else
+    {
+        ui->switch0Indicator->setPixmap(this->switchOff);
+    }
+}
+
+void MainWindow::switch1ChangedSlot(bool isOn)
+{
+    if(isOn)
+    {
+        ui->switch1Indicator->setPixmap(this->switchOn);
+    }
+    else
+    {
+        ui->switch1Indicator->setPixmap(this->switchOff);
+    }
+}
+
+void MainWindow::localTempChangedSlot(int value)
+{
+    ui->tempLocalBar->setValue(value);
 }

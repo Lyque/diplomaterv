@@ -530,7 +530,7 @@ static void MX_USART6_UART_Init(void)
 {
 
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 115200;
+  huart6.Init.BaudRate = 38400;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;
@@ -911,7 +911,7 @@ void StartDatagramThroughputTimeTaskA(void const * argument)
 						temp = (uint32_t)event.value.p;
 						if(temp != i)
 							return;
-						// ToDo: Láb állítása
+						// ToDo: Hibakezelés?
 					}
 				}
 				osSemaphoreRelease(datagramThroughput_xSemaphore);
@@ -1078,7 +1078,7 @@ void StartBLETask(void const * argument)
 
 void StartUART6Task(void const * argument)
 {
-	uint8_t data[1];
+	uint8_t data[14];
 	uint16_t size = sizeof(data)/sizeof(uint8_t);
 
 	osSemaphoreDef(SEM);

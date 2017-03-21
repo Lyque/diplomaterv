@@ -308,8 +308,11 @@ border-top-left-radius: 7px;
 border: 1px solid black;
 }</string>
          </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
          <property name="value">
-          <number>50</number>
+          <number>32000</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -368,8 +371,11 @@ border-top-left-radius: 7px;
 border: 1px solid black;
 }</string>
          </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
          <property name="value">
-          <number>50</number>
+          <number>32000</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

@@ -31,8 +31,21 @@ private slots:
     void handleError(QSerialPort::SerialPortError error);
 
     void on_led0CheckBox_toggled(bool checked);
-
     void on_led1CheckBox_toggled(bool checked);
+
+    // ToDo: Signalok és slotok megírása a GUI elemek aktualizálására.
+    void led0ChangedSlot(bool isOn);
+    void led1ChangedSlot(bool isOn);
+    void switch0ChangedSlot(bool isOn);
+    void switch1ChangedSlot(bool isOn);
+    void localTempChangedSlot(int value);
+
+signals:
+    void led0ChangedSignal(bool isOn);
+    void led1ChangedSignal(bool isOn);
+    void switch0ChangedSignal(bool isOn);
+    void switch1ChangedSignal(bool isOn);
+    void localTempChangedSignal(int value);
 
 private:
     void initActionsConnections();
