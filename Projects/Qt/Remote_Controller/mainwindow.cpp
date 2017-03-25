@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->switch0Indicator->setPixmap(this->switchOff);
     ui->switch1Indicator->setPixmap(this->switchOff);
 
-    ui->tempLocalBar->setValue(32000);
+    ui->tempLocalBar->setValue(2047);
     ui->tempRemoteBar->setValue(32000);
     ui->potmeterDial->setValue(2047);
 
@@ -46,7 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(led1ChangedSignal(bool)), this, SLOT(led1ChangedSlot(bool)));
     connect(this, SIGNAL(switch0ChangedSignal(bool)), this, SLOT(switch0ChangedSlot(bool)));
     connect(this, SIGNAL(switch1ChangedSignal(bool)), this, SLOT(switch1ChangedSlot(bool)));
-    connect(this, SIGNAL(localTempChangedSignal(int)), this, SLOT(localTempChangedSlot(int)));
+    connect(this, SIGNAL(localTempChangedSignal(uint32_t)), this, SLOT(localTempChangedSlot(uint32_t)));
+    connect(this, SIGNAL(potmeterChangedSignal(uint32_t)), this, SLOT(potmeterChangedSlot(uint32_t)));
 }
 
 MainWindow::~MainWindow()
@@ -57,7 +58,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openSerialPort()
 {
-    QByteArray message = "conn    :";
+    QByteArray message = "connect :";
     char value[5];
 
     value[0] = 0xAA;
@@ -145,7 +146,7 @@ void MainWindow::readData()
                 if(splitted.length() == 2)
                 {
                     QByteArray entity = splitted.at(0).simplified();
-                    QByteArray value = splitted.at(1).simplified();
+                    QByteArray value = splitted.at(1);
 
                     if(entity == "led0")
                     {
@@ -177,10 +178,17 @@ void MainWindow::readData()
                     }
                     else if(entity == "loctemp")
                     {
-                        int tempVal;
+                        uint32_t tempVal;
 
                         memcpy(&tempVal,value,4);
                         emit this->localTempChangedSignal(tempVal);
+                    }
+                    else if(entity == "potmeter")
+                    {
+                        uint32_t potmeterVal;
+
+                        memcpy(&potmeterVal,value,4);
+                        emit this->potmeterChangedSignal(potmeterVal);
                     }
                 }
             }
@@ -309,7 +317,12 @@ void MainWindow::switch1ChangedSlot(bool isOn)
     }
 }
 
-void MainWindow::localTempChangedSlot(int value)
+void MainWindow::localTempChangedSlot(uint32_t value)
 {
     ui->tempLocalBar->setValue(value);
+}
+
+void MainWindow::potmeterChangedSlot(uint32_t value)
+{
+    ui->potmeterDial->setValue(value);
 }

@@ -22,7 +22,7 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_DATAGRAM_THROUGHPUT_TIME
+#define MEAS_DEADLOCK_BREAKING_TIME
 #define BLINKING_LED
 #define MEAS_W_LOAD
 
@@ -39,6 +39,8 @@
  *
  * Ütemezõ: 0x0
  */
+
+// ToDo: A taszkok ID-jait jól megválasztani!
 #define IDLETASKID						"A"
 #define STARTMEASURETASKID				B
 
@@ -85,7 +87,8 @@
 #define POTMETERMEASTASKID				e
 #define BLETASKID						f
 #define UART6TASKID						g
-#define SDCARDTASKID					h
+#define UART6SENDTASKID					h
+#define SDCARDTASKID					i
 #endif
 
 #define LOW_PRIORITY_TASK_LOOP_DELAY		500000
@@ -95,5 +98,11 @@
 #define EXPAND(...) __VA_ARGS__
 #define ThreadDef(name, thread, priority, instances, stacksz) osThreadDef(name, thread, priority, instances, stacksz)
 #define Thread(name) osThread(name)
+
+// Alkalmazásspecifikus makrók
+
+#define MESSAGE_LENGTH					ENTITY_LENGTH+VALUE_LENGTH+2
+#define ENTITY_LENGTH					8
+#define VALUE_LENGTH					4
 
 #endif /* MEASURE_CONFIG_H_ */

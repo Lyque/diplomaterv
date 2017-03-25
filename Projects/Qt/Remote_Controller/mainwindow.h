@@ -38,14 +38,16 @@ private slots:
     void led1ChangedSlot(bool isOn);
     void switch0ChangedSlot(bool isOn);
     void switch1ChangedSlot(bool isOn);
-    void localTempChangedSlot(int value);
+    void localTempChangedSlot(uint32_t value);
+    void potmeterChangedSlot(uint32_t value);
 
 signals:
     void led0ChangedSignal(bool isOn);
     void led1ChangedSignal(bool isOn);
     void switch0ChangedSignal(bool isOn);
     void switch1ChangedSignal(bool isOn);
-    void localTempChangedSignal(int value);
+    void localTempChangedSignal(uint32_t value);
+    void potmeterChangedSignal(uint32_t value);
 
 private:
     void initActionsConnections();

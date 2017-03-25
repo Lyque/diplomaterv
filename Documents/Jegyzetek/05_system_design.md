@@ -166,6 +166,19 @@ Az üzenet-késleltetési idő nem kerül meghatározásra a dolgozatban.
 A legrosszabb válaszidő méréséhez a megszakítás-késleltetési idő szoftverét használom, mivel a megszakítás operációs-rendszereknél használt kezelését az valósítja meg.
 
 
+# A GUI által várt értékek tartományai
+
+| Név | Értéktartomány | A számértékhez tartozó valós érték |
+|:---:|:--------------:|:----------------------------------:|
+| Potméter | 0--4095 | 0--100% |
+| Helyi hőmérő | 0--4095 | -50--250 |
+| Távoli hőmérő (TMP007) | -32768--32767 | -55--150 |
+| Távoli hőmérő (HDC1000) | ?--? | ?--? |
+| Humidity (HDC1000) | ?--? | ?--? |
+| Távoli hőmérő (BMP280) | ?--? | ?--? |
+| Nyomás (BMP280) | ?--? | ?--? |
+| Fény | ?--? | ?--? |
+
 --------------------------------------------------
 
 # ToDo

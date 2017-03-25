@@ -115,10 +115,13 @@ osThreadId potmeterMeasureTaskHandle;
 
 osThreadId bleTaskHandle;
 osThreadId uart6TaskHandle;
+osThreadId uart6SendTaskHandle;
 osSemaphoreId ble_xSemaphore = NULL;
 osSemaphoreId uart6_xSemaphore = NULL;
+osMessageQId uart6Send_xMessage = NULL;
 
 osThreadId sdCardTaskHandle;
+osMessageQId sdCardSend_xMessage = NULL;
 #endif // defined(MEAS_W_LOAD)
 /* USER CODE END PV */
 
@@ -185,6 +188,7 @@ void StartPotmeterMeasureTask(void const * argument);
 void StartBLETask(void const * argument);
 
 void StartUART6Task(void const * argument);
+void StartUART6SendTask(void const * argument);
 
 void StartSDCardTask(void const * argument);
 #endif // defined(MEAS_W_LOAD)
@@ -317,12 +321,14 @@ int main(void)
   ThreadDef(POTMETERMEASTASKID, StartPotmeterMeasureTask, osPriorityNormal, 0, 128);
   ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 128);
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 128);
+  ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
   ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 128);
   switchChangedTaskHandle = osThreadCreate(Thread(SWITCHCHANGEDTASKID), NULL);
   tempMeasureTaskHandle = osThreadCreate(Thread(TEMPMEASTASKID), NULL);
   potmeterMeasureTaskHandle = osThreadCreate(Thread(POTMETERMEASTASKID), NULL);
   bleTaskHandle = osThreadCreate(Thread(BLETASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
+  uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
   sdCardTaskHandle = osThreadCreate(Thread(SDCARDTASKID), NULL);
 #endif // defined(MEAS_W_LOAD)
   // ToDo: A taszkoknak szükséges stackméretet végigbogarászni.
@@ -530,7 +536,7 @@ static void MX_USART6_UART_Init(void)
 {
 
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 38400;
+  huart6.Init.BaudRate = 115200;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;
@@ -909,9 +915,6 @@ void StartDatagramThroughputTimeTaskA(void const * argument)
 					if(event.status == osEventMessage)
 					{
 						temp = (uint32_t)event.value.p;
-						if(temp != i)
-							return;
-						// ToDo: Hibakezelés?
 					}
 				}
 				osSemaphoreRelease(datagramThroughput_xSemaphore);
@@ -996,12 +999,203 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		osSemaphoreRelease(uart6_xSemaphore);
 }
 
+void RemoteControllerConnected()
+{
+	GPIO_PinState state;
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
+	uint8_t i;
+
+	// led0 értékének kiolvasása és elküldése
+	memcpy(message, "led0    :", 9);
+
+	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_8);
+	if(state == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	// led1 értékének kiolvasása és elküldése
+	memcpy(message, "led1    :", 9);
+
+	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_9);
+	if(state == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	// switch0 értékének kiolvasása és elküldése
+	memcpy(message, "switch0 :", 9);
+
+	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_10);
+	if(state == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	// switch1 értékének kiolvasása és elküldése
+	memcpy(message, "switch1 :", 9);
+
+	state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_11);
+	if(state == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+}
+
+void ChangeLed0State(GPIO_PinState state)
+{
+	GPIO_PinState newState;
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
+	uint8_t i;
+
+	memcpy(message, "led0    :", 9);
+
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, state);
+	osDelay(1);
+	newState = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_8);
+	if(newState == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+}
+
+void ChangeLed1State(GPIO_PinState state)
+{
+	GPIO_PinState newState;
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
+	uint8_t i;
+
+	memcpy(message, "led1    :", 9);
+
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, state);
+	osDelay(1);
+	newState = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_9);
+	if(newState == GPIO_PIN_SET)
+	{
+		value[0] = 0xAA;
+		value[1] = 0xAA;
+		value[2] = 0xAA;
+		value[3] = 0xAA;
+		value[4] = '\n';
+	}
+	else
+	{
+		value[0] = 0x55;
+		value[1] = 0x55;
+		value[2] = 0x55;
+		value[3] = 0x55;
+		value[4] = '\n';
+	}
+
+	memcpy(&message[9], value, 5);
+
+	if(uart6Send_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+}
+
 void StartSwitchChangedTask(void const * argument)
 {
 	GPIO_PinState sw0_state = GPIO_PIN_RESET;
 	GPIO_PinState sw1_state = GPIO_PIN_RESET;
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
 	uint16_t gpioPin = 0;
 	osEvent event;
+	uint8_t i;
 
 	osMessageQDef(SWITCHMES, 1, uint16_t);
 	switchInterrupt_xMessage = osMessageCreate(osMessageQ(SWITCHMES), NULL);
@@ -1017,19 +1211,77 @@ void StartSwitchChangedTask(void const * argument)
 		{
 			gpioPin = (uint16_t)event.value.p;
 
+			memcpy(message, "switch", 6);
+
 			if(gpioPin == GPIO_PIN_10)
+			{
 				sw0_state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_10);
+
+				memcpy(&message[6], "0 :",3);
+
+				if(sw0_state == GPIO_PIN_SET)
+				{
+					value[0] = 0xAA;
+					value[1] = 0xAA;
+					value[2] = 0xAA;
+					value[3] = 0xAA;
+					value[4] = '\n';
+				}
+				else
+				{
+					value[0] = 0x55;
+					value[1] = 0x55;
+					value[2] = 0x55;
+					value[3] = 0x55;
+					value[4] = '\n';
+				}
+
+				memcpy(&message[9], value, 5);
+			}
 			else if(gpioPin == GPIO_PIN_11)
+			{
 				sw1_state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_11);
+
+				memcpy(&message[6], "1 :",3);
+
+				if(sw1_state == GPIO_PIN_SET)
+				{
+					value[0] = 0xAA;
+					value[1] = 0xAA;
+					value[2] = 0xAA;
+					value[3] = 0xAA;
+					value[4] = '\n';
+				}
+				else
+				{
+					value[0] = 0x55;
+					value[1] = 0x55;
+					value[2] = 0x55;
+					value[3] = 0x55;
+					value[4] = '\n';
+				}
+
+				memcpy(&message[9], value, 5);
+			}
+
+			if(uart6Send_xMessage!=NULL)
+				for(i=0;i<MESSAGE_LENGTH;i++)
+					osMessagePut(uart6Send_xMessage, message[i], 10);
 		}
-		// ToDo: Érték kiküldése soros porton.
-		osDelay(100);
+
+		osDelay(1);
 	}
 }
 
 void StartTempMeasureTask(void const * argument)
 {
 	uint32_t adc_val = 0;
+
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
+	uint8_t i;
+
+	memcpy(message, "loctemp :", 9);
 
 	while(1)
 	{
@@ -1042,7 +1294,14 @@ void StartTempMeasureTask(void const * argument)
 		{
 			adc_val = 0xFFFFFFFF;
 		}
-		// ToDo: Érték kiküldése soros porton.
+
+		memcpy(&message[9], &adc_val, 4);
+		message[13] = '\n';
+
+		if(uart6Send_xMessage!=NULL)
+			for(i=0;i<MESSAGE_LENGTH;i++)
+				osMessagePut(uart6Send_xMessage, message[i], 10);
+
 		osDelay(100);
 	}
 }
@@ -1050,6 +1309,12 @@ void StartTempMeasureTask(void const * argument)
 void StartPotmeterMeasureTask(void const * argument)
 {
 	uint32_t adc_val = 0;
+
+	uint8_t message[MESSAGE_LENGTH];
+	uint8_t value[VALUE_LENGTH+1];
+	uint8_t i;
+
+	memcpy(message, "potmeter:", 9);
 
 	while(1)
 	{
@@ -1062,7 +1327,14 @@ void StartPotmeterMeasureTask(void const * argument)
 		{
 			adc_val = 0xFFFFFFFF;
 		}
-		// ToDo: Érték kiküldése soros porton.
+
+		memcpy(&message[9], &adc_val, 4);
+		message[13] = '\n';
+
+		if(uart6Send_xMessage!=NULL)
+			for(i=0;i<MESSAGE_LENGTH;i++)
+				osMessagePut(uart6Send_xMessage, message[i], 10);
+
 		osDelay(100);
 	}
 }
@@ -1078,8 +1350,15 @@ void StartBLETask(void const * argument)
 
 void StartUART6Task(void const * argument)
 {
-	uint8_t data[14];
+	const char connectString[] = "connect ";
+	const char led0String[] = "led0    ";
+	const char led1String[] = "led1    ";
+
+	uint8_t data[MESSAGE_LENGTH];
 	uint16_t size = sizeof(data)/sizeof(uint8_t);
+	uint8_t entity[ENTITY_LENGTH+1];
+	uint8_t value[VALUE_LENGTH];
+	uint8_t i;
 
 	osSemaphoreDef(SEM);
 	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
@@ -1088,17 +1367,69 @@ void StartUART6Task(void const * argument)
 	while(1)
 	{
 		HAL_UART_Receive_IT(&huart6, data, size);
+		osDelay(1);
 		if(osSemaphoreWait(uart6_xSemaphore, portMAX_DELAY) == osOK)
 		{
-			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-			HAL_UART_Transmit(&huart6, data, size, 100);
-		}
-		else
-		{
-			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+			// ToDo: A bejövõ üzenetek feldolgozásának elvégzése.
+			do
+			{
+				memcpy(entity, data, ENTITY_LENGTH);
+				entity[ENTITY_LENGTH] = '\0';
+				memcpy(value, &data[ENTITY_LENGTH+1], VALUE_LENGTH);
+
+				if(!strcmp(entity, connectString))
+				{
+					RemoteControllerConnected();
+				}
+				else if(!strcmp(entity, led0String))
+				{
+					if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
+						ChangeLed0State(GPIO_PIN_SET);
+					else
+						ChangeLed0State(GPIO_PIN_RESET);
+				}
+				else if(!strcmp(entity, led1String))
+				{
+					if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
+						ChangeLed1State(GPIO_PIN_SET);
+					else
+						ChangeLed1State(GPIO_PIN_RESET);
+				}
+				else
+				{
+					// Valószínûleg bithiba történt, esetleg nem érkezett meg valamelyik byte, ekkor a további hibák\
+					akkumulálódását elkerülvén kiürítjük a buffert.
+					HAL_UART_Receive(&huart6, NULL, 128, 0);
+				}
+				// Sikeres fogadás esetén ha van még feldolgozásra váró üzenet, akkor azt dolgozzuk is fel!
+			} while(HAL_UART_Receive(&huart6, data, size, 0) == HAL_OK);
 		}
 	}
-	// ToDo: Az UART6 felelõs a GUI-val való kommunikációért, ezért ezt a taszkot mindenképp módosítani kell majd.
+	// ToDo: Valamiért kifagy a parancsfogadás!
+}
+
+void StartUART6SendTask(void const * argument)
+{
+	osMessageQDef(UART6MES, 140, uint8_t);
+	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
+
+	osEvent event;
+	uint8_t character;
+	uint16_t size = sizeof(character)/sizeof(uint8_t);
+
+	while(1)
+	{
+		event = osMessageGet(uart6Send_xMessage, portMAX_DELAY);
+		if(event.status == osEventMessage)
+		{
+			character = (uint32_t)event.value.p;
+
+			// Az üzenetek küldése közben ne legyen megszakítás!
+			portENTER_CRITICAL();
+			HAL_UART_Transmit(&huart6, &character, size, 100);
+			portEXIT_CRITICAL();
+		}
+	}
 }
 
 void StartSDCardTask(void const * argument)
