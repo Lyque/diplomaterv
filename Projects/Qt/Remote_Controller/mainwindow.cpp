@@ -319,10 +319,24 @@ void MainWindow::switch1ChangedSlot(bool isOn)
 
 void MainWindow::localTempChangedSlot(uint32_t value)
 {
+    int celsValue;
+    static int updatedCelsValue = 0;
+    const float delayCoeff = 0.2;
+
     ui->tempLocalBar->setValue(value);
+
+    celsValue = 300*value/4095-50;
+    updatedCelsValue = (1-delayCoeff)*updatedCelsValue+delayCoeff*celsValue;
+
+    ui->tempLocalVal->setText(QString::number(updatedCelsValue) + "°C");
 }
 
 void MainWindow::potmeterChangedSlot(uint32_t value)
 {
-    ui->potmeterDial->setValue(value);
+    static int updatedPotValue = 0;
+    const float delayCoeff = 0.2;
+
+    updatedPotValue = (1-delayCoeff)*updatedPotValue+delayCoeff*value;
+
+    ui->potmeterDial->setValue(updatedPotValue);
 }
