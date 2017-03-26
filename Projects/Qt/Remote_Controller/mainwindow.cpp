@@ -279,6 +279,7 @@ void MainWindow::led0ChangedSlot(bool isOn)
     {
         ui->led0Indicator->setPixmap(this->ledOff);
     }
+    ui->led0CheckBox->setChecked(isOn);
 }
 
 void MainWindow::led1ChangedSlot(bool isOn)
@@ -291,6 +292,7 @@ void MainWindow::led1ChangedSlot(bool isOn)
     {
         ui->led1Indicator->setPixmap(this->ledOff);
     }
+    ui->led1CheckBox->setChecked(isOn);
 }
 
 void MainWindow::switch0ChangedSlot(bool isOn)

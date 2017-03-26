@@ -1034,6 +1034,12 @@ void RemoteControllerConnected()
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
 
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
+
 	// led1 értékének kiolvasása és elküldése
 	memcpy(message, "led1    :", 9);
 
@@ -1060,6 +1066,12 @@ void RemoteControllerConnected()
 	if(uart6Send_xMessage!=NULL)
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 
 	// switch0 értékének kiolvasása és elküldése
 	memcpy(message, "switch0 :", 9);
@@ -1088,6 +1100,12 @@ void RemoteControllerConnected()
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
 
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
+
 	// switch1 értékének kiolvasása és elküldése
 	memcpy(message, "switch1 :", 9);
 
@@ -1114,6 +1132,12 @@ void RemoteControllerConnected()
 	if(uart6Send_xMessage!=NULL)
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 }
 
 void ChangeLed0State(GPIO_PinState state)
@@ -1150,6 +1174,12 @@ void ChangeLed0State(GPIO_PinState state)
 	if(uart6Send_xMessage!=NULL)
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 }
 
 void ChangeLed1State(GPIO_PinState state)
@@ -1186,6 +1216,12 @@ void ChangeLed1State(GPIO_PinState state)
 	if(uart6Send_xMessage!=NULL)
 		for(i=0;i<MESSAGE_LENGTH;i++)
 			osMessagePut(uart6Send_xMessage, message[i], 10);
+
+	if(sdCardWrite_xMessage!=NULL)
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 }
 
 void StartSwitchChangedTask(void const * argument)
@@ -1268,6 +1304,11 @@ void StartSwitchChangedTask(void const * argument)
 			if(uart6Send_xMessage!=NULL)
 				for(i=0;i<MESSAGE_LENGTH;i++)
 					osMessagePut(uart6Send_xMessage, message[i], 10);
+			if(sdCardWrite_xMessage!=NULL)
+				for(i=0;i<MESSAGE_LENGTH;i++)
+				{
+					osMessagePut(sdCardWrite_xMessage, message[i], 10);
+				}
 		}
 
 		osDelay(1);
@@ -1527,6 +1568,7 @@ void StartSDCardTask(void const * argument)
 							res = f_close(&logFile);
 						portEXIT_CRITICAL();
 
+						// Hiba esetén leválasztjuk, majd újra felcsatoljuk a kártyát
 						if(res != FR_OK)
 						{
 							f_mount(NULL, SD_Path, 1);
@@ -1555,6 +1597,7 @@ void StartSDCardTask(void const * argument)
 						res = f_close(&logFile);
 					portEXIT_CRITICAL();
 
+					// Hiba esetén leválasztjuk, majd újra felcsatoljuk a kártyát
 					if(res != FR_OK)
 					{
 						f_mount(NULL, SD_Path, 1);
