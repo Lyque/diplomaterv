@@ -86,9 +86,10 @@
 #define TEMPMEASTASKID					d
 #define POTMETERMEASTASKID				e
 #define BLETASKID						f
-#define UART6TASKID						g
-#define UART6SENDTASKID					h
-#define SDCARDTASKID					i
+#define BLESENDTASKID					g
+#define UART6TASKID						h
+#define UART6SENDTASKID					i
+#define SDCARDTASKID					j
 #endif
 
 #define LOW_PRIORITY_TASK_LOOP_DELAY		500000

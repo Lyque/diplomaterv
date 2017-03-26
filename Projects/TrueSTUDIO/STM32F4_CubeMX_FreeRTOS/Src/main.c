@@ -38,6 +38,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include "measure_config.h"
+#include "apitypes.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -115,9 +116,11 @@ osThreadId tempMeasureTaskHandle;
 osThreadId potmeterMeasureTaskHandle;
 
 osThreadId bleTaskHandle;
+osThreadId bleSendTaskHandle;
 osThreadId uart6TaskHandle;
 osThreadId uart6SendTaskHandle;
 osSemaphoreId ble_xSemaphore = NULL;
+osMessageQId ble_xMessage = NULL;
 osSemaphoreId uart6_xSemaphore = NULL;
 osMessageQId uart6Send_xMessage = NULL;
 
@@ -187,6 +190,7 @@ void StartTempMeasureTask(void const * argument);
 void StartPotmeterMeasureTask(void const * argument);
 
 void StartBLETask(void const * argument);
+void StartBLESendTask(void const * argument);
 
 void StartUART6Task(void const * argument);
 void StartUART6SendTask(void const * argument);
@@ -321,6 +325,7 @@ int main(void)
   ThreadDef(TEMPMEASTASKID, StartTempMeasureTask, osPriorityNormal, 0, 128);
   ThreadDef(POTMETERMEASTASKID, StartPotmeterMeasureTask, osPriorityNormal, 0, 128);
   ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 128);
+  ThreadDef(BLESENDTASKID, StartBLESendTask, osPriorityNormal, 0, 128);
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 128);
   ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
   ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 1280);
@@ -328,6 +333,7 @@ int main(void)
   tempMeasureTaskHandle = osThreadCreate(Thread(TEMPMEASTASKID), NULL);
   potmeterMeasureTaskHandle = osThreadCreate(Thread(POTMETERMEASTASKID), NULL);
   bleTaskHandle = osThreadCreate(Thread(BLETASKID), NULL);
+  bleSendTaskHandle = osThreadCreate(Thread(BLESENDTASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
   uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
   sdCardTaskHandle = osThreadCreate(Thread(SDCARDTASKID), NULL);
@@ -996,8 +1002,11 @@ void StartReverseLEDTask(void const * argument)
 #if defined(MEAS_W_LOAD)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-	if (UartHandle->Instance == USART6)
+	if(UartHandle->Instance == USART6)
 		osSemaphoreRelease(uart6_xSemaphore);
+	else if(UartHandle->Instance == USART1)
+		osDelay(1);
+	// ToDo: BLE112-tõl beérkezõ üzenet feldogozásához
 }
 
 void RemoteControllerConnected()
@@ -1402,6 +1411,15 @@ void StartBLETask(void const * argument)
 	}
 }
 
+void StartBLESendTask(void const * argument)
+{
+	while(1)
+	{
+		// ToDo: Taszk implementálása.
+		osDelay(1000);
+	}
+}
+
 void StartUART6Task(void const * argument)
 {
 	const char connectString[] = "connect ";
@@ -1423,7 +1441,6 @@ void StartUART6Task(void const * argument)
 		osDelay(1);
 		if(osSemaphoreWait(uart6_xSemaphore, portMAX_DELAY) == osOK)
 		{
-			// ToDo: A bejövõ üzenetek feldolgozásának elvégzése.
 			do
 			{
 				memcpy(entity, data, ENTITY_LENGTH);
@@ -1526,7 +1543,6 @@ void StartSDCardTask(void const * argument)
 
 	while(1)
 	{
-		// ToDo: Taszk implementálása.
 		i = 0;
 		memset(message,0,255);
 
