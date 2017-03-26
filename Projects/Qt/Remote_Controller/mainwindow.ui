@@ -372,10 +372,10 @@ border: 1px solid black;
 }</string>
          </property>
          <property name="maximum">
-          <number>4095</number>
+          <number>2048</number>
          </property>
          <property name="value">
-          <number>2000</number>
+          <number>1000</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

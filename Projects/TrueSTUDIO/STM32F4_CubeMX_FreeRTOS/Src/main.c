@@ -36,6 +36,7 @@
 #include "fatfs.h"
 
 /* USER CODE BEGIN Includes */
+#include <string.h>
 #include "measure_config.h"
 /* USER CODE END Includes */
 
@@ -121,7 +122,7 @@ osSemaphoreId uart6_xSemaphore = NULL;
 osMessageQId uart6Send_xMessage = NULL;
 
 osThreadId sdCardTaskHandle;
-osMessageQId sdCardSend_xMessage = NULL;
+osMessageQId sdCardWrite_xMessage = NULL;
 #endif // defined(MEAS_W_LOAD)
 /* USER CODE END PV */
 
@@ -322,7 +323,7 @@ int main(void)
   ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 128);
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 128);
   ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
-  ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 128);
+  ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 1280);
   switchChangedTaskHandle = osThreadCreate(Thread(SWITCHCHANGEDTASKID), NULL);
   tempMeasureTaskHandle = osThreadCreate(Thread(TEMPMEASTASKID), NULL);
   potmeterMeasureTaskHandle = osThreadCreate(Thread(POTMETERMEASTASKID), NULL);
@@ -415,7 +416,7 @@ static void MX_ADC1_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = DISABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -451,7 +452,7 @@ static void MX_ADC2_Init(void)
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc2.Instance = ADC2;
-  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
   hadc2.Init.Resolution = ADC_RESOLUTION_12B;
   hadc2.Init.ScanConvMode = DISABLE;
   hadc2.Init.ContinuousConvMode = DISABLE;
@@ -508,7 +509,7 @@ static void MX_SDIO_SD_Init(void)
   hsd.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
   hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
   hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd.Init.ClockDiv = 0;
+  hsd.Init.ClockDiv = 1;
 
 }
 
@@ -1278,7 +1279,6 @@ void StartTempMeasureTask(void const * argument)
 	uint32_t adc_val = 0;
 
 	uint8_t message[MESSAGE_LENGTH];
-	uint8_t value[VALUE_LENGTH+1];
 	uint8_t i;
 
 	memcpy(message, "loctemp :", 9);
@@ -1302,6 +1302,12 @@ void StartTempMeasureTask(void const * argument)
 			for(i=0;i<MESSAGE_LENGTH;i++)
 				osMessagePut(uart6Send_xMessage, message[i], 10);
 
+		if(sdCardWrite_xMessage!=NULL)
+			for(i=0;i<MESSAGE_LENGTH;i++)
+			{
+				osMessagePut(sdCardWrite_xMessage, message[i], 10);
+			}
+
 		osDelay(100);
 	}
 }
@@ -1311,7 +1317,6 @@ void StartPotmeterMeasureTask(void const * argument)
 	uint32_t adc_val = 0;
 
 	uint8_t message[MESSAGE_LENGTH];
-	uint8_t value[VALUE_LENGTH+1];
 	uint8_t i;
 
 	memcpy(message, "potmeter:", 9);
@@ -1333,7 +1338,15 @@ void StartPotmeterMeasureTask(void const * argument)
 
 		if(uart6Send_xMessage!=NULL)
 			for(i=0;i<MESSAGE_LENGTH;i++)
+			{
 				osMessagePut(uart6Send_xMessage, message[i], 10);
+			}
+
+		if(sdCardWrite_xMessage!=NULL)
+			for(i=0;i<MESSAGE_LENGTH;i++)
+			{
+				osMessagePut(sdCardWrite_xMessage, message[i], 10);
+			}
 
 		osDelay(100);
 	}
@@ -1358,7 +1371,6 @@ void StartUART6Task(void const * argument)
 	uint16_t size = sizeof(data)/sizeof(uint8_t);
 	uint8_t entity[ENTITY_LENGTH+1];
 	uint8_t value[VALUE_LENGTH];
-	uint8_t i;
 
 	osSemaphoreDef(SEM);
 	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
@@ -1432,12 +1444,140 @@ void StartUART6SendTask(void const * argument)
 	}
 }
 
+// FatFS open for append. Source: http://elm-chan.org/fsw/ff/res/app1.c
+FRESULT open_append (
+    FIL* fp,            /* [OUT] File object to create */
+    const uint8_t* path    /* [IN]  File name to be opened */
+)
+{
+    FRESULT fr;
+
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(fp, (char*)path, FA_WRITE | FA_OPEN_ALWAYS);
+
+    if (fr == FR_OK) {
+        /* Seek to end of the file to append data */
+    	fr = f_lseek(fp, f_size(fp));
+        if (fr != FR_OK)
+            f_close(fp);
+    }
+    return fr;
+}
+
 void StartSDCardTask(void const * argument)
 {
+	// SDCard deinicializálásához szükséges külsõ változó
+	extern Disk_drvTypeDef  disk;
+
+	osMessageQDef(SDCARDMES, 255, uint8_t);
+	sdCardWrite_xMessage = osMessageCreate(osMessageQ(SDCARDMES), NULL);
+
+	FATFS fileSystem;
+	FIL logFile;
+	UINT testBytes;
+	FRESULT res;
+
+	osEvent event;
+	uint8_t cardMounted = 0;
+
+	int i;
+	uint8_t message[255];
+
 	while(1)
 	{
 		// ToDo: Taszk implementálása.
-		osDelay(1000);
+		i = 0;
+		memset(message,0,255);
+
+		// CD láb ellenõrzése
+		event = osMessageGet(sdCardWrite_xMessage, portMAX_DELAY);
+		if(event.status == osEventMessage)
+		{
+			message[i] = (uint32_t)event.value.p;
+
+			do
+			{
+				i++;
+
+				event = osMessageGet(sdCardWrite_xMessage, 0);
+				if(event.status == osEventMessage)
+					message[i] = (uint32_t)event.value.p;
+			} while(event.status == osEventMessage);
+
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15) == GPIO_PIN_RESET)
+			{
+				if(!cardMounted)
+				{
+					if(f_mount(&fileSystem, SD_Path, 1) == FR_OK)
+					{
+						uint8_t path[12] = "logfile.txt";
+						path[11] = '\0';
+
+						cardMounted = 1;
+
+						// Ez nem szép dolog, de enélkül a szektorméret elérése után megáll a tudomány
+						portENTER_CRITICAL();
+						res = open_append(&logFile, path);
+
+						if(res == FR_OK)
+							res = f_write(&logFile, message, i, &testBytes);
+						if(res == FR_OK)
+							res = f_sync(&logFile);
+						if(res == FR_OK)
+							res = f_close(&logFile);
+						portEXIT_CRITICAL();
+
+						if(res != FR_OK)
+						{
+							f_mount(NULL, SD_Path, 1);
+							// Ez nem szép dolog, de enélkül nem inicializálja fel többször az SDCardot
+							disk.is_initialized[0] = 0;
+							cardMounted = 0;
+						}
+						else
+							HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+					}
+				}
+				else
+				{
+					uint8_t path[12] = "logfile.txt";
+					path[11] = '\0';
+
+					// Ez nem szép dolog, de enélkül a szektorméret elérése után megáll a tudomány
+					portENTER_CRITICAL();
+					res = open_append(&logFile, path);
+
+					if(res == FR_OK)
+						res = f_write(&logFile, message, i, &testBytes);
+					if(res == FR_OK)
+						res = f_sync(&logFile);
+					if(res == FR_OK)
+						res = f_close(&logFile);
+					portEXIT_CRITICAL();
+
+					if(res != FR_OK)
+					{
+						f_mount(NULL, SD_Path, 1);
+						// Ez nem szép dolog, de enélkül nem inicializálja fel többször az SDCardot
+						disk.is_initialized[0] = 0;
+						cardMounted = 0;
+					}
+					else
+						HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+				}
+			}
+			else
+			{
+				if(cardMounted)
+				{
+					f_mount(NULL, SD_Path, 1);
+					// Ez nem szép dolog, de enélkül nem inicializálja fel többször az SDCardot
+					disk.is_initialized[0] = 0;
+				}
+
+				cardMounted = 0;
+			}
+		}
 	}
 }
 #endif // defined(MEAS_W_LOAD)

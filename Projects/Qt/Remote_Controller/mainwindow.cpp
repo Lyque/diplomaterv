@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->switch0Indicator->setPixmap(this->switchOff);
     ui->switch1Indicator->setPixmap(this->switchOff);
 
-    ui->tempLocalBar->setValue(2047);
+    ui->tempLocalBar->setValue(1023);
     ui->tempRemoteBar->setValue(32000);
     ui->potmeterDial->setValue(2047);
 
@@ -320,23 +320,26 @@ void MainWindow::switch1ChangedSlot(bool isOn)
 void MainWindow::localTempChangedSlot(uint32_t value)
 {
     int celsValue;
-    static int updatedCelsValue = 0;
-    const float delayCoeff = 0.2;
+    static int updatedCelsValue = 20;
+    const float filterCoeff = 5;
 
     ui->tempLocalBar->setValue(value);
 
     celsValue = 300*value/4095-50;
-    updatedCelsValue = (1-delayCoeff)*updatedCelsValue+delayCoeff*celsValue;
+    // IIR filter
+    updatedCelsValue = ((filterCoeff-1)*updatedCelsValue+celsValue)/filterCoeff;
 
     ui->tempLocalVal->setText(QString::number(updatedCelsValue) + "°C");
 }
 
 void MainWindow::potmeterChangedSlot(uint32_t value)
 {
-    static int updatedPotValue = 0;
-    const float delayCoeff = 0.2;
+    static int updatedPotValue = 2047;
+    const float filterCoeff = 5;
 
-    updatedPotValue = (1-delayCoeff)*updatedPotValue+delayCoeff*value;
+    // IIR filter
+    updatedPotValue = ((filterCoeff-1)*updatedPotValue+value)/filterCoeff;
 
     ui->potmeterDial->setValue(updatedPotValue);
+    ui->potmeterVal->setText(QString::number(100*updatedPotValue/4095) + "%");
 }
