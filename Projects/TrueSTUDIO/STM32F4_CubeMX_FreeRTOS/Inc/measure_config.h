@@ -87,14 +87,18 @@
 #define POTMETERMEASTASKID				e
 #define BLETASKID						f
 #define BLESENDTASKID					g
-#define UART6TASKID						h
-#define UART6SENDTASKID					i
-#define SDCARDTASKID					j
+#define BLERECEIVETASKID				h
+#define UART6TASKID						i
+#define UART6SENDTASKID					j
+#define SDCARDTASKID					k
 #endif
 
 #define LOW_PRIORITY_TASK_LOOP_DELAY		500000
 #define MEDIUM_PRIORITY_TASK_LOOP_DELAY		250000
 #define HIGH_PRIORITY_TASK_LOOP_DELAY		50000
+
+#define BLEBAUDRATE							115200
+#define UART6BAUDRATE						115200
 
 #define EXPAND(...) __VA_ARGS__
 #define ThreadDef(name, thread, priority, instances, stacksz) osThreadDef(name, thread, priority, instances, stacksz)

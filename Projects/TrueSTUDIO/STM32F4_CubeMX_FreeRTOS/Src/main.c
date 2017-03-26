@@ -30,6 +30,8 @@
   *
   ******************************************************************************
   */
+// ToDo: Pár függvényt célszerû lenne külön fájlokba átrakni.
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "cmsis_os.h"
@@ -38,7 +40,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include "measure_config.h"
-#include "apitypes.h"
+#include "cmd_def.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -101,8 +103,6 @@ osThreadId reverseLEDTaskHandle;
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 
-I2C_HandleTypeDef hi2c1;
-
 SD_HandleTypeDef hsd;
 HAL_SD_CardInfoTypedef SDCardInfo;
 
@@ -117,6 +117,7 @@ osThreadId potmeterMeasureTaskHandle;
 
 osThreadId bleTaskHandle;
 osThreadId bleSendTaskHandle;
+osThreadId bleReceiveTaskHandle;
 osThreadId uart6TaskHandle;
 osThreadId uart6SendTaskHandle;
 osSemaphoreId ble_xSemaphore = NULL;
@@ -138,7 +139,6 @@ static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_ADC2_Init(void);
-static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 #endif // defined(MEAS_W_LOAD)
 
@@ -191,6 +191,7 @@ void StartPotmeterMeasureTask(void const * argument);
 
 void StartBLETask(void const * argument);
 void StartBLESendTask(void const * argument);
+void StartBLEReceiveTask(void const * argument);
 
 void StartUART6Task(void const * argument);
 void StartUART6SendTask(void const * argument);
@@ -225,7 +226,6 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_USART6_UART_Init();
   MX_ADC2_Init();
-  MX_I2C1_Init();
   MX_USART1_UART_Init();
 #endif // defined(MEAS_W_LOAD)
 
@@ -326,6 +326,7 @@ int main(void)
   ThreadDef(POTMETERMEASTASKID, StartPotmeterMeasureTask, osPriorityNormal, 0, 128);
   ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 128);
   ThreadDef(BLESENDTASKID, StartBLESendTask, osPriorityNormal, 0, 128);
+  ThreadDef(BLERECEIVETASKID, StartBLEReceiveTask, osPriorityNormal, 0, 128);
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 128);
   ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
   ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 1280);
@@ -334,6 +335,7 @@ int main(void)
   potmeterMeasureTaskHandle = osThreadCreate(Thread(POTMETERMEASTASKID), NULL);
   bleTaskHandle = osThreadCreate(Thread(BLETASKID), NULL);
   bleSendTaskHandle = osThreadCreate(Thread(BLESENDTASKID), NULL);
+  bleReceiveTaskHandle = osThreadCreate(Thread(BLERECEIVETASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
   uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
   sdCardTaskHandle = osThreadCreate(Thread(SDCARDTASKID), NULL);
@@ -485,26 +487,6 @@ static void MX_ADC2_Init(void)
 
 }
 
-/* I2C1 init function */
-static void MX_I2C1_Init(void)
-{
-
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-}
-
 /* SDIO init function */
 static void MX_SDIO_SD_Init(void)
 {
@@ -524,7 +506,7 @@ static void MX_USART1_UART_Init(void)
 {
 
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = BLEBAUDRATE;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -543,7 +525,7 @@ static void MX_USART6_UART_Init(void)
 {
 
   huart6.Instance = USART6;
-  huart6.Init.BaudRate = 115200;
+  huart6.Init.BaudRate = UART6BAUDRATE;
   huart6.Init.WordLength = UART_WORDLENGTH_8B;
   huart6.Init.StopBits = UART_STOPBITS_1;
   huart6.Init.Parity = UART_PARITY_NONE;
@@ -1005,8 +987,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 	if(UartHandle->Instance == USART6)
 		osSemaphoreRelease(uart6_xSemaphore);
 	else if(UartHandle->Instance == USART1)
-		osDelay(1);
-	// ToDo: BLE112-tõl beérkezõ üzenet feldogozásához
+		osSemaphoreRelease(ble_xSemaphore);
 }
 
 void RemoteControllerConnected()
@@ -1402,21 +1383,84 @@ void StartPotmeterMeasureTask(void const * argument)
 	}
 }
 
+void BLE_Send(uint8 len1,uint8* data1,uint16 len2,uint8* data2) {
+	uint8_t message[64];
+	uint8_t length;
+	uint8_t i;
+
+	length = len1+len2;
+	memcpy(message, &length, 1);
+	memcpy(&message[1],data1,len1);
+	memcpy(&message[len1+1],data2,len2);
+	length = len1+len2;
+	//Add to UART FIFO
+	if(ble_xMessage != NULL)
+		for(i=0;i<length+1;i++)
+		{
+			osMessagePut(ble_xMessage, message[i], 10);
+		}
+}
+
 void StartBLETask(void const * argument)
 {
+	// BGLib config
+	bglib_output = &BLE_Send;
+
 	while(1)
 	{
-		// ToDo: Taszk implementálása.
+		ble_cmd_system_hello();
+		// ToDo: Taszk implementálása. A taszk elvégzi a BLE112 konfigurálását, majd periodikusan lekérdezi a három szenzorértéket. \
+		Az egyes parancsok kiküldése között meg kell várni a választ. Ezt a fogadó taszk által billentett szemaforral oldom majd meg.
 		osDelay(1000);
 	}
 }
 
 void StartBLESendTask(void const * argument)
 {
+	osMessageQDef(BLEMES, 140, uint8_t);
+	ble_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
+
+	osEvent event;
+	uint8_t character;
+	uint16_t size = sizeof(character)/sizeof(uint8_t);
+
 	while(1)
 	{
-		// ToDo: Taszk implementálása.
-		osDelay(1000);
+		event = osMessageGet(ble_xMessage, portMAX_DELAY);
+		if(event.status == osEventMessage)
+		{
+			character = (uint32_t)event.value.p;
+
+			// Az üzenetek küldése közben ne legyen megszakítás!
+			portENTER_CRITICAL();
+			HAL_UART_Transmit(&huart1, &character, size, 100);
+			portEXIT_CRITICAL();
+		}
+	}
+}
+
+void StartBLEReceiveTask(void const * argument)
+{
+	uint8_t data;
+	uint16_t size = sizeof(data)/sizeof(uint8_t);
+
+	osSemaphoreDef(BLESEM);
+	ble_xSemaphore = osSemaphoreCreate(osSemaphore(BLESEM), 1);
+
+	osSemaphoreWait(ble_xSemaphore, 0);
+	while(1)
+	{
+		HAL_UART_Receive_IT(&huart1, &data, size);
+		osDelay(1);
+		if(osSemaphoreWait(ble_xSemaphore, portMAX_DELAY) == osOK)
+		{
+			do
+			{
+				// ToDo: BLE112-tõl beérkezõ üzenet feldolgozását végzõ taszk. Az egyes üzeneteket parse-olni kell, majd szemaforral jelezni kell a fõ taszknak, \
+				hogy folytathatja a feladatát.
+			} while(HAL_UART_Receive(&huart1, &data, size, 0) == HAL_OK);
+		}
+		osDelay(10);
 	}
 }
 
@@ -1431,8 +1475,8 @@ void StartUART6Task(void const * argument)
 	uint8_t entity[ENTITY_LENGTH+1];
 	uint8_t value[VALUE_LENGTH];
 
-	osSemaphoreDef(SEM);
-	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(SEM), 1);
+	osSemaphoreDef(UART6SEM);
+	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(UART6SEM), 1);
 
 	osSemaphoreWait(uart6_xSemaphore, 0);
 	while(1)

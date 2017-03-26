@@ -84,8 +84,8 @@ Az egyes perifériák a csatlakoztatható fejlesztőkártyák szerint táblázat
 | UART6_TX | PC6 | UART6_TX |
 | UART6_RX | PC7 | UART6_RX |
 |  |  |  |
-| BLE_TX | PA9 | UART1_TX |
-| BLE_RX | PA10 | UART1_RX |
+| BLE_TX | PB6 | UART1_TX |
+| BLE_RX | PB7 | UART1_RX |
 |  |  |  |
 | ADC_SCL | PB6 | I2C1_SCL |
 | ADC_SDA | PB7 | I2C1_SDA |
