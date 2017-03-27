@@ -121,9 +121,10 @@ osThreadId bleReceiveTaskHandle;
 osThreadId uart6TaskHandle;
 osThreadId uart6SendTaskHandle;
 osSemaphoreId ble_xSemaphore = NULL;
-osMessageQId ble_xMessage = NULL;
-osSemaphoreId uart6_xSemaphore = NULL;
+osMessageQId bleSend_xMessage = NULL;
 osMessageQId uart6Send_xMessage = NULL;
+osMessageQId uart6Receive_xMessage = NULL;
+uint8_t uart6Data[MESSAGE_LENGTH];
 
 osThreadId sdCardTaskHandle;
 osMessageQId sdCardWrite_xMessage = NULL;
@@ -985,9 +986,41 @@ void StartReverseLEDTask(void const * argument)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	if(UartHandle->Instance == USART6)
-		osSemaphoreRelease(uart6_xSemaphore);
+	{
+		// Az adat karakterenként érkezik, amit a MessageQ-ba töltünk.
+		osMessagePut(uart6Receive_xMessage, uart6Data[0], 0);
+		// Majd újra elindítjuk az adat vételét.
+		HAL_UART_Receive_IT(UartHandle, uart6Data, 1);
+	}
 	else if(UartHandle->Instance == USART1)
 		osSemaphoreRelease(ble_xSemaphore);
+	// ToDo: BLE UART-hoz is megírni az üzenet Message-be pakolását. De lehet elég egy sima szemafor.
+}
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	// Amennyiben overrun error lép fel, úgy töröljük a bitet, és eldobjuk az adatregiszter tartalmát (?)
+	if(__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
+	{
+		__HAL_UART_CLEAR_OREFLAG(huart);
+		__HAL_UART_FLUSH_DRREGISTER(huart); // ToDo: Ez biztosan eldobja?
+	}
+
+	if(huart->Instance == USART6)
+	{
+		uint8_t i;
+		uint8_t message[MESSAGE_LENGTH] = "error   :error\n";
+
+		// Ha a GUI-tól jött vezérlõparancs, akkor jelezzük, hogy hibás volt az átvitel.
+		if(uart6Send_xMessage!=NULL)
+			for(i=0;i<MESSAGE_LENGTH;i++)
+			{
+				osMessagePut(uart6Send_xMessage, message[i], 10);
+			}
+		// Majd újra elindítjuk az adat vételét.
+		HAL_UART_Receive_IT(huart, uart6Data, 1);
+	}
+	// ToDo: BLE UART esetére is megírni egy hibakezelést
 }
 
 void RemoteControllerConnected()
@@ -1394,10 +1427,10 @@ void BLE_Send(uint8 len1,uint8* data1,uint16 len2,uint8* data2) {
 	memcpy(&message[len1+1],data2,len2);
 	length = len1+len2;
 	//Add to UART FIFO
-	if(ble_xMessage != NULL)
+	if(bleSend_xMessage != NULL)
 		for(i=0;i<length+1;i++)
 		{
-			osMessagePut(ble_xMessage, message[i], 10);
+			osMessagePut(bleSend_xMessage, message[i], 10);
 		}
 }
 
@@ -1411,14 +1444,14 @@ void StartBLETask(void const * argument)
 		ble_cmd_system_hello();
 		// ToDo: Taszk implementálása. A taszk elvégzi a BLE112 konfigurálását, majd periodikusan lekérdezi a három szenzorértéket. \
 		Az egyes parancsok kiküldése között meg kell várni a választ. Ezt a fogadó taszk által billentett szemaforral oldom majd meg.
-		osDelay(1000);
+		osDelay(10000);
 	}
 }
 
 void StartBLESendTask(void const * argument)
 {
 	osMessageQDef(BLEMES, 140, uint8_t);
-	ble_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
+	bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
 
 	osEvent event;
 	uint8_t character;
@@ -1426,7 +1459,7 @@ void StartBLESendTask(void const * argument)
 
 	while(1)
 	{
-		event = osMessageGet(ble_xMessage, portMAX_DELAY);
+		event = osMessageGet(bleSend_xMessage, portMAX_DELAY);
 		if(event.status == osEventMessage)
 		{
 			character = (uint32_t)event.value.p;
@@ -1466,70 +1499,89 @@ void StartBLEReceiveTask(void const * argument)
 
 void StartUART6Task(void const * argument)
 {
+	// Beérkezõ parancsok lehetséges (érvényes) értékei
 	const char connectString[] = "connect ";
 	const char led0String[] = "led0    ";
 	const char led1String[] = "led1    ";
 
 	uint8_t data[MESSAGE_LENGTH];
-	uint16_t size = sizeof(data)/sizeof(uint8_t);
 	uint8_t entity[ENTITY_LENGTH+1];
 	uint8_t value[VALUE_LENGTH];
+	uint8_t i;
+	osEvent event;
 
-	osSemaphoreDef(UART6SEM);
-	uart6_xSemaphore = osSemaphoreCreate(osSemaphore(UART6SEM), 1);
+	osMessageQDef(UART6RECEIVEMES, 140, uint8_t);
+	uart6Receive_xMessage = osMessageCreate(osMessageQ(UART6RECEIVEMES), NULL);
 
-	osSemaphoreWait(uart6_xSemaphore, 0);
+	// Egyszerre csak egy karaktert várunk.
+	HAL_UART_Receive_IT(&huart6, uart6Data, 1);
 	while(1)
 	{
-		HAL_UART_Receive_IT(&huart6, data, size);
-		osDelay(1);
-		if(osSemaphoreWait(uart6_xSemaphore, portMAX_DELAY) == osOK)
+		i = 0;
+		while(i<MESSAGE_LENGTH)
 		{
+			// Az elsõ karakterre folyamatosan várunk, viszont ha nem érkezik rövid idõn belül új karakter, akkor feltételezzük, hogy hiba történt \
+			és eldobjuk az eddigi csomagot, illetve a következõ sorvége karakterig eldobjuk a karaktereket (vagy kiürítjük a MessageQ-t)
+			if(i==0)
+				event = osMessageGet(uart6Receive_xMessage, portMAX_DELAY);
+			else
+				event = osMessageGet(uart6Receive_xMessage, 10);
+
+			if(event.status == osEventMessage)
+			{
+				data[i] = event.value.p;
+				i++;
+			}
+			else
+				i=0;
+		}
+		// Beérkezett adat feldarabolása
+		memcpy(entity, data, ENTITY_LENGTH);
+		entity[ENTITY_LENGTH] = '\0';
+		memcpy(value, &data[ENTITY_LENGTH+1], VALUE_LENGTH);
+
+		// A GUI csatlakozott
+		if(!strcmp(entity, connectString))
+		{
+			RemoteControllerConnected();
+		}
+		// LED0 állítása
+		else if(!strcmp(entity, led0String))
+		{
+			if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
+				ChangeLed0State(GPIO_PIN_SET);
+			else
+				ChangeLed0State(GPIO_PIN_RESET);
+		}
+		// LED1 állítása
+		else if(!strcmp(entity, led1String))
+		{
+			if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
+				ChangeLed1State(GPIO_PIN_SET);
+			else
+				ChangeLed1State(GPIO_PIN_RESET);
+		}
+		else
+		{
+			// Valószínûleg bithiba történt, esetleg nem érkezett meg valamelyik byte, ekkor a további hibák\
+			akkumulálódását elkerülvén megkeressük a következõ sorvége karaktert, vagy kiürítjük a MessageQ-t
 			do
 			{
-				memcpy(entity, data, ENTITY_LENGTH);
-				entity[ENTITY_LENGTH] = '\0';
-				memcpy(value, &data[ENTITY_LENGTH+1], VALUE_LENGTH);
-
-				if(!strcmp(entity, connectString))
-				{
-					RemoteControllerConnected();
-				}
-				else if(!strcmp(entity, led0String))
-				{
-					if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
-						ChangeLed0State(GPIO_PIN_SET);
-					else
-						ChangeLed0State(GPIO_PIN_RESET);
-				}
-				else if(!strcmp(entity, led1String))
-				{
-					if(value[0] == 0xAA && value[1] == 0xAA && value[2] == 0xAA && value[3] == 0xAA)
-						ChangeLed1State(GPIO_PIN_SET);
-					else
-						ChangeLed1State(GPIO_PIN_RESET);
-				}
-				else
-				{
-					// Valószínûleg bithiba történt, esetleg nem érkezett meg valamelyik byte, ekkor a további hibák\
-					akkumulálódását elkerülvén kiürítjük a buffert.
-					HAL_UART_Receive(&huart6, NULL, 128, 0);
-				}
-				// Sikeres fogadás esetén ha van még feldolgozásra váró üzenet, akkor azt dolgozzuk is fel!
-			} while(HAL_UART_Receive(&huart6, data, size, 0) == HAL_OK);
+				event = osMessageGet(uart6Receive_xMessage,0);
+			} while(event.status == osEventMessage && event.value.p !='\n');
 		}
 	}
-	// ToDo: Valamiért kifagy a parancsfogadás!
+	// ToDo: Valamiért kifagy a parancsfogadás! (Talán már javítja önmagát.)
 }
 
 void StartUART6SendTask(void const * argument)
 {
-	osMessageQDef(UART6MES, 140, uint8_t);
-	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
-
 	osEvent event;
 	uint8_t character;
 	uint16_t size = sizeof(character)/sizeof(uint8_t);
+
+	osMessageQDef(UART6MES, 140, uint8_t);
+	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
 
 	while(1)
 	{
@@ -1619,14 +1671,26 @@ void StartSDCardTask(void const * argument)
 						// Ez nem szép dolog, de enélkül a szektorméret elérése után megáll a tudomány
 						portENTER_CRITICAL();
 						res = open_append(&logFile, path);
+						portEXIT_CRITICAL();
 
 						if(res == FR_OK)
+						{
+							portENTER_CRITICAL();
 							res = f_write(&logFile, message, i, &testBytes);
+							portEXIT_CRITICAL();
+						}
 						if(res == FR_OK)
+						{
+							portENTER_CRITICAL();
 							res = f_sync(&logFile);
+							portEXIT_CRITICAL();
+						}
 						if(res == FR_OK)
+						{
+							//portENTER_CRITICAL();
 							res = f_close(&logFile);
-						portEXIT_CRITICAL();
+							//portEXIT_CRITICAL();
+						}
 
 						// Hiba esetén leválasztjuk, majd újra felcsatoljuk a kártyát
 						if(res != FR_OK)
@@ -1648,14 +1712,26 @@ void StartSDCardTask(void const * argument)
 					// Ez nem szép dolog, de enélkül a szektorméret elérése után megáll a tudomány
 					portENTER_CRITICAL();
 					res = open_append(&logFile, path);
+					portEXIT_CRITICAL();
 
 					if(res == FR_OK)
+					{
+						portENTER_CRITICAL();
 						res = f_write(&logFile, message, i, &testBytes);
+						portEXIT_CRITICAL();
+					}
 					if(res == FR_OK)
+					{
+						portENTER_CRITICAL();
 						res = f_sync(&logFile);
+						portEXIT_CRITICAL();
+					}
 					if(res == FR_OK)
+					{
+						//portENTER_CRITICAL();
 						res = f_close(&logFile);
-					portEXIT_CRITICAL();
+						//portEXIT_CRITICAL();
+					}
 
 					// Hiba esetén leválasztjuk, majd újra felcsatoljuk a kártyát
 					if(res != FR_OK)

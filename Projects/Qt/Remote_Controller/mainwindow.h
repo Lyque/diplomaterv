@@ -52,12 +52,14 @@ signals:
 private:
     void initActionsConnections();
     void showStatusMessage(const QString &message);
+    void resendLastCommand();
 
 private:
     Ui::MainWindow *ui;
     QLabel *status;
     SettingsDialog *settings;
     QSerialPort *serial;
+    QByteArray lastCommand;
 
     QPixmap ledOn;
     QPixmap ledOff;

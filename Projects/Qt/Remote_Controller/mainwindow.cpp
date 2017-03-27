@@ -92,6 +92,7 @@ void MainWindow::openSerialPort()
         ui->presVal->setEnabled(true);
         ui->lightVal->setEnabled(true);
 
+        this->lastCommand = message;
         writeData(message);
 
         showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
@@ -148,7 +149,11 @@ void MainWindow::readData()
                     QByteArray entity = splitted.at(0).simplified();
                     QByteArray value = splitted.at(1);
 
-                    if(entity == "led0")
+                    if(entity == "error")
+                    {
+                        resendLastCommand();
+                    }
+                    else if(entity == "led0")
                     {
                         if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
                             emit this->led0ChangedSignal(true);
@@ -217,6 +222,11 @@ void MainWindow::showStatusMessage(const QString &message)
     status->setText(message);
 }
 
+void MainWindow::resendLastCommand()
+{
+    writeData(this->lastCommand);
+}
+
 void MainWindow::on_led0CheckBox_toggled(bool checked)
 {
     QByteArray message = "led0    :";
@@ -240,6 +250,7 @@ void MainWindow::on_led0CheckBox_toggled(bool checked)
     value[4] = '\n';
 
     message.append(value, 5);
+    this->lastCommand = message;
     writeData(message);
 }
 
@@ -266,6 +277,7 @@ void MainWindow::on_led1CheckBox_toggled(bool checked)
     value[4] = '\n';
 
     message.append(value, 5);
+    this->lastCommand = message;
     writeData(message);
 }
 
