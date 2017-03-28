@@ -122,9 +122,11 @@ osThreadId uart6TaskHandle;
 osThreadId uart6SendTaskHandle;
 osSemaphoreId ble_xSemaphore = NULL;
 osMessageQId bleSend_xMessage = NULL;
+osMessageQId bleReceive_xMessage = NULL;
 osMessageQId uart6Send_xMessage = NULL;
 osMessageQId uart6Receive_xMessage = NULL;
-uint8_t uart6Data[MESSAGE_LENGTH];
+uint8_t bleData[1];
+uint8_t uart6Data[1];
 
 osThreadId sdCardTaskHandle;
 osMessageQId sdCardWrite_xMessage = NULL;
@@ -993,7 +995,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		HAL_UART_Receive_IT(UartHandle, uart6Data, 1);
 	}
 	else if(UartHandle->Instance == USART1)
-		osSemaphoreRelease(ble_xSemaphore);
+	{
+		osMessagePut(bleReceive_xMessage, bleData[0], 0);
+		HAL_UART_Receive_IT(UartHandle, bleData, 1);
+	}
 	// ToDo: BLE UART-hoz is megírni az üzenet Message-be pakolását. De lehet elég egy sima szemafor.
 }
 
@@ -1434,23 +1439,30 @@ void BLE_Send(uint8 len1,uint8* data1,uint16 len2,uint8* data2) {
 
 void StartBLETask(void const * argument)
 {
+	osMessageQDef(BLEMES, 64, uint8_t);
+	bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
+	osMessageQDef(BLERECEIVEMES, 64, uint8_t); // ToDo: Message méretét jól megválasztani
+	bleReceive_xMessage = osMessageCreate(osMessageQ(BLERECEIVEMES), NULL);
+
 	// BGLib config
 	bglib_output = &BLE_Send;
+
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET);
 
 	while(1)
 	{
 		ble_cmd_system_hello();
+		osDelay(100);
+		ble_cmd_system_reset(0);
 		// ToDo: Taszk implementálása. A taszk elvégzi a BLE112 konfigurálását, majd periodikusan lekérdezi a három szenzorértéket. \
 		Az egyes parancsok kiküldése között meg kell várni a választ. Ezt a fogadó taszk által billentett szemaforral oldom majd meg.
+		//HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_4);
 		osDelay(10000);
 	}
 }
 
 void StartBLESendTask(void const * argument)
 {
-	osMessageQDef(BLEMES, 140, uint8_t);
-	bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
-
 	osEvent event;
 	uint8_t character;
 	uint16_t size = sizeof(character)/sizeof(uint8_t);
@@ -1472,26 +1484,55 @@ void StartBLESendTask(void const * argument)
 
 void StartBLEReceiveTask(void const * argument)
 {
-	uint8_t data;
+	volatile uint8_t data[64];
 	uint16_t size = sizeof(data)/sizeof(uint8_t);
+	uint8_t i;
+	osEvent event;
 
-	osSemaphoreDef(BLESEM);
-	ble_xSemaphore = osSemaphoreCreate(osSemaphore(BLESEM), 1);
+	// BLE variables. Source: https://eewiki.net/display/Wireless/Getting+Started+with+the+BlueGiga+BLE112+Bluetooth+Low+Energy+module
+	const struct ble_msg *BTMessage;
+	struct ble_header BTHeader;
 
-	osSemaphoreWait(ble_xSemaphore, 0);
+	// ToDo: A szemaforra lehet nem lesz szükség.
+//	osSemaphoreDef(BLESEM);
+//	ble_xSemaphore = osSemaphoreCreate(osSemaphore(BLESEM), 1);
+//
+//	osSemaphoreWait(ble_xSemaphore, 0);
+	HAL_UART_Receive_IT(&huart1, bleData, 1);
 	while(1)
 	{
-		HAL_UART_Receive_IT(&huart1, &data, size);
-		osDelay(1);
-		if(osSemaphoreWait(ble_xSemaphore, portMAX_DELAY) == osOK)
+		i=0;
+		memset(data, 0, size);
+		while(i<size)
 		{
-			do
+			if(i==0)
+				event = osMessageGet(bleReceive_xMessage, portMAX_DELAY);
+			else
+				event = osMessageGet(bleReceive_xMessage, 10);
+
+			if(event.status == osEventMessage)
 			{
-				// ToDo: BLE112-tõl beérkezõ üzenet feldolgozását végzõ taszk. Az egyes üzeneteket parse-olni kell, majd szemaforral jelezni kell a fõ taszknak, \
-				hogy folytathatja a feladatát.
-			} while(HAL_UART_Receive(&huart1, &data, size, 0) == HAL_OK);
+				data[i] = event.value.p;
+				i++;
+			}
+			else
+				break;
 		}
-		osDelay(10);
+
+		// ToDo: Megvizsgálni az üzenet hosszát, felhasználva az i és lolen változókat
+		BTHeader.type_hilen = data[0];
+		BTHeader.lolen = data[1];
+		BTHeader.cls = data[2];
+		BTHeader.command = data[3];
+
+		BTMessage = ble_get_msg_hdr(BTHeader);
+
+		if(!BTMessage)
+			osDelay(10);
+		else
+			BTMessage->handler(&data[4]);
+
+		// ToDo: A handler függvénynek jeleznie kell a sikeres -- vagy esetleg sikertelen -- parancsot.
 	}
 }
 
@@ -1507,6 +1548,8 @@ void StartUART6Task(void const * argument)
 	uint8_t value[VALUE_LENGTH];
 	uint8_t i;
 	osEvent event;
+
+	// ToDo: Az UART6 Send és Receive taszkokat indítsa ez a taszk! Így a kommunikációs objektumok deklarálása is itt történhet.
 
 	osMessageQDef(UART6RECEIVEMES, 140, uint8_t);
 	uart6Receive_xMessage = osMessageCreate(osMessageQ(UART6RECEIVEMES), NULL);
