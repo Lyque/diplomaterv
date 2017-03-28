@@ -252,6 +252,8 @@ void MainWindow::on_led0CheckBox_toggled(bool checked)
     message.append(value, 5);
     this->lastCommand = message;
     writeData(message);
+    ui->led0CheckBox->setEnabled(false);
+    ui->led1CheckBox->setEnabled(false);
 }
 
 void MainWindow::on_led1CheckBox_toggled(bool checked)
@@ -279,6 +281,8 @@ void MainWindow::on_led1CheckBox_toggled(bool checked)
     message.append(value, 5);
     this->lastCommand = message;
     writeData(message);
+    ui->led0CheckBox->setEnabled(false);
+    ui->led1CheckBox->setEnabled(false);
 }
 
 void MainWindow::led0ChangedSlot(bool isOn)
@@ -292,6 +296,8 @@ void MainWindow::led0ChangedSlot(bool isOn)
         ui->led0Indicator->setPixmap(this->ledOff);
     }
     ui->led0CheckBox->setChecked(isOn);
+    ui->led0CheckBox->setEnabled(true);
+    ui->led1CheckBox->setEnabled(true);
 }
 
 void MainWindow::led1ChangedSlot(bool isOn)
@@ -305,6 +311,8 @@ void MainWindow::led1ChangedSlot(bool isOn)
         ui->led1Indicator->setPixmap(this->ledOff);
     }
     ui->led1CheckBox->setChecked(isOn);
+    ui->led0CheckBox->setEnabled(true);
+    ui->led1CheckBox->setEnabled(true);
 }
 
 void MainWindow::switch0ChangedSlot(bool isOn)
@@ -337,13 +345,13 @@ void MainWindow::localTempChangedSlot(uint32_t value)
     static int updatedCelsValue = 20;
     const float filterCoeff = 5;
 
-    ui->tempLocalBar->setValue(value);
-
     celsValue = 300*value/4095-50;
     // IIR filter
     updatedCelsValue = ((filterCoeff-1)*updatedCelsValue+celsValue)/filterCoeff;
 
+    ui->tempLocalBar->setValue(updatedCelsValue);
     ui->tempLocalVal->setText(QString::number(updatedCelsValue) + "°C");
+    ui->tempLocalBar->update();
 }
 
 void MainWindow::potmeterChangedSlot(uint32_t value)

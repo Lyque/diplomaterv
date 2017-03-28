@@ -1003,7 +1003,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	if(__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
 	{
 		__HAL_UART_CLEAR_OREFLAG(huart);
-		__HAL_UART_FLUSH_DRREGISTER(huart); // ToDo: Ez biztosan eldobja?
+		__HAL_UART_FLUSH_DRREGISTER(huart);
 	}
 
 	if(huart->Instance == USART6)
@@ -1333,8 +1333,6 @@ void StartSwitchChangedTask(void const * argument)
 					osMessagePut(sdCardWrite_xMessage, message[i], 10);
 				}
 		}
-
-		osDelay(1);
 	}
 }
 
@@ -1372,7 +1370,7 @@ void StartTempMeasureTask(void const * argument)
 				osMessagePut(sdCardWrite_xMessage, message[i], 10);
 			}
 
-		osDelay(100);
+		osDelay(500);
 	}
 }
 
@@ -1412,7 +1410,7 @@ void StartPotmeterMeasureTask(void const * argument)
 				osMessagePut(sdCardWrite_xMessage, message[i], 10);
 			}
 
-		osDelay(100);
+		osDelay(500);
 	}
 }
 
@@ -1530,7 +1528,12 @@ void StartUART6Task(void const * argument)
 			if(event.status == osEventMessage)
 			{
 				data[i] = event.value.p;
-				i++;
+
+				// Ha a sorvége karakter az üzenet közepén érkezett, akkor hiba történt, ezért eldobjuk a csomagot.
+				if(data[i] == '\n' && i!=(MESSAGE_LENGTH-1))
+					i=0;
+				else
+					i++;
 			}
 			else
 				i=0;

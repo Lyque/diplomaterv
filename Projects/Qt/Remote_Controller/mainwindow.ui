@@ -371,11 +371,14 @@ border-top-left-radius: 7px;
 border: 1px solid black;
 }</string>
          </property>
+         <property name="minimum">
+          <number>-25</number>
+         </property>
          <property name="maximum">
-          <number>2048</number>
+          <number>50</number>
          </property>
          <property name="value">
-          <number>1000</number>
+          <number>20</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
