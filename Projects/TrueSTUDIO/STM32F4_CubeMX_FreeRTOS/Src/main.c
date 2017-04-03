@@ -120,12 +120,13 @@ osThreadId bleSendTaskHandle;
 osThreadId bleReceiveTaskHandle;
 osThreadId uart6TaskHandle;
 osThreadId uart6SendTaskHandle;
-osSemaphoreId ble_xSemaphore = NULL;
+osSemaphoreId bleEvent_xSemaphore = NULL;
 osMessageQId bleSend_xMessage = NULL;
 osMessageQId bleReceive_xMessage = NULL;
 osMessageQId uart6Send_xMessage = NULL;
 osMessageQId uart6Receive_xMessage = NULL;
 uint8_t bleData[1];
+uint8_t bleConnectionHndl;
 uint8_t uart6Data[1];
 
 osThreadId sdCardTaskHandle;
@@ -327,20 +328,14 @@ int main(void)
   ThreadDef(SWITCHCHANGEDTASKID, StartSwitchChangedTask, osPriorityNormal, 0, 128);
   ThreadDef(TEMPMEASTASKID, StartTempMeasureTask, osPriorityNormal, 0, 128);
   ThreadDef(POTMETERMEASTASKID, StartPotmeterMeasureTask, osPriorityNormal, 0, 128);
-  ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 128);
-  ThreadDef(BLESENDTASKID, StartBLESendTask, osPriorityNormal, 0, 128);
-  ThreadDef(BLERECEIVETASKID, StartBLEReceiveTask, osPriorityNormal, 0, 128);
+  ThreadDef(BLETASKID, StartBLETask, osPriorityNormal, 0, 1024);
   ThreadDef(UART6TASKID, StartUART6Task, osPriorityNormal, 0, 128);
-  ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
   ThreadDef(SDCARDTASKID, StartSDCardTask, osPriorityNormal, 0, 1280);
   switchChangedTaskHandle = osThreadCreate(Thread(SWITCHCHANGEDTASKID), NULL);
   tempMeasureTaskHandle = osThreadCreate(Thread(TEMPMEASTASKID), NULL);
   potmeterMeasureTaskHandle = osThreadCreate(Thread(POTMETERMEASTASKID), NULL);
   bleTaskHandle = osThreadCreate(Thread(BLETASKID), NULL);
-  bleSendTaskHandle = osThreadCreate(Thread(BLESENDTASKID), NULL);
-  bleReceiveTaskHandle = osThreadCreate(Thread(BLERECEIVETASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
-  uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
   sdCardTaskHandle = osThreadCreate(Thread(SDCARDTASKID), NULL);
 #endif // defined(MEAS_W_LOAD)
   // ToDo: A taszkoknak szükséges stackméretet végigbogarászni.
@@ -999,7 +994,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 		osMessagePut(bleReceive_xMessage, bleData[0], 0);
 		HAL_UART_Receive_IT(UartHandle, bleData, 1);
 	}
-	// ToDo: BLE UART-hoz is megírni az üzenet Message-be pakolását. De lehet elég egy sima szemafor.
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
@@ -1025,7 +1019,6 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 		// Majd újra elindítjuk az adat vételét.
 		HAL_UART_Receive_IT(huart, uart6Data, 1);
 	}
-	// ToDo: BLE UART esetére is megírni egy hibakezelést
 }
 
 void RemoteControllerConnected()
@@ -1441,23 +1434,122 @@ void StartBLETask(void const * argument)
 {
 	osMessageQDef(BLEMES, 64, uint8_t);
 	bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
-	osMessageQDef(BLERECEIVEMES, 64, uint8_t); // ToDo: Message méretét jól megválasztani
+	osMessageQDef(BLERECEIVEMES, 64, uint8_t);
 	bleReceive_xMessage = osMessageCreate(osMessageQ(BLERECEIVEMES), NULL);
+	osSemaphoreDef(BLEVENTSEM);
+	bleEvent_xSemaphore = osSemaphoreCreate(osSemaphore(BLEVENTSEM), 1);
+	osStatus rsp;
+
+	// Malloc elkerülése végett
+	uint8_t period_val_memory[2];
+	uint8_t config_val_memory[2];
+
+	uint8array *period_val;
+	uint8array *config_val;
+
+	period_val = period_val_memory;
+	config_val = config_val_memory;
+
+	period_val->len = 1;
+	period_val->data[0] = 100;
+
+	config_val->len = 1;
+	config_val->data[0] = 1;
 
 	// BGLib config
 	bglib_output = &BLE_Send;
+	bd_addr sensortag_address;
 
+	sensortag_address.addr[0] = SENSORTAG_ADDRESS_0;
+	sensortag_address.addr[1] = SENSORTAG_ADDRESS_1;
+	sensortag_address.addr[2] = SENSORTAG_ADDRESS_2;
+	sensortag_address.addr[3] = SENSORTAG_ADDRESS_3;
+	sensortag_address.addr[4] = SENSORTAG_ADDRESS_4;
+	sensortag_address.addr[5] = SENSORTAG_ADDRESS_5;
+
+	ThreadDef(BLESENDTASKID, StartBLESendTask, osPriorityNormal, 0, 128);
+	ThreadDef(BLERECEIVETASKID, StartBLEReceiveTask, osPriorityRealtime, 0, 128);
+	bleSendTaskHandle = osThreadCreate(Thread(BLESENDTASKID), NULL);
+	bleReceiveTaskHandle = osThreadCreate(Thread(BLERECEIVETASKID), NULL);
+
+	osSemaphoreWait(bleEvent_xSemaphore, 0);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET);
-
+	rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 	while(1)
 	{
-		ble_cmd_system_hello();
-		osDelay(100);
-		ble_cmd_system_reset(0);
-		// ToDo: Taszk implementálása. A taszk elvégzi a BLE112 konfigurálását, majd periodikusan lekérdezi a három szenzorértéket. \
-		Az egyes parancsok kiküldése között meg kell várni a választ. Ezt a fogadó taszk által billentett szemaforral oldom majd meg.
-		//HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_4);
-		osDelay(10000);
+		rsp = osErrorOS;
+		osDelay(1000);
+		do
+		{
+			ble_cmd_system_reset(RESETTOMAINPROGRAM);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+		while(rsp != osOK);
+
+		// Hello BLE
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_system_hello();
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+
+		// Connect to SensorTag
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_gap_connect_direct(sensortag_address.addr, gap_address_type_public, BLECONNINTERVALMIN, BLECONNINTERVALMAX, BLECONNTIMEOUT, BLECONNSLAVELATENCY);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+
+		// Config humidity sensor period
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLEHUMPERIODHNDL, period_val->len, period_val->data);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+		// Config light sensor period
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLELIGHTPERIODHNDL, period_val->len, period_val->data);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+
+		// Start humidity measurement
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLEHUMCONFIGHNDL, config_val->len, config_val->data);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+		// Start light measurement
+		if(rsp == osOK)
+		{
+			osDelay(10);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLELIGHTCONFIGHNDL, config_val->len, config_val->data);
+			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+		}
+
+		while(rsp == osOK)
+		{
+			osDelay(1000);
+			// Read humidity data
+			if(rsp == osOK)
+			{
+				osDelay(10);
+				ble_cmd_attclient_read_by_handle(bleConnectionHndl, BLEHUMDATAHNDL);
+				rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+			}
+			if(rsp == osOK)
+			{
+				osDelay(10);
+				ble_cmd_attclient_read_by_handle(bleConnectionHndl, BLELIGHTDATAHNDL);
+				rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
+			}
+		}
+		ble_cmd_connection_disconnect(bleConnectionHndl);
 	}
 }
 
@@ -1493,11 +1585,6 @@ void StartBLEReceiveTask(void const * argument)
 	const struct ble_msg *BTMessage;
 	struct ble_header BTHeader;
 
-	// ToDo: A szemaforra lehet nem lesz szükség.
-//	osSemaphoreDef(BLESEM);
-//	ble_xSemaphore = osSemaphoreCreate(osSemaphore(BLESEM), 1);
-//
-//	osSemaphoreWait(ble_xSemaphore, 0);
 	HAL_UART_Receive_IT(&huart1, bleData, 1);
 	while(1)
 	{
@@ -1508,7 +1595,7 @@ void StartBLEReceiveTask(void const * argument)
 			if(i==0)
 				event = osMessageGet(bleReceive_xMessage, portMAX_DELAY);
 			else
-				event = osMessageGet(bleReceive_xMessage, 10);
+				event = osMessageGet(bleReceive_xMessage, 2);
 
 			if(event.status == osEventMessage)
 			{
@@ -1519,7 +1606,6 @@ void StartBLEReceiveTask(void const * argument)
 				break;
 		}
 
-		// ToDo: Megvizsgálni az üzenet hosszát, felhasználva az i és lolen változókat
 		BTHeader.type_hilen = data[0];
 		BTHeader.lolen = data[1];
 		BTHeader.cls = data[2];
@@ -1531,8 +1617,6 @@ void StartBLEReceiveTask(void const * argument)
 			osDelay(10);
 		else
 			BTMessage->handler(&data[4]);
-
-		// ToDo: A handler függvénynek jeleznie kell a sikeres -- vagy esetleg sikertelen -- parancsot.
 	}
 }
 
@@ -1549,10 +1633,13 @@ void StartUART6Task(void const * argument)
 	uint8_t i;
 	osEvent event;
 
-	// ToDo: Az UART6 Send és Receive taszkokat indítsa ez a taszk! Így a kommunikációs objektumok deklarálása is itt történhet.
-
+	osMessageQDef(UART6MES, 140, uint8_t);
+	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
 	osMessageQDef(UART6RECEIVEMES, 140, uint8_t);
 	uart6Receive_xMessage = osMessageCreate(osMessageQ(UART6RECEIVEMES), NULL);
+
+	ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
+	uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
 
 	// Egyszerre csak egy karaktert várunk.
 	HAL_UART_Receive_IT(&huart6, uart6Data, 1);
@@ -1617,7 +1704,6 @@ void StartUART6Task(void const * argument)
 			} while(event.status == osEventMessage && event.value.p !='\n');
 		}
 	}
-	// ToDo: Valamiért kifagy a parancsfogadás! (Talán már javítja önmagát.)
 }
 
 void StartUART6SendTask(void const * argument)
@@ -1625,9 +1711,6 @@ void StartUART6SendTask(void const * argument)
 	osEvent event;
 	uint8_t character;
 	uint16_t size = sizeof(character)/sizeof(uint8_t);
-
-	osMessageQDef(UART6MES, 140, uint8_t);
-	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
 
 	while(1)
 	{

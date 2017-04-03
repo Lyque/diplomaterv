@@ -8,6 +8,17 @@
  ****************************************************************************/
 
 #include "cmd_def.h"
+
+// User includes
+#include "stm32f4xx_hal.h"
+#include "cmsis_os.h"
+#include "measure_config.h"
+
+extern uint8_t bleConnectionHndl;
+extern osSemaphoreId bleEvent_xSemaphore;
+extern osMessageQId uart6Send_xMessage;
+extern osMessageQId sdCardWrite_xMessage;
+
 void ble_default(const void*v)
 {
 }
@@ -18,6 +29,7 @@ void ble_rsp_system_reset(const void* nul)
 
 void ble_rsp_system_hello(const void* nul)
 {
+	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_rsp_system_address_get(const struct ble_msg_system_address_get_rsp_t *msg)
@@ -454,6 +466,7 @@ void ble_rsp_dfu_flash_upload_finish(const struct ble_msg_dfu_flash_upload_finis
 
 void ble_evt_system_boot(const struct ble_msg_system_boot_evt_t *msg)
 {
+	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_system_debug(const struct ble_msg_system_debug_evt_t *msg)
@@ -498,6 +511,9 @@ void ble_evt_attributes_status(const struct ble_msg_attributes_status_evt_t *msg
 
 void ble_evt_connection_status(const struct ble_msg_connection_status_evt_t *msg)
 {
+	// Sikeres csatlakozás esetén
+	if(msg->flags | connection_connected)
+		osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_connection_version_ind(const struct ble_msg_connection_version_ind_evt_t *msg)
@@ -522,6 +538,13 @@ void ble_evt_attclient_indicated(const struct ble_msg_attclient_indicated_evt_t 
 
 void ble_evt_attclient_procedure_completed(const struct ble_msg_attclient_procedure_completed_evt_t *msg)
 {
+	// Ha write parancsra érkezett, és sikeres a folyamat...
+	if(msg->connection == bleConnectionHndl)
+		if(msg->chrhandle == BLEHUMPERIODHNDL || msg->chrhandle == BLEHUMCONFIGHNDL || msg->chrhandle == BLELIGHTPERIODHNDL || msg->chrhandle == BLELIGHTCONFIGHNDL)
+			if(msg->result == 0)
+			{
+				osSemaphoreRelease(bleEvent_xSemaphore);
+			}
 }
 
 void ble_evt_attclient_group_found(const struct ble_msg_attclient_group_found_evt_t *msg)
@@ -538,6 +561,56 @@ void ble_evt_attclient_find_information_found(const struct ble_msg_attclient_fin
 
 void ble_evt_attclient_attribute_value(const struct ble_msg_attclient_attribute_value_evt_t *msg)
 {
+	// Adatolvasás sikeresen végbement
+	if(msg->connection == bleConnectionHndl)
+	{
+		if(msg->atthandle == BLEHUMDATAHNDL)
+		{
+			if(msg->value.len == 4)
+			{
+				uint8_t message[MESSAGE_LENGTH];
+				uint8_t i;
+
+				memcpy(message, "humidity:", 9);
+				memcpy(&message[9], msg->value.data, msg->value.len);
+				message[13] = '\n';
+
+				if(uart6Send_xMessage!=NULL)
+					for(i=0;i<MESSAGE_LENGTH;i++)
+						osMessagePut(uart6Send_xMessage, message[i], 10);
+
+				if(sdCardWrite_xMessage!=NULL)
+					for(i=0;i<MESSAGE_LENGTH;i++)
+					{
+						osMessagePut(sdCardWrite_xMessage, message[i], 10);
+					}
+			}
+		}
+		else if(msg->atthandle == BLELIGHTDATAHNDL)
+		{
+			if(msg->value.len == 2)
+			{
+				uint8_t message[MESSAGE_LENGTH];
+				uint8_t i;
+
+				memset(message, 0, MESSAGE_LENGTH);
+				memcpy(message, "lux     :", 9);
+				memcpy(&message[9], msg->value.data, msg->value.len);
+				message[13] = '\n';
+
+				if(uart6Send_xMessage!=NULL)
+					for(i=0;i<MESSAGE_LENGTH;i++)
+						osMessagePut(uart6Send_xMessage, message[i], 10);
+
+				if(sdCardWrite_xMessage!=NULL)
+					for(i=0;i<MESSAGE_LENGTH;i++)
+					{
+						osMessagePut(sdCardWrite_xMessage, message[i], 10);
+					}
+			}
+		}
+	}
+	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_attclient_read_multiple_response(const struct ble_msg_attclient_read_multiple_response_evt_t *msg)

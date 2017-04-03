@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->switch0Indicator->setPixmap(this->switchOff);
     ui->switch1Indicator->setPixmap(this->switchOff);
 
-    ui->tempLocalBar->setValue(1023);
-    ui->tempRemoteBar->setValue(32000);
+    ui->tempLocalBar->setValue(20);
+    ui->tempRemoteBar->setValue(20);
     ui->potmeterDial->setValue(2047);
 
     ui->actionConnect->setEnabled(true);
@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(switch1ChangedSignal(bool)), this, SLOT(switch1ChangedSlot(bool)));
     connect(this, SIGNAL(localTempChangedSignal(uint32_t)), this, SLOT(localTempChangedSlot(uint32_t)));
     connect(this, SIGNAL(potmeterChangedSignal(uint32_t)), this, SLOT(potmeterChangedSlot(uint32_t)));
+    connect(this, SIGNAL(humidityChangedSignal(uint32_t)), this, SLOT(humidityChangedSlot(uint32_t)));
+    connect(this, SIGNAL(lightChangedSignal(uint32_t)), this, SLOT(lightChangedSlot(uint32_t)));
 }
 
 MainWindow::~MainWindow()
@@ -89,7 +91,6 @@ void MainWindow::openSerialPort()
         ui->led0CheckBox->setEnabled(true);
         ui->led1CheckBox->setEnabled(true);
         ui->humVal->setEnabled(true);
-        ui->presVal->setEnabled(true);
         ui->lightVal->setEnabled(true);
 
         this->lastCommand = message;
@@ -121,7 +122,6 @@ void MainWindow::closeSerialPort()
     ui->led0CheckBox->setEnabled(false);
     ui->led1CheckBox->setEnabled(false);
     ui->humVal->setEnabled(false);
-    ui->presVal->setEnabled(false);
     ui->lightVal->setEnabled(false);
 
     showStatusMessage(tr("Disconnected"));
@@ -142,7 +142,7 @@ void MainWindow::readData()
 
             if(data.length() == 14)
             {
-                // ToDo: Felbontani a beérkezett csomagot, majd feldolgozni azt.
+                // Done: Felbontani a beérkezett csomagot, majd feldolgozni azt.
                 QList<QByteArray> splitted = data.split(':');
                 if(splitted.length() == 2)
                 {
@@ -194,6 +194,20 @@ void MainWindow::readData()
 
                         memcpy(&potmeterVal,value,4);
                         emit this->potmeterChangedSignal(potmeterVal);
+                    }
+                    else if(entity == "humidity")
+                    {
+                        uint32_t humidityVal;
+
+                        memcpy(&humidityVal,value,4);
+                        emit this->humidityChangedSignal(humidityVal);
+                    }
+                    else if(entity == "lux")
+                    {
+                        uint32_t lightVal;
+
+                        memcpy(&lightVal,value,4);
+                        emit this->lightChangedSignal(lightVal);
                     }
                 }
             }
@@ -342,26 +356,65 @@ void MainWindow::switch1ChangedSlot(bool isOn)
 void MainWindow::localTempChangedSlot(uint32_t value)
 {
     int celsValue;
-    static int updatedCelsValue = 20;
+    static int updatedLocalTempValue = 20;
     const float filterCoeff = 5;
 
     celsValue = 300*value/4095-50;
     // IIR filter
-    updatedCelsValue = ((filterCoeff-1)*updatedCelsValue+celsValue)/filterCoeff;
+    updatedLocalTempValue = ((filterCoeff-1)*updatedLocalTempValue+celsValue)/filterCoeff;
 
-    ui->tempLocalBar->setValue(updatedCelsValue);
-    ui->tempLocalVal->setText(QString::number(updatedCelsValue) + "°C");
+    ui->tempLocalBar->setValue(updatedLocalTempValue);
+    ui->tempLocalVal->setText(QString::number(updatedLocalTempValue) + "°C");
     ui->tempLocalBar->update();
 }
 
 void MainWindow::potmeterChangedSlot(uint32_t value)
 {
     static int updatedPotValue = 2047;
-    const float filterCoeff = 5;
+    const float filterCoeff = 3;
 
     // IIR filter
     updatedPotValue = ((filterCoeff-1)*updatedPotValue+value)/filterCoeff;
 
     ui->potmeterDial->setValue(updatedPotValue);
     ui->potmeterVal->setText(QString::number(100*updatedPotValue/4095) + "%");
+}
+
+void MainWindow::humidityChangedSlot(uint32_t value)
+{
+    static int updatedHumidityValue = 50;
+    static int updatedRemoteTempValue = 20;
+    const float filterCoeff = 1.1;
+
+    uint32_t hum = (value & 0xFFFF0000) >> 16;
+    uint32_t temp = (value & 0x0000FFFF);
+
+    float hum_f = float(hum);
+    float temp_f = float(temp);
+
+    float humVal = hum_f/(1 << 16)*100;
+    float tempVal = temp_f/(1 << 16)*165-40;
+
+    // IIR filter
+    updatedHumidityValue = ((filterCoeff-1)*updatedHumidityValue+humVal)/filterCoeff;
+    updatedRemoteTempValue = ((filterCoeff-1)*updatedRemoteTempValue+tempVal)/filterCoeff;
+
+    ui->humVal->setText(QString::number(updatedHumidityValue));
+    ui->tempRemoteBar->setValue(updatedRemoteTempValue);
+    ui->tempRemoteVal->setText(QString::number(updatedRemoteTempValue) + "°C");
+    ui->tempRemoteBar->update();
+}
+
+void MainWindow::lightChangedSlot(uint32_t value)
+{
+    static float updatedLightValue = 0;
+    const float filterCoeff = 1.1;
+
+    int exp = (value & 0xF000) >> 12;
+    int low_limit_res = (value & 0x0FFF);
+    float lightVal = 0.01*(1 << (exp))*low_limit_res;
+
+    // IIR filter
+    updatedLightValue = ((filterCoeff-1)*updatedLightValue+lightVal)/filterCoeff;
+    ui->lightVal->setText(QString::number(updatedLightValue) + " lux");
 }

@@ -35,45 +35,85 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="2" column="0">
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="0">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+      <property name="spacing">
+       <number>1</number>
+      </property>
+      <item row="1" column="0">
        <widget class="QLabel" name="label_10">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
          <string>Light:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Humidity:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Pressure:</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QLabel" name="humVal">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
          <string>N/A</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLabel" name="presVal">
+       <widget class="QLabel" name="lightVal">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
          <string>N/A</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="lightVal">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
-         <string>N/A</string>
+         <string>Humidity:</string>
         </property>
        </widget>
       </item>
@@ -308,11 +348,14 @@ border-top-left-radius: 7px;
 border: 1px solid black;
 }</string>
          </property>
+         <property name="minimum">
+          <number>-25</number>
+         </property>
          <property name="maximum">
-          <number>65535</number>
+          <number>50</number>
          </property>
          <property name="value">
-          <number>32000</number>
+          <number>20</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
