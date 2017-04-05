@@ -540,7 +540,7 @@ void ble_evt_attclient_procedure_completed(const struct ble_msg_attclient_proced
 {
 	// Ha write parancsra érkezett, és sikeres a folyamat...
 	if(msg->connection == bleConnectionHndl)
-		if(msg->chrhandle == BLEHUMPERIODHNDL || msg->chrhandle == BLEHUMCONFIGHNDL || msg->chrhandle == BLELIGHTPERIODHNDL || msg->chrhandle == BLELIGHTCONFIGHNDL)
+		if(msg->chrhandle == BLETEMPPERIODHNDL || msg->chrhandle == BLETEMPCONFIGHNDL || msg->chrhandle == BLELIGHTPERIODHNDL || msg->chrhandle == BLELIGHTCONFIGHNDL)
 			if(msg->result == 0)
 			{
 				osSemaphoreRelease(bleEvent_xSemaphore);
@@ -564,14 +564,14 @@ void ble_evt_attclient_attribute_value(const struct ble_msg_attclient_attribute_
 	// Adatolvasás sikeresen végbement
 	if(msg->connection == bleConnectionHndl)
 	{
-		if(msg->atthandle == BLEHUMDATAHNDL)
+		if(msg->atthandle == BLETEMPDATAHNDL)
 		{
 			if(msg->value.len == 4)
 			{
 				uint8_t message[MESSAGE_LENGTH];
 				uint8_t i;
 
-				memcpy(message, "humidity:", 9);
+				memcpy(message, "remtemp :", 9);
 				memcpy(&message[9], msg->value.data, msg->value.len);
 				message[13] = '\n';
 

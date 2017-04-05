@@ -576,11 +576,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-//  /*Configure GPIO pin : PC13 */
-//  GPIO_InitStruct.Pin = GPIO_PIN_13;
-//  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-//  GPIO_InitStruct.Pull = GPIO_NOPULL;
-//  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+#if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+#endif // defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
 
   /*Configure GPIO pin : PB15 */
   GPIO_InitStruct.Pin = GPIO_PIN_15;
@@ -1018,6 +1020,11 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 			}
 		// Majd újra elindítjuk az adat vételét.
 		HAL_UART_Receive_IT(huart, uart6Data, 1);
+	}
+	else if(huart->Instance == USART1)
+	{
+		// Újra elindítjuk az adat vételét.
+		HAL_UART_Receive_IT(huart, bleData, 1);
 	}
 }
 
@@ -1502,11 +1509,11 @@ void StartBLETask(void const * argument)
 			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 		}
 
-		// Config humidity sensor period
+		// Config temperature sensor period
 		if(rsp == osOK)
 		{
 			osDelay(10);
-			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLEHUMPERIODHNDL, period_val->len, period_val->data);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLETEMPPERIODHNDL, period_val->len, period_val->data);
 			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 		}
 		// Config light sensor period
@@ -1517,11 +1524,11 @@ void StartBLETask(void const * argument)
 			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 		}
 
-		// Start humidity measurement
+		// Start temperature measurement
 		if(rsp == osOK)
 		{
 			osDelay(10);
-			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLEHUMCONFIGHNDL, config_val->len, config_val->data);
+			ble_cmd_attclient_attribute_write(bleConnectionHndl, BLETEMPCONFIGHNDL, config_val->len, config_val->data);
 			rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 		}
 		// Start light measurement
@@ -1535,11 +1542,11 @@ void StartBLETask(void const * argument)
 		while(rsp == osOK)
 		{
 			osDelay(1000);
-			// Read humidity data
+			// Read temperature data
 			if(rsp == osOK)
 			{
 				osDelay(10);
-				ble_cmd_attclient_read_by_handle(bleConnectionHndl, BLEHUMDATAHNDL);
+				ble_cmd_attclient_read_by_handle(bleConnectionHndl, BLETEMPDATAHNDL);
 				rsp = osSemaphoreWait(bleEvent_xSemaphore, 2000);
 			}
 			if(rsp == osOK)

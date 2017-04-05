@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(switch1ChangedSignal(bool)), this, SLOT(switch1ChangedSlot(bool)));
     connect(this, SIGNAL(localTempChangedSignal(uint32_t)), this, SLOT(localTempChangedSlot(uint32_t)));
     connect(this, SIGNAL(potmeterChangedSignal(uint32_t)), this, SLOT(potmeterChangedSlot(uint32_t)));
-    connect(this, SIGNAL(humidityChangedSignal(uint32_t)), this, SLOT(humidityChangedSlot(uint32_t)));
+    connect(this, SIGNAL(remoteTempChangedSignal(uint32_t)), this, SLOT(remoteTempChangedSlot(uint32_t)));
     connect(this, SIGNAL(lightChangedSignal(uint32_t)), this, SLOT(lightChangedSlot(uint32_t)));
 }
 
@@ -90,7 +90,7 @@ void MainWindow::openSerialPort()
         ui->potmeterVal->setEnabled(true);
         ui->led0CheckBox->setEnabled(true);
         ui->led1CheckBox->setEnabled(true);
-        ui->humVal->setEnabled(true);
+        ui->ambTempVal->setEnabled(true);
         ui->lightVal->setEnabled(true);
 
         this->lastCommand = message;
@@ -121,7 +121,7 @@ void MainWindow::closeSerialPort()
     ui->potmeterVal->setEnabled(false);
     ui->led0CheckBox->setEnabled(false);
     ui->led1CheckBox->setEnabled(false);
-    ui->humVal->setEnabled(false);
+    ui->ambTempVal->setEnabled(false);
     ui->lightVal->setEnabled(false);
 
     showStatusMessage(tr("Disconnected"));
@@ -195,12 +195,12 @@ void MainWindow::readData()
                         memcpy(&potmeterVal,value,4);
                         emit this->potmeterChangedSignal(potmeterVal);
                     }
-                    else if(entity == "humidity")
+                    else if(entity == "remtemp")
                     {
-                        uint32_t humidityVal;
+                        uint32_t tempVal;
 
-                        memcpy(&humidityVal,value,4);
-                        emit this->humidityChangedSignal(humidityVal);
+                        memcpy(&tempVal,value,4);
+                        emit this->remoteTempChangedSignal(tempVal);
                     }
                     else if(entity == "lux")
                     {
@@ -380,28 +380,28 @@ void MainWindow::potmeterChangedSlot(uint32_t value)
     ui->potmeterVal->setText(QString::number(100*updatedPotValue/4095) + "%");
 }
 
-void MainWindow::humidityChangedSlot(uint32_t value)
+void MainWindow::remoteTempChangedSlot(uint32_t value)
 {
-    static int updatedHumidityValue = 50;
-    static int updatedRemoteTempValue = 20;
+    static int updatedAmbientTempValue = 50;
+    static int updatedSensorTempValue = 20;
     const float filterCoeff = 1.1;
 
-    uint32_t hum = (value & 0xFFFF0000) >> 16;
-    uint32_t temp = (value & 0x0000FFFF);
+    int16_t ambTemp = (value & 0x0000FFFF);
+    int16_t sensTemp = (value & 0xFFFF0000) >> 16;
 
-    float hum_f = float(hum);
-    float temp_f = float(temp);
+    float ambTemp_f = float(ambTemp>>2);
+    float sensTemp_f = float(sensTemp>>2);
 
-    float humVal = hum_f/(1 << 16)*100;
-    float tempVal = temp_f/(1 << 16)*165-40;
+    float ambTempVal = ambTemp_f/32;
+    float sensTempVal = sensTemp_f/32;
 
     // IIR filter
-    updatedHumidityValue = ((filterCoeff-1)*updatedHumidityValue+humVal)/filterCoeff;
-    updatedRemoteTempValue = ((filterCoeff-1)*updatedRemoteTempValue+tempVal)/filterCoeff;
+    updatedAmbientTempValue = ((filterCoeff-1)*updatedAmbientTempValue+ambTempVal)/filterCoeff;
+    updatedSensorTempValue = ((filterCoeff-1)*updatedSensorTempValue+sensTempVal)/filterCoeff;
 
-    ui->humVal->setText(QString::number(updatedHumidityValue));
-    ui->tempRemoteBar->setValue(updatedRemoteTempValue);
-    ui->tempRemoteVal->setText(QString::number(updatedRemoteTempValue) + "°C");
+    ui->ambTempVal->setText(QString::number(updatedAmbientTempValue) + "°C");
+    ui->tempRemoteBar->setValue(updatedSensorTempValue);
+    ui->tempRemoteVal->setText(QString::number(updatedSensorTempValue) + "°C");
     ui->tempRemoteBar->update();
 }
 

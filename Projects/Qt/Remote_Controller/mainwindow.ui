@@ -61,7 +61,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLabel" name="humVal">
+       <widget class="QLabel" name="ambTempVal">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -113,7 +113,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Humidity:</string>
+         <string>Ambient temperature:</string>
         </property>
        </widget>
       </item>

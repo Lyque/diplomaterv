@@ -40,7 +40,7 @@ private slots:
     void switch1ChangedSlot(bool isOn);
     void localTempChangedSlot(uint32_t value);
     void potmeterChangedSlot(uint32_t value);
-    void humidityChangedSlot(uint32_t value);
+    void remoteTempChangedSlot(uint32_t value);
     void lightChangedSlot(uint32_t value);
 
 signals:
@@ -50,7 +50,7 @@ signals:
     void switch1ChangedSignal(bool isOn);
     void localTempChangedSignal(uint32_t value);
     void potmeterChangedSignal(uint32_t value);
-    void humidityChangedSignal(uint32_t value);
+    void remoteTempChangedSignal(uint32_t value);
     void lightChangedSignal(uint32_t value);
 
 private:
