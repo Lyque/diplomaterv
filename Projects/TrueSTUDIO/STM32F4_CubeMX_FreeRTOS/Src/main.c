@@ -1026,11 +1026,10 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 		uint8_t message[MESSAGE_LENGTH] = "error   :error\n";
 
 		// Ha a GUI-tól jött vezérlõparancs, akkor jelezzük, hogy hibás volt az átvitel.
-		if(uart6Send_xMessage!=NULL)
-			for(i=0;i<MESSAGE_LENGTH;i++)
-			{
-				osMessagePut(uart6Send_xMessage, message[i], 10);
-			}
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+		}
 		// Majd újra elindítjuk az adat vételét.
 		HAL_UART_Receive_IT(huart, uart6Data, 1);
 	}
@@ -1071,15 +1070,13 @@ void RemoteControllerConnected()
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 
 	// led1 értékének kiolvasása és elküldése
 	memcpy(message, "led1    :", 9);
@@ -1104,15 +1101,13 @@ void RemoteControllerConnected()
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 
 	// switch0 értékének kiolvasása és elküldése
 	memcpy(message, "switch0 :", 9);
@@ -1137,15 +1132,13 @@ void RemoteControllerConnected()
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 
 	// switch1 értékének kiolvasása és elküldése
 	memcpy(message, "switch1 :", 9);
@@ -1170,15 +1163,13 @@ void RemoteControllerConnected()
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 }
 
 void ChangeLed0State(GPIO_PinState state)
@@ -1212,15 +1203,13 @@ void ChangeLed0State(GPIO_PinState state)
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 }
 
 void ChangeLed1State(GPIO_PinState state)
@@ -1254,15 +1243,13 @@ void ChangeLed1State(GPIO_PinState state)
 
 	memcpy(&message[9], value, 5);
 
-	if(uart6Send_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-			osMessagePut(uart6Send_xMessage, message[i], 10);
+	for(i=0;i<MESSAGE_LENGTH;i++)
+		osMessagePut(uart6Send_xMessage, message[i], 10);
 
-	if(sdCardWrite_xMessage!=NULL)
-		for(i=0;i<MESSAGE_LENGTH;i++)
-		{
-			osMessagePut(sdCardWrite_xMessage, message[i], 10);
-		}
+	for(i=0;i<MESSAGE_LENGTH;i++)
+	{
+		osMessagePut(sdCardWrite_xMessage, message[i], 10);
+	}
 }
 
 void StartSwitchChangedTask(void const * argument)
@@ -1339,14 +1326,13 @@ void StartSwitchChangedTask(void const * argument)
 				memcpy(&message[9], value, 5);
 			}
 
-			if(uart6Send_xMessage!=NULL)
-				for(i=0;i<MESSAGE_LENGTH;i++)
-					osMessagePut(uart6Send_xMessage, message[i], 10);
-			if(sdCardWrite_xMessage!=NULL)
-				for(i=0;i<MESSAGE_LENGTH;i++)
-				{
-					osMessagePut(sdCardWrite_xMessage, message[i], 10);
-				}
+			for(i=0;i<MESSAGE_LENGTH;i++)
+				osMessagePut(uart6Send_xMessage, message[i], 10);
+
+			for(i=0;i<MESSAGE_LENGTH;i++)
+			{
+				osMessagePut(sdCardWrite_xMessage, message[i], 10);
+			}
 		}
 	}
 }
@@ -1375,15 +1361,13 @@ void StartTempMeasureTask(void const * argument)
 		memcpy(&message[9], &adc_val, 4);
 		message[13] = '\n';
 
-		if(uart6Send_xMessage!=NULL)
-			for(i=0;i<MESSAGE_LENGTH;i++)
-				osMessagePut(uart6Send_xMessage, message[i], 10);
+		for(i=0;i<MESSAGE_LENGTH;i++)
+			osMessagePut(uart6Send_xMessage, message[i], 10);
 
-		if(sdCardWrite_xMessage!=NULL)
-			for(i=0;i<MESSAGE_LENGTH;i++)
-			{
-				osMessagePut(sdCardWrite_xMessage, message[i], 10);
-			}
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 
 		osDelay(500);
 	}
@@ -1413,17 +1397,15 @@ void StartPotmeterMeasureTask(void const * argument)
 		memcpy(&message[9], &adc_val, 4);
 		message[13] = '\n';
 
-		if(uart6Send_xMessage!=NULL)
-			for(i=0;i<MESSAGE_LENGTH;i++)
-			{
-				osMessagePut(uart6Send_xMessage, message[i], 10);
-			}
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(uart6Send_xMessage, message[i], 10);
+		}
 
-		if(sdCardWrite_xMessage!=NULL)
-			for(i=0;i<MESSAGE_LENGTH;i++)
-			{
-				osMessagePut(sdCardWrite_xMessage, message[i], 10);
-			}
+		for(i=0;i<MESSAGE_LENGTH;i++)
+		{
+			osMessagePut(sdCardWrite_xMessage, message[i], 10);
+		}
 
 		osDelay(500);
 	}
@@ -1440,11 +1422,10 @@ void BLE_Send(uint8 len1,uint8* data1,uint16 len2,uint8* data2) {
 	memcpy(&message[len1+1],data2,len2);
 	length = len1+len2;
 	//Add to UART FIFO
-	if(bleSend_xMessage != NULL)
-		for(i=0;i<length+1;i++)
-		{
-			osMessagePut(bleSend_xMessage, message[i], 10);
-		}
+	for(i=0;i<length+1;i++)
+	{
+		osMessagePut(bleSend_xMessage, message[i], 10);
+	}
 }
 
 void StartBLETask(void const * argument)
