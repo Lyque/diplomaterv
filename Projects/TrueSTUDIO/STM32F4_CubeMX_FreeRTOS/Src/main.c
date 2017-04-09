@@ -223,16 +223,6 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-#if defined(MEAS_W_LOAD)
-  MX_ADC1_Init();
-  MX_SDIO_SD_Init();
-  MX_USART6_UART_Init();
-  MX_ADC2_Init();
-  MX_USART1_UART_Init();
-#endif // defined(MEAS_W_LOAD)
-
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -292,6 +282,8 @@ int main(void)
 #if defined(MEAS_INTERRUPT_LATENCY_TIME)
   ThreadDef(INTERRUPTLATENCYTIMETASKID, StartInterruptLatencyTimeTask, osPriorityRealtime, 0, 128);
   interruptLatencyTimeTaskHandle = osThreadCreate(Thread(INTERRUPTLATENCYTIMETASKID), NULL);
+  osSemaphoreDef(INTSEM);
+  interruptLatency_xSemaphore = osSemaphoreCreate(osSemaphore(INTSEM), 1);
 #endif // defined(MEAS_INTERRUPT_LATENCY_TIME)
 
 #if defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
@@ -299,6 +291,9 @@ int main(void)
   ThreadDef(SEMAPHORESHUFFLINGTIMETASKBID, StartSemaphoreShufflingTimeTaskB, osPriorityAboveNormal, 0, 128);
   semaphoreShufflingTimeTaskAHandle = osThreadCreate(Thread(SEMAPHORESHUFFLINGTIMETASKAID), NULL);
   semaphoreShufflingTimeTaskBHandle = osThreadCreate(Thread(SEMAPHORESHUFFLINGTIMETASKBID), NULL);
+  // FreeRTOS esetén a szemafor alapértelmezett értéke 1. Nincs szükség külön függvényhivásra, hogy a teszt sikeresen lefusson.
+  osSemaphoreDef(SEMSHUFSEM);
+  semaphoreShuffling_xSemaphore = osSemaphoreCreate(osSemaphore(SEMSHUFSEM), 1);
 #endif // defined(MEAS_SEMAPHORE_SHUFFLING_TIME)
 
 #if defined(MEAS_DEADLOCK_BREAKING_TIME)
@@ -315,6 +310,10 @@ int main(void)
   ThreadDef(DATAGRAMTHROUGHPUTTIMETASKBID, StartDatagramThroughputTimeTaskB, osPriorityNormal, 0, 128);
   datagramThroughputTimeTaskAHandle = osThreadCreate(Thread(DATAGRAMTHROUGHPUTTIMETASKAID), NULL);
   datagramThroughputTimeTaskBHandle = osThreadCreate(Thread(DATAGRAMTHROUGHPUTTIMETASKBID), NULL);
+  osSemaphoreDef(DATAGRAMSEM);
+  datagramThroughput_xSemaphore = osSemaphoreCreate(osSemaphore(DATAGRAMSEM), 1);
+  osMessageQDef(DATAGRAMMES, 256, uint32_t);
+  datagramThrougput_xMessage = osMessageCreate(osMessageQ(DATAGRAMMES), NULL);
 #endif // defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
 
 #if defined(BLINKING_LED)
@@ -337,8 +336,33 @@ int main(void)
   bleTaskHandle = osThreadCreate(Thread(BLETASKID), NULL);
   uart6TaskHandle = osThreadCreate(Thread(UART6TASKID), NULL);
   sdCardTaskHandle = osThreadCreate(Thread(SDCARDTASKID), NULL);
+
+  osMessageQDef(SWITCHMES, 1, uint16_t);
+  switchInterrupt_xMessage = osMessageCreate(osMessageQ(SWITCHMES), NULL);
+  osMessageQDef(BLEMES, 64, uint8_t);
+  bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
+  osMessageQDef(BLERECEIVEMES, 64, uint8_t);
+  bleReceive_xMessage = osMessageCreate(osMessageQ(BLERECEIVEMES), NULL);
+  osSemaphoreDef(BLEEVENTSEM);
+  bleEvent_xSemaphore = osSemaphoreCreate(osSemaphore(BLEEVENTSEM), 1);
+  osMessageQDef(UART6MES, 140, uint8_t);
+  uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
+  osMessageQDef(UART6RECEIVEMES, 140, uint8_t);
+  uart6Receive_xMessage = osMessageCreate(osMessageQ(UART6RECEIVEMES), NULL);
+  osMessageQDef(SDCARDMES, 255, uint8_t);
+  sdCardWrite_xMessage = osMessageCreate(osMessageQ(SDCARDMES), NULL);
 #endif // defined(MEAS_W_LOAD)
   // ToDo: A taszkoknak szükséges stackméretet végigbogarászni.
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+#if defined(MEAS_W_LOAD)
+  MX_ADC1_Init();
+  MX_SDIO_SD_Init();
+  MX_USART6_UART_Init();
+  MX_ADC2_Init();
+  MX_USART1_UART_Init();
+#endif // defined(MEAS_W_LOAD)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -763,9 +787,6 @@ void StartPreemptionTimeTaskC(void const * argument)
 #if defined(MEAS_INTERRUPT_LATENCY_TIME)
 void StartInterruptLatencyTimeTask(void const * argument)
 {
-	osSemaphoreDef(INTSEM);
-	interruptLatency_xSemaphore = osSemaphoreCreate(osSemaphore(INTSEM), 1);
-
 	while(1)
 	{
 		if(osSemaphoreWait(interruptLatency_xSemaphore, portMAX_DELAY) == osOK)
@@ -795,9 +816,6 @@ void StartInterruptLatencyTimeTask(void const * argument)
 void StartSemaphoreShufflingTimeTaskA(void const * argument)
 {
 	int i = 0;
-
-	osSemaphoreDef(SEMSHUFSEM);
-	semaphoreShuffling_xSemaphore = osSemaphoreCreate(osSemaphore(SEMSHUFSEM), 1);
 
 	while(1)
 	{
@@ -882,13 +900,8 @@ void StartDeadlockBreakingTimeTaskC(void const * argument)
 #if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
 void StartDatagramThroughputTimeTaskA(void const * argument)
 {
-	osSemaphoreDef(DATAGRAMSEM);
-	datagramThroughput_xSemaphore = osSemaphoreCreate(osSemaphore(DATAGRAMSEM), 1);
-	osMessageQDef(DATAGRAMMES, 128, uint32_t);
-	datagramThrougput_xMessage = osMessageCreate(osMessageQ(DATAGRAMMES), NULL);
-
 	uint32_t i = 0;
-	uint32_t temp;
+	volatile uint32_t temp;
 	osEvent event;
 
 	while(1)
@@ -898,7 +911,7 @@ void StartDatagramThroughputTimeTaskA(void const * argument)
 			if(osSemaphoreWait(measureSemaphoreA_xSemaphore, portMAX_DELAY) == osOK)
 			{
 				osSemaphoreRelease(measureSemaphoreB_xSemaphore);
-				for(i=0;i<128;i++)
+				for(i=0;i<256;i++)
 				{
 					event = osMessageGet(datagramThrougput_xMessage, portMAX_DELAY);
 					if(event.status == osEventMessage)
@@ -931,7 +944,7 @@ void StartDatagramThroughputTimeTaskB(void const * argument)
 			" 	str r2, [r0, #0]								\n" /* Magas érték kiírása az OUT lábra */
 			"	pop {r0, r1, r2}								\n"
 			);
-			for(i=0;i<128;i++)
+			for(i=0;i<256;i++)
 			{
 				osMessagePut(datagramThrougput_xMessage, i, portMAX_DELAY);
 			}
@@ -1262,9 +1275,6 @@ void StartSwitchChangedTask(void const * argument)
 	osEvent event;
 	uint8_t i;
 
-	osMessageQDef(SWITCHMES, 1, uint16_t);
-	switchInterrupt_xMessage = osMessageCreate(osMessageQ(SWITCHMES), NULL);
-
 	sw0_state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_10);
 	sw1_state = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_11);
 
@@ -1439,12 +1449,6 @@ void BLE_Send(uint8 len1,uint8* data1,uint16 len2,uint8* data2) {
 
 void StartBLETask(void const * argument)
 {
-	osMessageQDef(BLEMES, 64, uint8_t);
-	bleSend_xMessage = osMessageCreate(osMessageQ(BLEMES), NULL);
-	osMessageQDef(BLERECEIVEMES, 64, uint8_t);
-	bleReceive_xMessage = osMessageCreate(osMessageQ(BLERECEIVEMES), NULL);
-	osSemaphoreDef(BLEVENTSEM);
-	bleEvent_xSemaphore = osSemaphoreCreate(osSemaphore(BLEVENTSEM), 1);
 	osStatus rsp;
 
 	// Malloc elkerülése végett
@@ -1640,11 +1644,6 @@ void StartUART6Task(void const * argument)
 	uint8_t i;
 	osEvent event;
 
-	osMessageQDef(UART6MES, 140, uint8_t);
-	uart6Send_xMessage = osMessageCreate(osMessageQ(UART6MES), NULL);
-	osMessageQDef(UART6RECEIVEMES, 140, uint8_t);
-	uart6Receive_xMessage = osMessageCreate(osMessageQ(UART6RECEIVEMES), NULL);
-
 	ThreadDef(UART6SENDTASKID, StartUART6SendTask, osPriorityNormal, 0, 128);
 	uart6SendTaskHandle = osThreadCreate(Thread(UART6SENDTASKID), NULL);
 
@@ -1758,9 +1757,6 @@ void StartSDCardTask(void const * argument)
 {
 	// SDCard deinicializálásához szükséges külsõ változó
 	extern Disk_drvTypeDef  disk;
-
-	osMessageQDef(SDCARDMES, 255, uint8_t);
-	sdCardWrite_xMessage = osMessageCreate(osMessageQ(SDCARDMES), NULL);
 
 	FATFS fileSystem;
 	FIL logFile;
