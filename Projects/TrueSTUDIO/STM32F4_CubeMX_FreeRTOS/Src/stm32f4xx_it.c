@@ -215,15 +215,15 @@ void EXTI15_10_IRQHandler(void)
 #if defined(MEAS_W_LOAD)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
-#endif
+#endif // defined(MEAS_W_LOAD)
 #if defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
-#endif
+#endif // defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME)
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
-#endif
+#endif // defined(MEAS_LATENCY) || defined(MEAS_INTERRUPT_LATENCY_TIME) || defined(MEAS_W_LOAD)
 
 #if defined(MEAS_W_LOAD)
 /**
@@ -239,7 +239,7 @@ void USART6_IRQHandler(void)
 
   /* USER CODE END USART6_IRQn 1 */
 }
-#endif
+#endif // defined(MEAS_W_LOAD)
 
 /* USER CODE BEGIN 1 */
 

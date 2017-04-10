@@ -229,10 +229,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
-#if defined(MEAS_DEADLOCK_BREAKING_TIME)
-  osMutexDef(DEADLOCKMUT);
-  deadlockBreaking_xMutex = osMutexCreate(osMutex(DEADLOCKMUT));
-#endif // defined(MEAS_DEADLOCK_BREAKING_TIME)
+
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -303,6 +300,8 @@ int main(void)
   deadlockBreakingTimeTaskAHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKAID), NULL);
   deadlockBreakingTimeTaskBHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKBID), NULL);
   deadlockBreakingTimeTaskCHandle = osThreadCreate(Thread(DEADLOCKBREAKINGTIMETASKCID), NULL);
+  osMutexDef(DEADLOCKMUT);
+  deadlockBreaking_xMutex = osMutexCreate(osMutex(DEADLOCKMUT));
 #endif // defined(MEAS_DEADLOCK_BREAKING_TIME)
 
 #if defined(MEAS_DATAGRAM_THROUGHPUT_TIME)
