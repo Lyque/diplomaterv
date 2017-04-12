@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QLabel>
 #include <QPixmap>
+#include <QThread>
 
 #include "settingsdialog.h"
 

@@ -134,82 +134,88 @@ void MainWindow::writeData(const QByteArray &data)
 
 void MainWindow::readData()
 {
+    static QByteArray data;
+
     if(this->serial->canReadLine())
     {
         while(this->serial->bytesAvailable() && this->serial->canReadLine())
         {
-            QByteArray data = this->serial->readLine(15);
+            data = data + this->serial->readLine(15);
 
-            if(data.length() == 14)
+            if(data.length()==14)
             {
                 // Done: Felbontani a beérkezett csomagot, majd feldolgozni azt.
                 QList<QByteArray> splitted = data.split(':');
-                if(splitted.length() == 2)
+
+                QByteArray entity = splitted.at(0).simplified();
+                QByteArray value = splitted.at(1);
+
+                // : karakter is előfodulhat az üzenetben. Ekkor az értéket több részből kell összerakni.
+                for(int i=2;i<splitted.length();i++)
+                    value = value + ':' + splitted.at(i);
+
+                if(entity == "error")
                 {
-                    QByteArray entity = splitted.at(0).simplified();
-                    QByteArray value = splitted.at(1);
-
-                    if(entity == "error")
-                    {
-                        resendLastCommand();
-                    }
-                    else if(entity == "led0")
-                    {
-                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
-                            emit this->led0ChangedSignal(true);
-                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
-                            emit this->led0ChangedSignal(false);
-                    }
-                    else if(entity == "led1")
-                    {
-                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
-                            emit this->led1ChangedSignal(true);
-                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
-                            emit this->led1ChangedSignal(false);
-                    }
-                    else if(entity == "switch0")
-                    {
-                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
-                            emit this->switch0ChangedSignal(true);
-                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
-                            emit this->switch0ChangedSignal(false);
-                    }
-                    else if(entity == "switch1")
-                    {
-                        if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
-                            emit this->switch1ChangedSignal(true);
-                        else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
-                            emit this->switch1ChangedSignal(false);
-                    }
-                    else if(entity == "loctemp")
-                    {
-                        uint32_t tempVal;
-
-                        memcpy(&tempVal,value,4);
-                        emit this->localTempChangedSignal(tempVal);
-                    }
-                    else if(entity == "potmeter")
-                    {
-                        uint32_t potmeterVal;
-
-                        memcpy(&potmeterVal,value,4);
-                        emit this->potmeterChangedSignal(potmeterVal);
-                    }
-                    else if(entity == "remtemp")
-                    {
-                        uint32_t tempVal;
-
-                        memcpy(&tempVal,value,4);
-                        emit this->remoteTempChangedSignal(tempVal);
-                    }
-                    else if(entity == "lux")
-                    {
-                        uint32_t lightVal;
-
-                        memcpy(&lightVal,value,4);
-                        emit this->lightChangedSignal(lightVal);
-                    }
+                    resendLastCommand();
                 }
+                else if(entity == "led0")
+                {
+                    if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                        emit this->led0ChangedSignal(true);
+                    else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                        emit this->led0ChangedSignal(false);
+                }
+                else if(entity == "led1")
+                {
+                    if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                        emit this->led1ChangedSignal(true);
+                    else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                        emit this->led1ChangedSignal(false);
+                }
+                else if(entity == "switch0")
+                {
+                    if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                        emit this->switch0ChangedSignal(true);
+                    else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                        emit this->switch0ChangedSignal(false);
+                }
+                else if(entity == "switch1")
+                {
+                    if(uint8_t(value.at(0)) == 0xAA && uint8_t(value.at(1)) == 0xAA && uint8_t(value.at(2)) == 0xAA && uint8_t(value.at(3)) == 0xAA)
+                        emit this->switch1ChangedSignal(true);
+                    else if(uint8_t(value.at(0)) == 0x55 && uint8_t(value.at(1)) == 0x55 && uint8_t(value.at(2)) == 0x55 && uint8_t(value.at(3)) == 0x55)
+                        emit this->switch1ChangedSignal(false);
+                }
+                else if(entity == "loctemp")
+                {
+                    uint32_t tempVal;
+
+                    memcpy(&tempVal,value,4);
+                    emit this->localTempChangedSignal(tempVal);
+                }
+                else if(entity == "potmeter")
+                {
+                    uint32_t potmeterVal;
+
+                    memcpy(&potmeterVal,value,4);
+                    emit this->potmeterChangedSignal(potmeterVal);
+                }
+                else if(entity == "remtemp")
+                {
+                    uint32_t tempVal;
+
+                    memcpy(&tempVal,value,4);
+                    emit this->remoteTempChangedSignal(tempVal);
+                }
+                else if(entity == "lux")
+                {
+                    uint32_t lightVal;
+
+                    memcpy(&lightVal,value,4);
+                    emit this->lightChangedSignal(lightVal);
+                }
+
+                data.clear();
             }
         }
     }
@@ -238,6 +244,7 @@ void MainWindow::showStatusMessage(const QString &message)
 
 void MainWindow::resendLastCommand()
 {
+    QThread::msleep(5);
     writeData(this->lastCommand);
 }
 
