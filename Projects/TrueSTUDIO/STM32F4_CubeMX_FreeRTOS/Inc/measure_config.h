@@ -113,8 +113,8 @@
 // BLE-specifikus makrók
 #define SENSORTAG_ADDRESS_0				0x01
 #define SENSORTAG_ADDRESS_1				0x47
-#define SENSORTAG_ADDRESS_3				0x89
 #define SENSORTAG_ADDRESS_2				0xC1
+#define SENSORTAG_ADDRESS_3				0x89
 #define SENSORTAG_ADDRESS_4				0x71
 #define SENSORTAG_ADDRESS_5				0x24
 
@@ -128,7 +128,7 @@
 #define BLECONNTIMEOUT					1000
 #define BLECONNSLAVELATENCY				0
 
-// Humidity
+// Temperature
 #define BLETEMPDATAHNDL					0x0024
 #define BLETEMPCONFIGHNDL				0x0027
 #define BLETEMPPERIODHNDL				0x0029

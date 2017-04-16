@@ -3250,13 +3250,15 @@ namespace Bluegiga {
 
             uint bytesWritten;
 
-            DataWriter dataWriter = new DataWriter();
-            dataWriter.WriteBytes(new byte[] { (byte)cmd.Length });
-            if (bgapiPacketMode)
-                bytesWritten = await port.OutputStream.WriteAsync(dataWriter.DetachBuffer());
+            using (DataWriter dataWriter = new DataWriter())
+            {
+                dataWriter.WriteBytes(new byte[] { (byte)cmd.Length });
+                if (bgapiPacketMode)
+                    bytesWritten = await port.OutputStream.WriteAsync(dataWriter.DetachBuffer());
 
-            dataWriter.WriteBytes(cmd);
-            bytesWritten = await port.OutputStream.WriteAsync(dataWriter.DetachBuffer());
+                dataWriter.WriteBytes(cmd);
+                bytesWritten = await port.OutputStream.WriteAsync(dataWriter.DetachBuffer());
+            }
             return 0; // no error handling yet
         }
 
