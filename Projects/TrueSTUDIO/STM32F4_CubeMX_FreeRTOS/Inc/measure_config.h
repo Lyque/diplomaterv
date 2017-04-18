@@ -22,9 +22,9 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_PREEMPTION_TIME
-#define BLINKING_LED
-#define MEAS_W_LOAD
+#define MEAS_TASK_SWITCHING_TIME
+//#define BLINKING_LED
+//#define MEAS_W_LOAD
 
 /**
  * A task ID-k A-tól O-ig mehetnek.
