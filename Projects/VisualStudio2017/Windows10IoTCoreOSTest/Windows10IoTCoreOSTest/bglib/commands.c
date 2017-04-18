@@ -8,17 +8,6 @@
  ****************************************************************************/
 
 #include "cmd_def.h"
-
-// User includes
-#include "stm32f4xx_hal.h"
-#include "cmsis_os.h"
-#include "measure_config.h"
-
-extern uint8_t bleConnectionHndl;
-extern osSemaphoreId bleEvent_xSemaphore;
-extern osMessageQId uart6Send_xMessage;
-extern osMessageQId sdCardWrite_xMessage;
-
 void ble_default(const void*v)
 {
 }
@@ -29,7 +18,6 @@ void ble_rsp_system_reset(const void* nul)
 
 void ble_rsp_system_hello(const void* nul)
 {
-	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_rsp_system_address_get(const struct ble_msg_system_address_get_rsp_t *msg)
@@ -84,18 +72,6 @@ void ble_rsp_system_endpoint_set_watermarks(const struct ble_msg_system_endpoint
 {
 }
 
-void ble_rsp_system_aes_setkey(const void* nul)
-{
-}
-
-void ble_rsp_system_aes_encrypt(const struct ble_msg_system_aes_encrypt_rsp_t *msg)
-{
-}
-
-void ble_rsp_system_aes_decrypt(const struct ble_msg_system_aes_decrypt_rsp_t *msg)
-{
-}
-
 void ble_rsp_flash_ps_defrag(const void* nul)
 {
 }
@@ -124,11 +100,7 @@ void ble_rsp_flash_erase_page(const struct ble_msg_flash_erase_page_rsp_t *msg)
 {
 }
 
-void ble_rsp_flash_write_data(const struct ble_msg_flash_write_data_rsp_t *msg)
-{
-}
-
-void ble_rsp_flash_read_data(const struct ble_msg_flash_read_data_rsp_t *msg)
+void ble_rsp_flash_write_words(const void* nul)
 {
 }
 
@@ -149,10 +121,6 @@ void ble_rsp_attributes_user_read_response(const void* nul)
 }
 
 void ble_rsp_attributes_user_write_response(const void* nul)
-{
-}
-
-void ble_rsp_attributes_send(const struct ble_msg_attributes_send_rsp_t *msg)
 {
 }
 
@@ -189,10 +157,6 @@ void ble_rsp_connection_get_status(const struct ble_msg_connection_get_status_rs
 }
 
 void ble_rsp_connection_raw_tx(const struct ble_msg_connection_raw_tx_rsp_t *msg)
-{
-}
-
-void ble_rsp_connection_slave_latency_disable(const struct ble_msg_connection_slave_latency_disable_rsp_t *msg)
 {
 }
 
@@ -272,14 +236,6 @@ void ble_rsp_sm_set_oob_data(const void* nul)
 {
 }
 
-void ble_rsp_sm_whitelist_bonds(const struct ble_msg_sm_whitelist_bonds_rsp_t *msg)
-{
-}
-
-void ble_rsp_sm_set_pairing_distribution_keys(const struct ble_msg_sm_set_pairing_distribution_keys_rsp_t *msg)
-{
-}
-
 void ble_rsp_gap_set_privacy_flags(const void* nul)
 {
 }
@@ -294,7 +250,6 @@ void ble_rsp_gap_discover(const struct ble_msg_gap_discover_rsp_t *msg)
 
 void ble_rsp_gap_connect_direct(const struct ble_msg_gap_connect_direct_rsp_t *msg)
 {
-	bleConnectionHndl = msg->connection_handle;
 }
 
 void ble_rsp_gap_end_procedure(const struct ble_msg_gap_end_procedure_rsp_t *msg)
@@ -322,14 +277,6 @@ void ble_rsp_gap_set_adv_data(const struct ble_msg_gap_set_adv_data_rsp_t *msg)
 }
 
 void ble_rsp_gap_set_directed_connectable_mode(const struct ble_msg_gap_set_directed_connectable_mode_rsp_t *msg)
-{
-}
-
-void ble_rsp_gap_set_initiating_con_parameters(const struct ble_msg_gap_set_initiating_con_parameters_rsp_t *msg)
-{
-}
-
-void ble_rsp_gap_set_nonresolvable_address(const struct ble_msg_gap_set_nonresolvable_address_rsp_t *msg)
 {
 }
 
@@ -389,38 +336,6 @@ void ble_rsp_hardware_timer_comparator(const struct ble_msg_hardware_timer_compa
 {
 }
 
-void ble_rsp_hardware_io_port_irq_enable(const struct ble_msg_hardware_io_port_irq_enable_rsp_t *msg)
-{
-}
-
-void ble_rsp_hardware_io_port_irq_direction(const struct ble_msg_hardware_io_port_irq_direction_rsp_t *msg)
-{
-}
-
-void ble_rsp_hardware_analog_comparator_enable(const void* nul)
-{
-}
-
-void ble_rsp_hardware_analog_comparator_read(const struct ble_msg_hardware_analog_comparator_read_rsp_t *msg)
-{
-}
-
-void ble_rsp_hardware_analog_comparator_config_irq(const struct ble_msg_hardware_analog_comparator_config_irq_rsp_t *msg)
-{
-}
-
-void ble_rsp_hardware_set_rxgain(const void* nul)
-{
-}
-
-void ble_rsp_hardware_usb_enable(const struct ble_msg_hardware_usb_enable_rsp_t *msg)
-{
-}
-
-void ble_rsp_hardware_sleep_enable(const struct ble_msg_hardware_sleep_enable_rsp_t *msg)
-{
-}
-
 void ble_rsp_test_phy_tx(const void* nul)
 {
 }
@@ -445,29 +360,8 @@ void ble_rsp_test_debug(const struct ble_msg_test_debug_rsp_t *msg)
 {
 }
 
-void ble_rsp_test_channel_mode(const void* nul)
-{
-}
-
-void ble_rsp_dfu_reset(const void* nul)
-{
-}
-
-void ble_rsp_dfu_flash_set_address(const struct ble_msg_dfu_flash_set_address_rsp_t *msg)
-{
-}
-
-void ble_rsp_dfu_flash_upload(const struct ble_msg_dfu_flash_upload_rsp_t *msg)
-{
-}
-
-void ble_rsp_dfu_flash_upload_finish(const struct ble_msg_dfu_flash_upload_finish_rsp_t *msg)
-{
-}
-
 void ble_evt_system_boot(const struct ble_msg_system_boot_evt_t *msg)
 {
-	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_system_debug(const struct ble_msg_system_debug_evt_t *msg)
@@ -490,10 +384,6 @@ void ble_evt_system_no_license_key(const void* nul)
 {
 }
 
-void ble_evt_system_protocol_error(const struct ble_msg_system_protocol_error_evt_t *msg)
-{
-}
-
 void ble_evt_flash_ps_key(const struct ble_msg_flash_ps_key_evt_t *msg)
 {
 }
@@ -512,9 +402,6 @@ void ble_evt_attributes_status(const struct ble_msg_attributes_status_evt_t *msg
 
 void ble_evt_connection_status(const struct ble_msg_connection_status_evt_t *msg)
 {
-	// Sikeres csatlakozás esetén
-	if(msg->flags & connection_connected)
-		osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_connection_version_ind(const struct ble_msg_connection_version_ind_evt_t *msg)
@@ -539,13 +426,6 @@ void ble_evt_attclient_indicated(const struct ble_msg_attclient_indicated_evt_t 
 
 void ble_evt_attclient_procedure_completed(const struct ble_msg_attclient_procedure_completed_evt_t *msg)
 {
-	// Ha write parancsra érkezett, és sikeres a folyamat...
-	if(msg->connection == bleConnectionHndl)
-		if(msg->chrhandle == BLETEMPPERIODHNDL || msg->chrhandle == BLETEMPCONFIGHNDL || msg->chrhandle == BLELIGHTPERIODHNDL || msg->chrhandle == BLELIGHTCONFIGHNDL)
-			if(msg->result == 0)
-			{
-				osSemaphoreRelease(bleEvent_xSemaphore);
-			}
 }
 
 void ble_evt_attclient_group_found(const struct ble_msg_attclient_group_found_evt_t *msg)
@@ -562,56 +442,6 @@ void ble_evt_attclient_find_information_found(const struct ble_msg_attclient_fin
 
 void ble_evt_attclient_attribute_value(const struct ble_msg_attclient_attribute_value_evt_t *msg)
 {
-	// Adatolvasás sikeresen végbement
-	if(msg->connection == bleConnectionHndl)
-	{
-		if(msg->atthandle == BLETEMPDATAHNDL)
-		{
-			if(msg->value.len == 4)
-			{
-				uint8_t message[MESSAGE_LENGTH];
-				uint8_t i;
-
-				memcpy(message, "remtemp :", 9);
-				memcpy(&message[9], msg->value.data, msg->value.len);
-				message[13] = '\n';
-
-				if(uart6Send_xMessage!=NULL)
-					for(i=0;i<MESSAGE_LENGTH;i++)
-						osMessagePut(uart6Send_xMessage, message[i], 10);
-
-				if(sdCardWrite_xMessage!=NULL)
-					for(i=0;i<MESSAGE_LENGTH;i++)
-					{
-						osMessagePut(sdCardWrite_xMessage, message[i], 10);
-					}
-			}
-		}
-		else if(msg->atthandle == BLELIGHTDATAHNDL)
-		{
-			if(msg->value.len == 2)
-			{
-				uint8_t message[MESSAGE_LENGTH];
-				uint8_t i;
-
-				memset(message, 0, MESSAGE_LENGTH);
-				memcpy(message, "lux     :", 9);
-				memcpy(&message[9], msg->value.data, msg->value.len);
-				message[13] = '\n';
-
-				if(uart6Send_xMessage!=NULL)
-					for(i=0;i<MESSAGE_LENGTH;i++)
-						osMessagePut(uart6Send_xMessage, message[i], 10);
-
-				if(sdCardWrite_xMessage!=NULL)
-					for(i=0;i<MESSAGE_LENGTH;i++)
-					{
-						osMessagePut(sdCardWrite_xMessage, message[i], 10);
-					}
-			}
-		}
-	}
-	osSemaphoreRelease(bleEvent_xSemaphore);
 }
 
 void ble_evt_attclient_read_multiple_response(const struct ble_msg_attclient_read_multiple_response_evt_t *msg)
@@ -655,14 +485,6 @@ void ble_evt_hardware_soft_timer(const struct ble_msg_hardware_soft_timer_evt_t 
 }
 
 void ble_evt_hardware_adc_result(const struct ble_msg_hardware_adc_result_evt_t *msg)
-{
-}
-
-void ble_evt_hardware_analog_comparator_status(const struct ble_msg_hardware_analog_comparator_status_evt_t *msg)
-{
-}
-
-void ble_evt_dfu_boot(const struct ble_msg_dfu_boot_evt_t *msg)
 {
 }
 
