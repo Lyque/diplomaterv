@@ -505,6 +505,8 @@ namespace Windows10IoTCoreOSTest
                             else
                                 this.ErrorMessage.Text = "Semaphore timeout";
                         }
+
+                        await bglib.SendCommandAsync(this.bleSerial, bglib.BLECommandConnectionDisconnect(this.bleConnectionHndl));
                     }
                     catch (Exception ex)
                     {
@@ -517,8 +519,6 @@ namespace Windows10IoTCoreOSTest
 
         private void processLocalTemp(byte[] data)
         {
-            const float filterCoeff = 5;
-
             if(data.Length == 2)
             {
                 int val = checked((int)(data[0] << 4 | data[1] >> 4));
