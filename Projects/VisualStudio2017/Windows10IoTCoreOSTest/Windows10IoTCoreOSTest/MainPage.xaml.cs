@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -108,21 +109,50 @@ namespace Windows10IoTCoreOSTest
         private string fileName = "logfile.txt";
         private List<string> stringQueue;
 
+        private bool logfileThreadAbort;
+        private Task logfileThread;
+        private bool adcThreadAbort;
+        private Task adcThread;
+        private bool bleThreadAbort;
+        private Task bleThread;
+        private bool serialListenerThreadAbort;
+        private Task serialListenerThread;
+
         public object Thread { get; private set; }
 
         public MainPage()
         {
             this.InitializeComponent();
 
+            // Window.Current.Closed +=
+            Application.Current.Suspending += (ss, ee) =>
+            {
+                Debug.WriteLine("Application closed");
+                this.logfileThreadAbort = true;
+                this.adcThreadAbort = true;
+                this.bleThreadAbort = true;
+                this.serialListenerThreadAbort = true;
+
+                this.logfileThread.Wait();
+                this.adcThread.Wait();
+                this.bleThread.Wait();
+                this.serialListenerThread.Wait();
+            };
+
             this.initLog();
             this.initGPIO();
             this.initI2C();
             this.initBLE();
 
-            this.dumpToFile();
-            this.readADCPeriodically();
-            this.readBLEPeriodically();
-            this.SerialListen();
+            this.logfileThreadAbort = false;
+            this.adcThreadAbort = false;
+            this.bleThreadAbort = false;
+            this.serialListenerThreadAbort = false;
+
+            this.logfileThread = this.dumpToFile();
+            this.adcThread = this.readADCPeriodically();
+            this.bleThread = this.readBLEPeriodically();
+            this.serialListenerThread = this.SerialListen();
         }
 
         private async void initLog()
@@ -304,6 +334,8 @@ namespace Windows10IoTCoreOSTest
             // LED0 értékének beállitása
             this.LED0Pin.Write(GpioPinValue.Low);
             this.stringQueue.Add("LED0 LOW" + Environment.NewLine);
+            Application.Current.Exit();
+            Debug.WriteLine("Close in progress...");
         }
 
         private void LED1CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -367,7 +399,7 @@ namespace Windows10IoTCoreOSTest
             this.OUTPin.Write(this.INPin.Read());
         }
 
-        private async void readADCPeriodically()
+        private async Task readADCPeriodically()
         {
             // Szükséges üzenetek és bufferek
             byte[] changeToCh0WriteBuff = new byte[] { ADC_I2C_MODE_REG, ADC_I2C_MODE_AWAKE_CH0 };
@@ -381,21 +413,26 @@ namespace Windows10IoTCoreOSTest
 
             while (true)
             {
+                if (this.adcThreadAbort)
+                    return;
+
                 if (this.I2CAdc != null && this.I2cInitialized)
                 {
                     try
                     {
                         // Hőmérő kiolvasása. A konverzió kétszer kerül inditásra, mert egyébként a két csatorna befolyásolja egymást.
                         this.I2CAdc.Write(startConvCh0WriteBuff);
-                        await Task.Delay(1);
+                        await Task.Delay(15);
                         this.I2CAdc.Write(startConvCh0WriteBuff);
+                        await Task.Delay(1);
                         this.I2CAdc.WriteRead(readCh0RegWriteBuff, readTempBuff);
                         // Hőmérő adatainak feldolgozása
                         this.processLocalTemp(readTempBuff);
                         // Potmeter kiolvasása
                         this.I2CAdc.Write(startConvCh1WriteBuff);
-                        await Task.Delay(1);
+                        await Task.Delay(15);
                         this.I2CAdc.Write(startConvCh1WriteBuff);
+                        await Task.Delay(1);
                         this.I2CAdc.WriteRead(readCh1RegWriteBuff, readPotmeterBuff);
                         // Potmeter adatainak feldolgozása
                         this.processPotmeter(readPotmeterBuff);
@@ -410,7 +447,7 @@ namespace Windows10IoTCoreOSTest
             }
         }
 
-        private async void readBLEPeriodically()
+        private async Task readBLEPeriodically()
         {
             bool rsp;
 
@@ -423,9 +460,15 @@ namespace Windows10IoTCoreOSTest
                     {
                         do
                         {
+                            if (this.bleThreadAbort)
+                                return;
+
                             await bglib.SendCommandAsync(this.bleSerial, bglib.BLECommandSystemReset(0));
                             rsp = await this.bleSemaphore.WaitAsync(2000);
                         } while (!rsp);
+
+                        if (this.bleThreadAbort)
+                            return;
 
                         if (rsp)
                         {
@@ -435,6 +478,9 @@ namespace Windows10IoTCoreOSTest
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
 
+                        if (this.bleThreadAbort)
+                            return;
+
                         if (rsp)
                         {
                             byte[] bleAddress = new byte[] { SENSORTAG_ADDRESS_0, SENSORTAG_ADDRESS_1, SENSORTAG_ADDRESS_2, SENSORTAG_ADDRESS_3, SENSORTAG_ADDRESS_4, SENSORTAG_ADDRESS_5 };
@@ -443,6 +489,9 @@ namespace Windows10IoTCoreOSTest
                         }
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
+
+                        if (this.bleThreadAbort)
+                            return;
 
                         // Config temperature sensor period
                         if (rsp)
@@ -454,6 +503,9 @@ namespace Windows10IoTCoreOSTest
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
 
+                        if (this.bleThreadAbort)
+                            return;
+
                         // Config light sensor period
                         if (rsp)
                         {
@@ -463,6 +515,9 @@ namespace Windows10IoTCoreOSTest
                         }
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
+
+                        if (this.bleThreadAbort)
+                            return;
 
                         // Start temperature measurement
                         if (rsp)
@@ -474,6 +529,9 @@ namespace Windows10IoTCoreOSTest
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
 
+                        if (this.bleThreadAbort)
+                            return;
+
                         // Start light measurement
                         if (rsp)
                         {
@@ -484,9 +542,16 @@ namespace Windows10IoTCoreOSTest
                         else
                             this.ErrorMessage.Text = "Semaphore timeout";
 
-                        while(rsp)
+                        if (this.bleThreadAbort)
+                            return;
+
+                        while (rsp)
                         {
                             await Task.Delay(1000);
+
+                            if (this.bleThreadAbort)
+                                return;
+
                             // Read temperature data
                             if (rsp)
                             {
@@ -496,6 +561,9 @@ namespace Windows10IoTCoreOSTest
                             else
                                 this.ErrorMessage.Text = "Semaphore timeout";
 
+                            if (this.bleThreadAbort)
+                                return;
+
                             // Read light data
                             if (rsp)
                             {
@@ -504,6 +572,9 @@ namespace Windows10IoTCoreOSTest
                             }
                             else
                                 this.ErrorMessage.Text = "Semaphore timeout";
+
+                            if (this.bleThreadAbort)
+                                return;
                         }
 
                         await bglib.SendCommandAsync(this.bleSerial, bglib.BLECommandConnectionDisconnect(this.bleConnectionHndl));
@@ -554,12 +625,15 @@ namespace Windows10IoTCoreOSTest
         }
 
         // Serial port listen
-        private async void SerialListen()
+        private async Task SerialListen()
         {
             try
             {
                 while (true)
                 {
+                    if (this.serialListenerThreadAbort)
+                        return;
+
                     if (this.bleSerial != null && this.SerialInitialized)
                     {
                         await ReadSerialAsync();
@@ -695,12 +769,15 @@ namespace Windows10IoTCoreOSTest
             this.bleSemaphore.Release();
         }
 
-        private async void dumpToFile()
+        private async Task dumpToFile()
         {
             while (true)
             {
                 if (this.logFile != null) 
                 {
+                    if (this.logfileThreadAbort)
+                        return;
+
                     while (this.stringQueue.Count() > 0)
                     {
                         try
