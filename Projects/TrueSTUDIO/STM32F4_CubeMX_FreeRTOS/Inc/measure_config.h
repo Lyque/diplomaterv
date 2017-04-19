@@ -22,9 +22,9 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_TASK_SWITCHING_TIME
+#define MEAS_INTERRUPT_LATENCY_TIME
 //#define BLINKING_LED
-//#define MEAS_W_LOAD
+#define MEAS_W_LOAD
 
 /**
  * A task ID-k A-tól O-ig mehetnek.
@@ -93,8 +93,8 @@
 #define SDCARDTASKID					O
 #endif
 
-#define LOW_PRIORITY_TASK_LOOP_DELAY		500000
-#define MEDIUM_PRIORITY_TASK_LOOP_DELAY		250000
+#define LOW_PRIORITY_TASK_LOOP_DELAY		300000
+#define MEDIUM_PRIORITY_TASK_LOOP_DELAY		100000
 #define HIGH_PRIORITY_TASK_LOOP_DELAY		50000
 
 #define BLEBAUDRATE							115200

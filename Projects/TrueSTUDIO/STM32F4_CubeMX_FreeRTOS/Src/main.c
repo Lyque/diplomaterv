@@ -762,7 +762,7 @@ void StartPreemptionTimeTaskB(void const * argument)
 		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
 		{
 			osSemaphoreRelease(measureSemaphoreC_xSemaphore);
-			osDelay(11);
+			osDelay(5);
 			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
 		}
 	}
@@ -776,7 +776,7 @@ void StartPreemptionTimeTaskC(void const * argument)
 	{
 		if(osSemaphoreWait(measureSemaphoreC_xSemaphore, portMAX_DELAY) == osOK)
 		{
-			osDelay(23);
+			osDelay(7);
 			for(i=0;i<HIGH_PRIORITY_TASK_LOOP_DELAY;i++){}
 		}
 	}
@@ -836,7 +836,7 @@ void StartSemaphoreShufflingTimeTaskB(void const * argument)
 	{
 		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
 		{
-			osDelay(10);
+			osDelay(5);
 			if(osSemaphoreWait(semaphoreShuffling_xSemaphore, portMAX_DELAY) == osOK)
 			{
 				osSemaphoreRelease(semaphoreShuffling_xSemaphore);
@@ -874,7 +874,7 @@ void StartDeadlockBreakingTimeTaskB(void const * argument)
 		if(osSemaphoreWait(measureSemaphoreB_xSemaphore, portMAX_DELAY) == osOK)
 		{
 			osSemaphoreRelease(measureSemaphoreC_xSemaphore);
-			osDelay(11);
+			osDelay(5);
 			for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
 		}
 	}
@@ -886,7 +886,7 @@ void StartDeadlockBreakingTimeTaskC(void const * argument)
 	{
 		if(osSemaphoreWait(measureSemaphoreC_xSemaphore, portMAX_DELAY) == osOK)
 		{
-			osDelay(23);
+			osDelay(7);
 			if(osMutexWait(deadlockBreaking_xMutex, portMAX_DELAY) == osOK)
 			{
 				osMutexRelease(deadlockBreaking_xMutex);
