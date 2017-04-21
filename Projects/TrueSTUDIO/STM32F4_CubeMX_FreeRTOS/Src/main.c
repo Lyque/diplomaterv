@@ -858,7 +858,7 @@ void StartDeadlockBreakingTimeTaskA(void const * argument)
 			osSemaphoreRelease(measureSemaphoreB_xSemaphore);
 			if(osMutexWait(deadlockBreaking_xMutex, portMAX_DELAY) == osOK)
 			{
-				for(i=0;i<LOW_PRIORITY_TASK_LOOP_DELAY;i++){}
+				for(i=0;i<MEDIUM_PRIORITY_TASK_LOOP_DELAY;i++){}
 				osMutexRelease(deadlockBreaking_xMutex);
 			}
 		}

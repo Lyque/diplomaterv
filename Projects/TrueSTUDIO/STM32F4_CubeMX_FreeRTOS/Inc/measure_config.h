@@ -22,7 +22,7 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_INTERRUPT_LATENCY_TIME
+#define MEAS_DATAGRAM_THROUGHPUT_TIME
 //#define BLINKING_LED
 #define MEAS_W_LOAD
 
