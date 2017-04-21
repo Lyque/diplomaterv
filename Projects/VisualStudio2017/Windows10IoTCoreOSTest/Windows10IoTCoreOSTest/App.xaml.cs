@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -30,6 +31,13 @@ namespace Windows10IoTCoreOSTest
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.EnteredBackground += App_EnteredBackground;
+
+        }
+
+        private void App_EnteredBackground(object sender, EnteredBackgroundEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

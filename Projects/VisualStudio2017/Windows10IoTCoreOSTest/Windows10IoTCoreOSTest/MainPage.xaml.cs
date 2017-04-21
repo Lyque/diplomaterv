@@ -125,7 +125,8 @@ namespace Windows10IoTCoreOSTest
             this.InitializeComponent();
 
             // Window.Current.Closed +=
-            Application.Current.Suspending += (ss, ee) =>
+           // Window.Current.
+            /*Application.Current.Suspending += (ss, ee) =>
             {
                 Debug.WriteLine("Application closed");
                 this.logfileThreadAbort = true;
@@ -137,7 +138,7 @@ namespace Windows10IoTCoreOSTest
                 this.adcThread.Wait();
                 this.bleThread.Wait();
                 this.serialListenerThread.Wait();
-            };
+            };*/
 
             this.initLog();
             this.initGPIO();
@@ -154,6 +155,8 @@ namespace Windows10IoTCoreOSTest
             this.bleThread = this.readBLEPeriodically();
             this.serialListenerThread = this.SerialListen();
         }
+
+        
 
         private async void initLog()
         {
@@ -334,8 +337,10 @@ namespace Windows10IoTCoreOSTest
             // LED0 értékének beállitása
             this.LED0Pin.Write(GpioPinValue.Low);
             this.stringQueue.Add("LED0 LOW" + Environment.NewLine);
-            Application.Current.Exit();
+            
+            
             Debug.WriteLine("Close in progress...");
+            
         }
 
         private void LED1CheckBox_Checked(object sender, RoutedEventArgs e)
