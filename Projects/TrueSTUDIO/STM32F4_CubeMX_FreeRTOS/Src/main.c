@@ -351,7 +351,7 @@ int main(void)
   osMessageQDef(SDCARDMES, 255, uint8_t);
   sdCardWrite_xMessage = osMessageCreate(osMessageQ(SDCARDMES), NULL);
 #endif // defined(MEAS_W_LOAD)
-  // ToDo: A taszkoknak szükséges stackméretet végigbogarászni.
+  // Done: A taszkoknak szükséges stackméretet végigbogarászni.
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();

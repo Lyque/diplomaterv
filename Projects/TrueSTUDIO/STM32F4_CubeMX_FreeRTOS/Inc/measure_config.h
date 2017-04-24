@@ -22,7 +22,7 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_DATAGRAM_THROUGHPUT_TIME
+#define MEAS_TASK_SWITCHING_TIME
 //#define BLINKING_LED
 #define MEAS_W_LOAD
 
@@ -40,7 +40,7 @@
  * Ütemezõ: 0x0
  */
 
-// ToDo: A taszkok ID-jait jól megválasztani!
+// Done: A taszkok ID-jait jól megválasztani!
 #define IDLETASKID						"A"
 #define STARTMEASURETASKID				B
 
