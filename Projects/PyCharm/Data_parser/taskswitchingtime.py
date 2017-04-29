@@ -37,10 +37,11 @@ def parse(filename):
                         # If the switch is real
                         if fromID != row["ID"]:
                             time_us = cntr * time_tick_ns / 1000.0
-                            print str(time_us) + " us"
-                            # print "Ends @Line: " + str(line)
-                            outputfile.write(str(time_us) + " us\n")
-                            data_list.append(time_us)
+                            if time_us > 2:
+                                print str(time_us) + " us"
+                                # print "Ends @Line: " + str(line)
+                                outputfile.write(str(time_us) + " us\n")
+                                data_list.append(time_us)
                         cntr = 0
     
                     if measure:

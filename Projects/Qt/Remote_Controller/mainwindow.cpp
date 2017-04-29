@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -144,6 +145,7 @@ void MainWindow::readData()
 
             if(data.length()==14)
             {
+                qDebug() << data;
                 // Done: Felbontani a beérkezett csomagot, majd feldolgozni azt.
                 QList<QByteArray> splitted = data.split(':');
 
