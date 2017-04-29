@@ -22,9 +22,9 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_INTERRUPT_LATENCY_TIME
+#define MEAS_LATENCY
 //#define BLINKING_LED
-#define MEAS_W_LOAD
+//#define MEAS_W_LOAD
 
 /**
  * A task ID-k A-tól O-ig mehetnek.
@@ -40,7 +40,7 @@
  * Ütemezõ: 0x0
  */
 
-// ToDo: A taszkok ID-jait jól megválasztani!
+// Done: A taszkok ID-jait jól megválasztani!
 #define IDLETASKID						"A"
 #define STARTMEASURETASKID				B
 

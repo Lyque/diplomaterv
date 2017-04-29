@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.4 (64-bit)
+# SW Build 1756540 on Mon Jan 23 19:11:23 MST 2017
+# IP Build 1755317 on Mon Jan 23 20:30:07 MST 2017
+# Start of session at: Tue Apr 25 12:35:33 2017
+# Process ID: 4932
+# Current directory: D:/My Tresors/Diplomaterv/Github/Projects/Vivado/Counter/Counter.runs/synth_1
+# Command line: vivado.exe -log Basys3_Counter_Top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source Basys3_Counter_Top.tcl
+# Log file: D:/My Tresors/Diplomaterv/Github/Projects/Vivado/Counter/Counter.runs/synth_1/Basys3_Counter_Top.vds
+# Journal file: D:/My Tresors/Diplomaterv/Github/Projects/Vivado/Counter/Counter.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source Basys3_Counter_Top.tcl -notrace

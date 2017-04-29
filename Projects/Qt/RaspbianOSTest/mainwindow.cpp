@@ -165,19 +165,19 @@ void MainWindow::readADCPeriodically()
         if(this->adcThreadAbort)
             return;
 
+        //wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA0_CONV_START);
+        //QThread::msleep(15);
         wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA0_CONV_START);
-        QThread::msleep(15);
-        wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA0_CONV_START);
-        QThread::msleep(1);
+        //QThread::msleep(1);
         result = wiringPiI2CReadReg16(this->i2cDevice, ADC_I2C_DATA0_REG | ADC_I2C_READ_INC);
         // Byte-swap
         result = (((result >> 8) & 0xFF) | ((result << 8) & 0xFF00));
         this->processLocalTemp(result);
 
+        //wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA1_CONV_START);
+        //QThread::msleep(15);
         wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA1_CONV_START);
-        QThread::msleep(15);
-        wiringPiI2CWriteReg8(this->i2cDevice, ADC_I2C_MODE_REG, ADC_I2C_DATA1_CONV_START);
-        QThread::msleep(1);
+        //QThread::msleep(1);
         result = wiringPiI2CReadReg16(this->i2cDevice, ADC_I2C_DATA1_REG | ADC_I2C_READ_INC);
         // Byte-swap
         result = (((result >> 8) & 0xFF) | ((result << 8) & 0xFF00));
@@ -394,7 +394,7 @@ void MainWindow::HelloResponse(QObject *sender, BGLib::HelloEventArgs e)
     Q_UNUSED(sender)
     Q_UNUSED(e)
 
-    qDebug() << "Hello response";
+    //qDebug() << "Hello response";
     this->bleSemaphore->release(1);
 }
 
@@ -402,7 +402,7 @@ void MainWindow::GAPConnectDirectResponse(QObject *sender, BGLib::ConnectDirectE
 {
     Q_UNUSED(sender)
 
-    qDebug() << "ConnectDirect response";
+    //qDebug() << "ConnectDirect response";
     this->bleConnectionHndl = e.connection_handle;
 }
 
@@ -412,7 +412,7 @@ void MainWindow::SystemBootEvent(QObject *sender, BGLib::BootEventArgs e)
     Q_UNUSED(sender)
     Q_UNUSED(e)
 
-    qDebug() << "SystemBoot event";
+    //qDebug() << "SystemBoot event";
     this->bleSemaphore->release(1);
 }
 
@@ -420,7 +420,7 @@ void MainWindow::ConnectionStatusEvent(QObject *sender, BGLib::ConnectionStatusE
 {
     Q_UNUSED(sender)
 
-    qDebug() << "ConnectionStatus event";
+    //qDebug() << "ConnectionStatus event";
     if((e.flags & 0x01) != 0) // connection_connected
     {
         emit this->errorMessage("", "");
@@ -432,7 +432,7 @@ void MainWindow::ATTClientProcedureCompletedEvent(QObject *sender, BGLib::Proced
 {
     Q_UNUSED(sender)
 
-    qDebug() << "ProcedureCompleted event";
+    //qDebug() << "ProcedureCompleted event";
     // Ha Write parancsra érkezett, és sikeres a folyamat...
     if(e.connection == this->bleConnectionHndl)
         if(e.chrhandle == BLETEMPPERIODHNDL || e.chrhandle == BLETEMPCONFIGHNDL || e.chrhandle == BLELIGHTPERIODHNDL || e.chrhandle == BLELIGHTCONFIGHNDL)
@@ -446,7 +446,7 @@ void MainWindow::ATTClientAttributeValueEvent(QObject *sender, BGLib::AttributeV
 {
     Q_UNUSED(sender)
 
-    qDebug() << "AttributeValue event";
+    //qDebug() << "AttributeValue event";
     // Adatolvasás sikeresen megtörtént
     if(e.connection == this->bleConnectionHndl)
     {
@@ -562,6 +562,6 @@ void MainWindow::errorMessageReceived(QString errorValue, QString errorMessage)
 
 void MainWindow::sendBLECommandSlot(QByteArray command)
 {
-    qDebug() << "Serial data sent";
+    //qDebug() << "Serial data sent";
     this->bglib.SendCommand(this->bleSerial, command);
 }
