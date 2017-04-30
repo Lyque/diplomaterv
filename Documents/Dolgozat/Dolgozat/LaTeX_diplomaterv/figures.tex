@@ -1,0 +1,973 @@
+\newcounter{halftick}
+
+%Plots
+% LatencyAndJitter
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 0.76,
+    xmax = 1.84,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/LatencyAndJitter.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/LatencyAndJitter.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/LatencyAndJitter.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 0.76,
+    xmax = 1.84,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/LatencyAndJitter.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/LatencyAndJitter.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/LatencyAndJitter.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Késleltetés és Jitter terheléssel és terhelés nélkül.}
+\label{fig:LatencyAndJitter}
+\end{figure}
+
+% TaskSwitching
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 2.64,
+    xmax = 3.22,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/FreeRTOSTaskSwitching.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {2},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/FreeRTOSTaskSwitching.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/FreeRTOSTaskSwitching.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 14.62,
+    xmax = 14.96,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/uCOSTaskSwitching.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/uCOSTaskSwitching.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/uCOSTaskSwitching.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Taszkváltási idõ terheléssel és terhelés nélkül.}
+\label{fig:TaskSwitching}
+\end{figure}
+
+% Preemption
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 4.58,
+    xmax = 4.76,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/FreeRTOSPreemption.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/FreeRTOSPreemption.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/FreeRTOSPreemption.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 15.6,
+    xmax = 15.86,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/uCOSPreemption.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/uCOSPreemption.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/uCOSPreemption.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Premptálási idõ terheléssel és terhelés nélkül.}
+\label{fig:Preemption}
+\end{figure}
+
+% Interrupt Latncy
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 8.16,
+    xmax = 9.4,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/InterruptLatency.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {8},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/InterruptLatency.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/InterruptLatency.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 8.16,
+    xmax = 9.4,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/InterruptLatency.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/InterruptLatency.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/InterruptLatency.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Megszakítás-késleltetési idõ terheléssel és terhelés nélkül.}
+\label{fig:InterruptLatency}
+\end{figure}
+
+% SemaphoreShuffling
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 1.74,
+    xmax = 1.9,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/SemaphoreShuffling.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {8},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/SemaphoreShuffling.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/SemaphoreShuffling.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 1.74,
+    xmax = 1.9,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/SemaphoreShuffling.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {8},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/SemaphoreShuffling.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/SemaphoreShuffling.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Szemafor-váltási idõ terheléssel és terhelés nélkül.}
+\label{fig:SemaphoreShuffling}
+\end{figure}
+
+% DeadlockBreaking
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 3.38,
+    xmax = 3.58,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/DeadlockBreaking.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {8},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/DeadlockBreaking.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/DeadlockBreaking.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 3.38,
+    xmax = 3.58,
+    %xtick =  data,
+    xtick distance =  {0.02},
+    xticklabels from table = {data/DeadlockBreaking.dat}{Label},
+    xticklabel={\pgfmathprintnumber\tick},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {5},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/DeadlockBreaking.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/DeadlockBreaking.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Deadlock-feloldási idõ terheléssel és terhelés nélkül.}
+\label{fig:DeadlockBreaking}
+\end{figure}
+
+% DatagramThroughput
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 1368,
+    xmax = 1388,
+    %xtick =  data,
+    xtick distance =  {1},
+    xticklabels from table = {data/FreeRTOSDatagramThroughput.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {5},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=FreeRTOS_wo_Load, /pgf/number format/read comma as period] {data/FreeRTOSDatagramThroughput.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=FreeRTOS_w_Load, /pgf/number format/read comma as period] {data/FreeRTOSDatagramThroughput.dat};
+  \addlegendentry{FreeRTOS}
+  \addlegendentry{FreeRTOS terheléssel}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 785,
+    xmax = 805,
+    %xtick =  data,
+    xtick distance =  {1},
+    xticklabels from table = {data/uCOSDatagramThroughput.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {8},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=uCOS_wo_Load, /pgf/number format/read comma as period] {data/uCOSDatagramThroughput.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=uCOS_w_Load, /pgf/number format/read comma as period] {data/uCOSDatagramThroughput.dat};
+  \addlegendentry{\textmugreek C/OS--III}
+  \addlegendentry{\textmugreek C/OS--III terheléssel}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Datagram-átviteli idõ terheléssel és terhelés nélkül.}
+\label{fig:DatagramThroughput}
+\end{figure}
+
+% LatencyAndJitter Raspberry
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 100,
+    xmax = 136,
+    %xtick =  data,
+    xtick distance =  {0.5},
+    xticklabels from table = {data/Linux.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=2,
+        legend cell align=left,
+        %/tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=Headed, /pgf/number format/read comma as period] {data/Linux.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=Headless, /pgf/number format/read comma as period] {data/Linux.dat};
+    \addplot[const plot, green, fill, fill opacity = 0.4] table [ y=HeadlessPrio, /pgf/number format/read comma as period] {data/Linux.dat};
+  \addlegendentry{Raspbian grafikus felülettel}
+  \addlegendentry{Raspbian grafikus felület nélkül}
+  \addlegendentry{Raspbian grafikus felület nélkül, magasabb prioritással}
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+    /pgf/number format/.cd,
+    use comma,
+    %1000 sep={},
+    width=\columnwidth,
+    ticklabel style = {font=\tiny},
+    height=5cm,
+    xlabel = {{ Idõ  [$\mu s$]}},
+    ylabel = { Elõfordulás  [\%]},
+    grid=major,
+    xmin = 40,
+    xmax = 105,
+    %xtick =  data,
+    xtick distance =  {1},
+    xticklabels from table = {data/Windows.dat}{Label},
+    xticklabel={
+    \ifodd\ticknum$\setcounter{halftick}{\ticknum/2}$
+    \else$\setcounter{halftick}{\ticknum}$
+    \fi
+    \ifodd\thehalftick$\pgfmathprintnumber\tick$
+    \fi},
+    y tick label style={
+    /pgf/number format/.cd,
+    fixed,
+    fixed zerofill,
+    precision=2
+    },
+    ymin = 0,
+    ytick distance = {4},
+    %legend pos=north west
+    legend style={
+        at={(0.0,1.01)},
+        anchor=south west,
+        legend columns=-1,
+        /tikz/every even column/.append style={column sep=1.0cm},
+        font=\fontsize{7}{8}\selectfont
+        },
+    legend image code/.code={%
+        \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        },
+]
+    \addplot[const plot, red, fill, fill opacity = 0.4] table [ y=Headed, /pgf/number format/read comma as period] {data/Windows.dat};
+    \addplot[const plot, blue, fill, fill opacity = 0.4] table [ y=Headless, /pgf/number format/read comma as period] {data/Windows.dat};
+  \addlegendentry{Windows 10 IoT Headed}
+  \addlegendentry{Windows 10 IoT Headless}
+\end{axis}
+\end{tikzpicture}
+\caption[]{Késleltetés és Jitter Raspberry Pi-n futó rendszereknél terheléssel és terhelés nélkül.}
+\label{fig:LatencyAndJitterRaspi}
+\end{figure}
+
+
+%FlowCharts
+% StartMeasure
+\begin{figure}[h!]
+\centering
+\includegraphics[height=5cm]{figures/FlowCharts/StartMeasure.eps}
+\caption{StartMeasure taszk folyamatábrája.}
+\label{fig:StartMeas}
+\end{figure}
+
+% TaskSwitching
+\begin{figure}[h!]
+\centering
+\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/TaskSwitching.eps}
+\caption{Taszkváltási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:TaskSwitching}
+\end{figure}
+
+% Preemption
+\begin{figure}[h!]
+\centering
+\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/Preemption.eps}
+\caption{Preemtálási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:Preemption}
+\end{figure}
+
+% InterruptLatency
+\begin{figure}[h!]
+\centering
+\includegraphics[height=6.8cm]{figures/FlowCharts/InterruptLatency.eps}
+\caption{Megszakítás-késleltetési idõ méréséhez használt taszk folyamatábrája.}
+\label{fig:InterruptLatency}
+\end{figure}
+
+% SemaphoreShuffling
+\begin{figure}[h!]
+\centering
+\includegraphics[height=12cm]{figures/FlowCharts/SemaphoreShuffling.eps}
+\caption{Szemafor-váltási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:SemaphoreShuffling}
+\end{figure}
+
+% DeadlockBreaking
+\begin{figure}[h!]
+\centering
+\includegraphics[height=11.81cm, angle=90]{figures/FlowCharts/DeadlockBreaking.eps}
+\caption{Deadlock-feloldási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:DeadlockBreaking}
+\end{figure}
+
+% DatagramThroughput
+\begin{figure}[h!]
+\centering
+\includegraphics[height=16.53cm]{figures/FlowCharts/DatagramThroughput.eps}
+\caption{Datagram-átviteli idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:DatagramThroughput}
+\end{figure}
+
+% A3 paper size
+\clearpage
+\begingroup
+\advance\textwidth\pdfpagewidth
+\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
+\pdfpagewidth=2\pdfpagewidth
+
+% ADCTask
+\begin{figure}[h!]
+\centering
+\includegraphics[height=24.8cm, angle=90]{figures/FlowCharts/ADCTask.eps}
+\caption{Analog-Digital konverziót végzõ taszkok folyamatábrája.}
+\label{fig:ADCTask}
+\end{figure}
+
+% ChangeLEDState
+\begin{figure}[h!]
+\centering
+\includegraphics[height=23.25cm, angle=90]{figures/FlowCharts/ChangeLEDState.eps}
+\caption{A LED-ek állapotát vezérlõ taszkok folyamatábrája.}
+\label{fig:ChangeLEDState}
+\end{figure}
+
+\clearpage
+\endgroup
+
+% A3 paper size
+\clearpage
+\begingroup
+\advance\textwidth\pdfpagewidth
+\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
+\pdfpagewidth=2\pdfpagewidth
+
+% SwitchChanged
+\begin{figure}[h!]
+\centering
+\includegraphics[height=31cm, angle=90]{figures/FlowCharts/SwitchChanged.eps}
+\caption{Kapcsolók változását kezelõ taszkok folyamatábrája.}
+\label{fig:SwitchChanged}
+\end{figure}
+
+\clearpage
+\endgroup
+
+% A3 paper size
+\clearpage
+\begingroup
+\advance\textwidth\pdfpagewidth
+\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
+\pdfpagewidth=2\pdfpagewidth
+
+% BLE
+\begin{figure}[h!]
+\centering
+\includegraphics[height=28.62cm, angle=90]{figures/FlowCharts/BLE.eps}
+\caption{BLE112 modult vezérlõ taszk folyamatábrája.}
+\label{fig:BLE}
+\end{figure}
+
+\clearpage
+\endgroup
+
+% BLEReceive
+\begin{figure}[h!]
+\centering
+\includegraphics[height=15.83cm]{figures/FlowCharts/BLEReceive.eps}
+\caption{BLE112 modultól érkezõ válaszok feldolgozását taszk folyamatábrája.}
+\label{fig:BLEReceive}
+\end{figure}
+
+% BLESend
+\begin{figure}[h!]
+\centering
+\includegraphics[height=7.09cm]{figures/FlowCharts/BLESend.eps}
+\caption{BLE112 modulnak küldött üzenetek továbbítását végzõ taszk folyamatábrája.}
+\label{fig:BLESend}
+\end{figure}
+
+% UARTSend
+\begin{figure}[h!]
+\centering
+\includegraphics[height=7.09cm]{figures/FlowCharts/UARTSend.eps}
+\caption{A vezérlõnek küldött üzenetek továbbítását végzõ taszk folyamatábrája.}
+\label{fig:UARTSend}
+\end{figure}
+
+\begingroup
+\clearpage
+\newgeometry{top = 0.7cm}
+
+% UARTReceive
+\begin{figure}[h!]
+\centering
+\includegraphics[height=24.8cm]{figures/FlowCharts/UARTReceive.eps}
+\caption{A vezérlõ felöl érkezõ üzenetek feldolgozását végzõ taszk folyamatábrája.}
+\label{fig:UARTReceive}
+\end{figure}
+
+\clearpage
+\endgroup
+\restoregeometry
+
+% A3 paper size
+\clearpage
+\begingroup
+\advance\textwidth\pdfpagewidth
+\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
+\pdfpagewidth=2\pdfpagewidth
+
+% RemoteControlConnected
+\begin{figure}[h!]
+\centering
+\includegraphics[height=20.11cm]{figures/FlowCharts/RemoteControlConnected.eps}
+\caption{A vezérlõ program csatlakozását kezelõ taszk folyamatábrája.}
+\label{fig:RemoteControlConnected}
+\end{figure} 
+
+\clearpage
+\endgroup
