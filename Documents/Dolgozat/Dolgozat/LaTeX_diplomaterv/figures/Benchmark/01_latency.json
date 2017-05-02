@@ -8,7 +8,7 @@
     
   edge:
 [
-  'a-c','b-d','c<->d Latency'
+  'a-c','b-d','c<->d Késleltetés'
 ],
   config: { hscale: 1 }
 }

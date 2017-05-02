@@ -41,7 +41,7 @@ A rendszer késleltetése az az idõ, ami egy esemény beérkezésétõl a rendszer vála
 \begin{figure}[h!]
 \center
 \resizebox{15cm}{!}{
-\includegraphics{figures/Benchmark/01_latency.png}}
+\includegraphics{figures/Benchmark/01_latency.eps}}
 \caption{Az operációs rendszer késleltetésének szemléltetése.}
 \label{fig:01_latency}
 \end{figure}
@@ -55,7 +55,7 @@ A jitter egy folyamat vizsgálata során a többszöri bekövetkezés után mért késlel
 \begin{figure}[h!]
 \center
 \resizebox{15cm}{!}{
-\includegraphics{figures/Benchmark/02_jitter.png}}
+\includegraphics{figures/Benchmark/02_jitter.eps}}
 \caption{A késleltetés jitterének szemléltetése.}
 \label{fig:02_jitter}
 \end{figure}
@@ -118,7 +118,7 @@ A preemptálási idõ nagyban hasonlít a taszkváltási idõhöz, azonban a járulékos u
 \subsubsection{Megszakítás-késleltetési idõ}
 %----------------------------------------------------------------------------
 
-A megszakítás-késleltetési idõ egy esemény beérkezése és a megszakítás kezelõ rutin elsõ utasítása között eltelt átlagos idõtartam.
+A megszakítás-késleltetési idõ egy esemény beérkezése és a megszakítás-kezelõ rutin elsõ utasítása között eltelt átlagos idõtartam.
 
 \begin{figure}[h!]
 \center
@@ -259,7 +259,7 @@ A jelgenerátor kimenetét a mérendõ rendszer bemenetére, illetve mindkét számláló
 \begin{figure}[h!]
 \center
 \resizebox{13cm}{!}{
-\includegraphics{figures/Benchmark/11_worst_case_response_time.png}}
+\includegraphics{figures/Benchmark/11_worst_case_response_time.eps}}
 \caption{A legrosszabb válaszidõ mérési összeállítása.}
 \label{fig:11_worst_case_response_time}
 \end{figure}
@@ -268,7 +268,7 @@ A jelgenerátor kimenetét a mérendõ rendszer bemenetére, illetve mindkét számláló
 \subsubsection{Mérési elv}
 %----------------------------------------------------------------------------
 
-A mérés során azt a legkisebb frekvenciát keressük, amit a rendszer már nem tud követni, vagyis impulzusokat veszít. Ezáltal a kimenetén megjelenõ impulzusok száma különbözni fog a bemenetére adott impulzusok számától, amit a számlálók segítségével detektálunk. A kapott frekvencia a a legrosszabb válaszidõ reciproka.
+A mérés során azt a legkisebb frekvenciát keressük, amit a rendszer már nem tud követni, vagyis impulzusokat veszít. Ezáltal a kimenetén megjelenõ impulzusok száma különbözni fog a bemenetére adott impulzusok számától, amit a számlálók segítségével detektálunk. A kapott frekvencia a legrosszabb válaszidõ reciproka.
 
 %----------------------------------------------------------------------------
 \subsubsection{Mérés menete}
@@ -296,6 +296,6 @@ A dolgozat további részeiben \asecref{metrics}ben felsorolt összes jellemzõ megh
 \item Memóriaigény,
 \item Késleltetés,
 \item Jitter,
-\item Rhealstone értékek,
+\item Rhealstone értékek (elsõ publikáció szerinti értékek),
 \item Legrosszabb válaszidõ.
-\end{itemize}
+\end{itemize} 

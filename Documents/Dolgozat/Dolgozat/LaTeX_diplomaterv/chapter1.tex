@@ -12,7 +12,7 @@ A mindennapi életben naponta szembesülünk a különbözõ gyártók vagy fejlesztõk ál
 \subsection{Zárt forráskódú szoftver}
 %----------------------------------------------------------------------------
 
-Zárt forráskódú szoftver esetén a forráskód kizárólag a gyártó/fejlesztõ kezében marad. A szoftver használatáért általában valamekkora összeget kell fizetni, amely gyakran magában foglalja a fellépõ problémák megoldásában való segítségnyújtást is. 
+Zárt forráskódú szoftver esetén a forráskód kizárólag a gyártó/fejlesztõ kezében marad. A szoftver használatáért általában valamekkora összeget kell fizetni, amely gyakran magában foglalja a fellépõ problémák megoldásában való segítségnyújtást is.
 Természetesen a zárt forráskód nem vonja kötelezõen maga után, hogy a felhasználónak fizetnie kell a szoftver használatáért. Sok gyártó a termékét ingyen elérhetõvé teszi (freeware). Ilyen esetben a kereskedelmi célú felhasználásból és/vagy a segítségnyújtásból származik a fejlesztést fedezõ bevétel.
 A gyártó a felhasználás feltételeit saját maga szabhatja meg, így ebben az esetben nem lehet általános elemzést végezni a licencekkel kapcsolatban.
 
@@ -26,13 +26,7 @@ A szoftverek másik nagy csoportját alkotják a nyílt forráskódú szoftverek. Ekkor
 \subsubsection{MIT License}
 %----------------------------------------------------------------------------
 
-Az MIT licenc a legegyszerûbb licencek egyike. A licenc alá esõ forráskód szabadon másolható, módosítható, terjeszthetõ, akár más licenc alá helyezhetõ. 
-
-%----------------------------------------------------------------------------
-\subsubsection{Apache License 2.0}
-%----------------------------------------------------------------------------
-
-[ToDo]
+Az MIT licenc a legegyszerûbb licencek egyike. A licenc alá esõ forráskód szabadon másolható, módosítható, terjeszthetõ, akár más licenc alá helyezhetõ.
 
 %----------------------------------------------------------------------------
 \subsubsection{BSD licenc}
@@ -84,9 +78,9 @@ A licenc több módosításon keresztül ment. A két legutolsó változatot ismertetem 
 \paragraph{GNU GPLv2}
 %----------------------------------------------------------------------------
 
-A GNU GPLv2 licenc megengedi a program szabad terjesztését és módosítását, amennyiben a terjesztett/módosított szoftver örökli az eredeti szerzõi jogi megjegyzéseket. A garanciális kötelezettségek elutasításra kerülnek, de nem tiltja meg (akár ellenszolgáltatás fejében) a vállalásukat. 
+A GNU GPLv2 licenc megengedi a program szabad terjesztését és módosítását, amennyiben a terjesztett/módosított szoftver örökli az eredeti szerzõi jogi megjegyzéseket. A garanciális kötelezettségek elutasításra kerülnek, de nem tiltja meg (akár ellenszolgáltatás fejében) a vállalásukat.
 
-Ha módosítás történt a programon, akkor fel kell tüntetni a módosító nevét és a módosítás dátumát. 
+Ha módosítás történt a programon, akkor fel kell tüntetni a módosító nevét és a módosítás dátumát.
 
 A programtól elkülöníthetõ munkára nem kötelezõ kiterjeszteni a licenc hatályát, amennyiben az külön kerül terjesztésre. Ha az eredeti (szerzõi jogok alá esõ) munkával együtt kerül terjesztésre, akkor automatikusan kiterjesztésre kerülnek a feltételek.
 
@@ -106,7 +100,7 @@ A GPLv2 licenc nem engedi meg, hogy a program része legyen szellemi tulajdont ké
 \paragraph{GNU GPLv3}
 %----------------------------------------------------------------------------
 
-A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami az érthetõséget hivatott szolgálni. 
+A GPL 2007-es módosítása során a tartalmi változtatásokon kívül formai változtatás is történt, ami az érthetõséget hivatott szolgálni.
 
 A tartalmi változtatások megcélozzák a más licencekkel való kompatibilitást, a licenccel védett szoftverhez járó felhasználói termék módosított programmal való használatának biztosítását (tivoizáció\footnote{A TiVo egy digitális videórögzítõ eszközöket gyártó cég, ami az eladott termékeiben GPLv2 licenc alá esõ szoftverek használt. A Series~1 termékét módosított szoftverrel is lehetett használni, viszont a 2000-es évek elején piacra dobott Series~2 DVR box-ban már digitális védelmet használtak, ami meggátolta a módosított rendszerek alkalmazását.} elkerülése), jobban specifikálja a jogok elvesztését, illetve azok visszaszerzésének lehetõségeit, illetve megjelenik a \emph{megkülönböztetõ} licenc definíciója. Megkülönböztetõ licencnek tekintendõ minden olyan licenc, ami nem tartalmazza az eredeti jogokat, vagy megtiltja valamely, az eredeti licencben foglalt jog gyakorlását.
 
@@ -187,9 +181,7 @@ Nem preemptív.
 \subsubsection{Shortest Job First (Legrövidebb feladat elõször)}
 %----------------------------------------------------------------------------
 
-A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes mûködés esetén az átlagos várakozási idõ optimális lesz.
-
-A gyakorlatban nehéz elõre megjósolni egy taszk futási idejét.
+A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes mûködés esetén az átlagos várakozási idõ optimális lesz., viszont a gyakorlatban nehéz elõre megjósolni egy taszk futási idejét.
 
 Lehet preemptív és nem-preemptív is. Preemptív esetben Shortest Remaining Time First (Legrövidebb hátralevõ idejû elõször) ütemezésrõl beszélünk.
 
@@ -218,7 +210,7 @@ A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési 
 \begin{figure}[h!]
 \center
 \resizebox{13cm}{!}{
-\includegraphics{figures/RTOS/05_multilevel_queue_scheduling.png}}
+\includegraphics{figures/RTOS/05_multilevel_queue_scheduling.eps}}
 \caption{Multilevel queue ütemezés.}
 \label{fig:05_multilevel_queue_scheduling}
 \end{figure}
@@ -241,7 +233,7 @@ Egy taszk létrehozásakor az operációs rendszer osztja ki a taszk számára a haszn
 \subsubsection{Atomi mûvelet}
 %----------------------------------------------------------------------------
 
-Bizonyos mûveletek során szükség van a mûveletsor szigorúan egymás utáni futtatására. Ilyen eset például a megosztott adatterületre való írás, amikor ha taszkváltás következik be az adatterület írása közben, akkor a tartalmazott adat érvénytelen értéket vehet fel. Az ilyen, \emph{oszthatatlan} mûveleteket nevezzük atomi mûveleteknek. 
+Bizonyos mûveletek során szükség van a mûveletsor szigorúan egymás utáni futtatására. Ilyen eset például a megosztott adatterületre való írás, amikor ha taszkváltás következik be az adatterület írása közben, akkor a tartalmazott adat érvénytelen értéket vehet fel. Az ilyen, \emph{oszthatatlan} mûveleteket nevezzük atomi mûveleteknek.
 
 A konzisztencia biztosítása céljából az atomi mûveleteket \emph{kritikus szakaszokba} kell ágyazni, ezzel jelezve az operációs rendszernek, hogy a mûveletek végrehajtása alatt nem következhet be taszkváltás, bizonyos esetekben megszakítás sem.
 
@@ -288,7 +280,7 @@ Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a fut
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/06_binary_semaphore.png}}
+\includegraphics{figures/RTOS/06_binary_semaphore.eps}}
 \caption{Szinkronizáció bináris szemafor segítségével.}
 \label{fig:06_binary_semaphore}
 \end{figure}
@@ -298,7 +290,7 @@ Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a 
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/07_binary_semaphore_collision.png}}
+\includegraphics{figures/RTOS/07_binary_semaphore_collision.eps}}
 \caption{Esemény bekövetkezésének elvesztése bináris szemafor használata során.}
 \label{fig:07_binary_semaphore_collision}
 \end{figure}
@@ -312,7 +304,7 @@ A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el ne
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/08_counting_semaphore.png}}
+\includegraphics{figures/RTOS/08_counting_semaphore.eps}}
 \caption{Számláló szemafor mûködésének szemléltetése.}
 \label{fig:08_counting_semaphore}
 \end{figure}
@@ -327,17 +319,17 @@ Két felhasználása elterjedt a számláló szemaforoknak:
 \paragraph{Mutex}
 %----------------------------------------------------------------------------
 
-Taszkok vagy taszkok és megszakítási rutinok között megosztott erõforrás kezelésekor a mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erõforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erõforrás szabad, akkor az igénylõ taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erõforrással való munkát (\figref{09_mutual_exclusion}a). A mutex-et a lehetõ legkorábban (az erõforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét. 
+Taszkok vagy taszkok és megszakítási rutinok között megosztott erõforrás kezelésekor a mutex (kölcsönös kizárás) használata indokolt. Mikor egy taszk vagy megszakítás hozzáférést indít egy erõforráshoz, akkor a hozzá tartozó mutex-et elkéri. Ha az erõforrás szabad, akkor az igénylõ taszk megkapja a kezelés jogát, és mindaddig megtartja, amíg be nem fejezi az erõforrással való munkát (\figref{09_mutual_exclusion}a). A mutex-et a lehetõ legkorábban (az erõforrással való munka befejeztével) fel kell szabadítani, ezzel is csökkentve az esetleges holtpont kialakulásának veszélyét.
 
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/09_mutual_exclusion.png}}
+\includegraphics{figures/RTOS/09_mutual_exclusion.eps}}
 \caption{Mutex mûködésének szemléltetése.}
 \label{fig:09_mutual_exclusion}
 \end{figure}
 
-Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza. 
+Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza.
 
 %----------------------------------------------------------------------------
 \paragraph{Sor (Queue)}
@@ -348,7 +340,7 @@ A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/10_queue.png}}
+\includegraphics{figures/RTOS/10_queue.eps}}
 \caption{Sor mûködésének szemléltetése.}
 \label{fig:10_queue}
 \end{figure}
@@ -359,22 +351,13 @@ A sorba való írás során másolat készül az eredeti változóról, és ez a másolat ke
 \paragraph{Üzenet (Message)}
 %----------------------------------------------------------------------------
 
-Az üzenet három dolgot tartalmaz:
-\begin{itemize}
-\item Az adatra mutató pointert,
-\item A mutatott adat méretét,
-\item Egy idõbélyegzõt, ami megmutatja, mikor került a pointer a tárolóba.
-\end{itemize}
-
-A pointer mutathat egy egész adatterületre vagy akár függvényre is. A küldõ és fogadó félnek tudnia kell, hogy az üzenet tartalma mire mutat.
-
-Mivel a kommunikáció során csak az adat referenciája kerül átvitelre, ezért különös figyelmet kell fordítani az adat konzisztenciájára.
+Az üzenet az adat másolása helyett csak az adatra mutató pointert továbbítja a fogadó fél számára. Mivel a kommunikáció során csak az adat referenciája kerül átvitelre, ezért különös figyelmet kell fordítani az adat konzisztenciájára.
 
 %----------------------------------------------------------------------------
-\paragraph{Események (Event flag)}
+\paragraph{Eseményjelzõ bitek (Event flag)}
 %----------------------------------------------------------------------------
 
-Az események taszkok közötti szinkronizációra szolgálnak. Megvalósítható diszjunktív szinkronizáció, amikor több esemény küzül bármelyik bekövetkezése esetén a taszk futásra kész állapotba kerül (logikai VAGY), és megvalósítható konjuktív szinkronizáció, amikor az események mindegyikének bekövetkezése feltétele a taszk futásának (logikai ÉS).
+Események bekövetkezésekor egy-egy bitet használva tartalmazza az eseményre vonatkozó információt. Elõnye a szemaforral szemben, hogy több eseményjelzõ bitet felhasználva csoportosíthatjuk az eseményeket, így egyszerre több eseményrõl kapunk információt (és akár egyszerre több eseményre is várakozhatunk).
 
 %----------------------------------------------------------------------------
 \subsection{Operációs rendszer használata esetén felmerülõ problémák}
@@ -442,4 +425,4 @@ A holtponti helyzetek elkerülésére és feloldására több szabály létezik, de beágy
 
 Egy függvény reentráns (újrahívható), ha biztonságosan meghívható több különbözõ taszkból vagy megszakításból.
 
-Minden taszk rendelkezik saját stack-kel és saját regiszterekkel. Ha egy függvény minden adatot a stack-jén vagy a regisztereiben tárol (vagyis nem használ globális és statikus változókat), akkor a függvény reentráns.
+Minden taszk rendelkezik saját stack-kel és saját regiszterekkel. Ha egy függvény minden adatot a stack-jén vagy a regisztereiben tárol (vagyis nem használ globális és statikus változókat), akkor a függvény reentráns. 

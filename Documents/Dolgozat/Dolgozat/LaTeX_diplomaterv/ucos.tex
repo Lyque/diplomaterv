@@ -1,3 +1,161 @@
 %----------------------------------------------------------------------------
 \section{\textmugreek C/OS--III}
 %----------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------
+\subsection{Ismertetõ}
+%----------------------------------------------------------------------------
+
+A \textmugreek C/OS--III valósidejû operációs rendszert a Jean Labrosse és Christian Légaré által alapított \emph{Micrium} fejleszti. Az operációs rendszer oktatási célra ingyenesen elérhetõ, mely magában foglalja többek között a rendszer forráskódját és részletes dokumentációját is.
+
+A vállalat kiemelt figyelmet fordít a forráskód minõségére, ezért szigorú szabályokat felállítva fejlesztették a rendszert. Ezen szabályok kiterjednek az egyes függvények és struktúrák nevére, és a függvényparaméterek sorrendjére is.
+
+A részletes dokumentáció mellett -- mely oldalakon keresztül ismerteti a rendszer könyvtárának struktúráját és tartalmát; külön fejezet foglalkozik a portolás lépéseinek magyarázatával -- a forráskódban található megjegyzések is segítik a fejlesztõt a programozás során.
+
+Az operációs mellett a vállalat további modulokat is elérhetõvé tesz, mellyel a rendszer funkcionalitását bõvíti. Ilyen modul például a \textmugreek C/TCP-IP, a \textmugreek C/USB és a \textmugreek C/FS.
+
+%----------------------------------------------------------------------------
+\subsection{Taszkok}
+%----------------------------------------------------------------------------
+
+A \textmugreek C/OS elõzõ verziójában a prioritások száma korlátozott volt és minden prioritási szinthez maximum egy tasz tartozhatott, ezáltal korlátozva a taszkok számát is. Az igényeket kielégítve ezt a korlátozást a rendszer harmadik verziójában eltörölték. Nincs megkötés sem a prioritásokra, sem a taszkok számára. Korlátot egyedül a használt mikrokontroller erõforrásai jelentenek.
+
+A preemptív ütemezés mellett implementálásra került a Round-Robin ütemezés, amely lehetõvé teszi az azonos prioritásû taszkok között a processzoridõ periodikus kiosztását. A Round-Robin ütemezést fordítási idõben engedélyezni kell, majd ezután futási idõben  szabadon engedélyezhetjük vagy letilthatjuk.
+
+A \textmugreek C/OS--III taszkjainak állapotmodellje kis mértékben különbözik a FreeRTOS esetében megismerttõl. Nem különbözteti meg a \emph{Felfüggesztett} és \emph{Blokkolt} állapotokat, viszont a törölt (vagy még el nem indított) taszkokat \emph{Alvó} állapotba sorolja. Ezen felül bevezeti a \emph{Megszakított} állapotot, melybe megszakítás érkezésekor kerül a taszk. Az állapotmodell \afigref{01_uCOS_states}án látható.
+
+\begin{figure}[h!]
+\center
+\resizebox{10cm}{!}{
+\includegraphics{figures/uCOS/01_uCOS_states.eps}}
+\caption{Taszk lehetséges állapotai a \mbox{\textmugreek C/OS--III} rendszerben.}
+\label{fig:01_uCOS_states}
+\end{figure}
+
+A taszkok nyílvántartása a \textmugreek C/OS--III esetében is TCB használatával történik. A TCB struktúra által tartalmazott változók száma meglehetõsen nagy, viszont ezért több információt is tárol az egyes taszkokról. A \textmugreek C/OS--III által alkalmazott TCB fõbb változói \atabref{uCOS_tcb}ban láthatóak.
+
+\begin{table}[h!]
+\caption{A \mbox{\textmugreek C/OS} TCB-jének fõbb változói.}
+\label{tab:uCOS_tcb}
+\center
+\begin{tabular}{|p{3.5cm}|p{8cm}|}
+\hline
+Változó & Jelentés \\
+\hline
+\hline
+StkPtr & A stack utolsó elemére mutató pointer \\
+\hline
+StkLimitPtr & A stack-en belül egy adott részre mutat. A stack túlcsordulásának ellenõrzésére használja a rendszer. \\
+\hline
+NextPtr és PrevPtr & Ezen pointerek használatosak a futásra kész taszkok TCB-jének kétszeresen láncolt listájának felépítésére. \\
+\hline
+NamePtr & A taszkhoz rendelt név. \\
+\hline
+StkBasePtr & A taszk stack-jéne alapcímére mutató pointer. \\
+\hline
+TaskEntryAddr & A taszk belépési pontját tartalmazza. \\
+\hline
+TaskEntryArg & A taszk indulásakor a taszk paramétereit tartalmazza. \\
+\hline
+PendDataTblPtr & Azon objektumok táblázatára mutató pointer, melyre a taszk éppen várakozik. \\
+\hline
+TaskState & A taszk aktuális állapota. \\
+\hline
+Prio & A taszk aktuális prioritása. \\
+\hline
+StkSize & A stack mérete. \\
+\hline
+SemCtr & A taszkhoz rendelt beépített szemafor számlálója. \\
+\hline
+TickRemain & A várakozó taszk hátralevõ várakozási ideje. \\
+\hline
+TimeQuanta és \mbox{TimeQuantaCtr} & Round-Robin ütemezés esetén a taszk számára kiosztott processzoridõ és a hátralevõ idõszeletek száma. \\
+\hline
+MsgPtr és MsgSize & Közvetlenül a taszknak küldött üzenetre mutató pointer és az üzenet mérete. \\
+\hline
+\end{tabular}
+\end{table}
+
+A FreeRTOS-hoz hasonlóan a \textmugreek C/OS--III is támogatja a hook függvények használatát, melyekkel a rendszer funkcionalitását bõvíthetjük.
+
+Az Idle taszk is megtalálható, mely a legalacsonyabb prioritási szinten jön létre a rendszer inizializálásakor\footnote{A \textmugreek C/OS--III csak az Idle taszkot engedi a legalacsonyabb prioritási szinten futni, a fejlesztõ által létrehozott taszkoknak mindeképp magasabb prioritással kell rendelkeznie!}. Ellentétben a FreeRTOS-sal, itt az Idle taszk nem végez hasznos tevékenységet, csupán számlálók értékét növeli, illetve az Idle-hook függvényt hívja meg.
+
+Az operációs rendszer beépített támogatással rendelkezik a különbözõ terhelési jellemzõk mérésére, Amennyiben fordítási idõben azt engedélyezzük, úgy információt kaphatunk a processzor kihasználtságáról, a taszkonkénti processzor-terhelésrõl és a taszkonkénti stack használatról is.
+
+%----------------------------------------------------------------------------
+\subsection{Kommunikációs objektumok}
+%----------------------------------------------------------------------------
+
+Az alap kommunikációs objektumok -- mint szemafor, mutex, sor -- mellett a rendszer lehetõséget teremt eseményjelzõ bitek használatára, taszkok közötti jelzés küldésére szemafor használata nélkül, illetve taszkok közötti üzenet küldésére sor létrehozása nélkül. Az objektumok használatakor függvény-paraméterként megadható, hogy az ütemezõ lefusson-e a függvényhívás hatására, vagy sem. Ez a lehetõség tipikusan akkor használható, ha egyszerre több objektumok használunk (például több különbözõ sorba helyezünk üzenetet, majd szemafort is felszabadítunk), és nem szeretnénk, hogy közben a taszk másik taszk által megszakításra kerüljön.
+
+%----------------------------------------------------------------------------
+\subsubsection{Sorok}
+%----------------------------------------------------------------------------
+
+Egy üzenet a küldött változóra, adatstruktúrára vagy akár függvényre mutató pointert, az adat méretét és az üzenet küldésének idõpontját tartalmazó bélyegzõt foglalja magában. Mivel az üzenet nem tartalmazza a tárolt adat típusát, ezért a fogadó taszknak ismernie kell a várt üzenet feldolgozásának módját. A sor több ilyen üzenet láncolt listáját jelenti.
+
+A \textmugreek C/OS--III-ban megvalósított sorok esetén az adat nem kerül másolásra, csupán az adat memóriacíme és merete jut el a fogadóhoz, ezért biztosítani kell, hogy az üzenet tartalma a feldolgozás befejeztéig változatlan maradjon. Ennek egyik lehetséges megvalósítása, hogy a küldõ dinamikusan lefoglalható memóriaszeletet kér az operációs rendszertõl, majd ezen memóriaterületre másolja a küldeni kívánt adatot. A fogadó oldalon, miután az adat feldolgozása befejezõdöt, a memóriaterület felszabadításra kerül.
+
+%----------------------------------------------------------------------------
+\paragraph{Olvasás sorból}
+%----------------------------------------------------------------------------
+
+A \textmugreek C/OS--III esetében is megadható az a maximális idõtartam, ameddig a taszk várakozik az üzenet beérkezésére. Ha a megadott idõn belül nem érkezik adat, akkor a függvény paramétereként átadott változóban hibakód jelzi az olvasás sikertelenségét.
+
+Amennyiben több taszk is várakozik ugyanazon sorba érkezõ adatra, úgy a legnagyobb prioritással rendelkezõ taszk jogosult az adat elvételére. Ha az adatot valamilyen okból minden várakozó taszkhoz el kell juttatni, akkor a küldõ küldhet broadcast üzenetet.
+
+%----------------------------------------------------------------------------
+\paragraph{Taszknak küldött üzenet}
+%----------------------------------------------------------------------------
+
+Általános alkalmazások esetén ritkán fordul elõ, hogy egy sort több taszk is figyelne. Ezért a \textmugreek C/OS--III-ban minden taszk rendelkezik saját üzenetsorral, melybe a többi taszk a megszokott módon helyezhet adatot. Ekkor nem szükséges külön objektumot létrehozni az üzenet továbbítására, csupán a fogadó taszk TCB-jének ismerete szükséges.
+
+A célzott üzenetek használata amellett, hogy átláthatóbb kódot eredményez, az üzenetküldés folyamatát is hatékonyabban valósítja meg.
+
+%----------------------------------------------------------------------------
+\subsubsection{Szemaforok}
+%----------------------------------------------------------------------------
+
+A rendszer támogadtja a bináris és a számláló szemaforok használatát egyaránt. A szemafor létrehozásakor megadhatjuk annak inicializálási értékét.
+
+Minden taszk rendelkezik saját beépített szemaforral, melynek segítségével a taszkok közötti szinkronizáció hatékonyabban megoldható, és külön objektum létrehozására sincs szükség.
+
+%----------------------------------------------------------------------------
+\subsubsection{Mutex-ek}
+%----------------------------------------------------------------------------
+
+A szemafor mellett a mutex is elérhetõ. Egy taszk többször is lefoglalhatja az általa birtokolt mutex-et (maximum 250-szer), viszont ugyanannyiszor el is kell engednie azt. A mutex védett a prioritás inverzió jelenségével szemben.
+
+%----------------------------------------------------------------------------
+\subsubsection{Eseményjelzõ bitek (Event flag)}
+%----------------------------------------------------------------------------
+
+Az eseményjelzõ bitek akkor bizonyulnak hasznosnak, ha egy taszk több esemény bekövetkezésére várakozik. Az eseményre való várakozás megvalósulhat diszjunktív módon, amikor bármely esemény bekövetkezése kielégíti a feltételt (logikai VAGY), vagy megvalósulhat konjuktív módon, amikor minden esemény bekövetkezése szükséges (logikai ÉS). Az egyes jelzõ bitek jelentése teljes mértékben a fejlesztõre van bízva, azt az operációs rendszer nem korlátozza.
+
+%----------------------------------------------------------------------------
+\subsection{Megszakítás-kezelés}
+%----------------------------------------------------------------------------
+
+A \emph{os\_cfg.h} konfigurációs fájlban található \emph{OS\_CFG\_ISR\_POST\_DEFERRED\_EN} makró segítségével kétféle megszakítás-kezelési módszer között válthatunk: közvetlen módszer és késleltetett módszer.
+
+Közvetlen módszer (\emph{Direct Method}) esetén a kritikus szakaszokban a megszakítások letiltásra kerülnek, és egy közben beérkezõ esemény csak az újbóli engedélyezés után jut érvényre. Ez a megvalósítás volt jelen az operációs rendszer elõzõ verziójában is.
+
+Késleltett módszer (\emph{Deferred Method}) esetén a kritikus szakaszokban a megszakítások nem kerülnek letiltásra, csak az ütemezõt függeszti fel az operációs rendszer. A módszer elõnye, hogy a megszakítások csak nagyon kevés idõre vannak letiltott állapotban, így sûrûn bekövetkezõ események sem vesznek el. A mechanizmus mögötti gondolat, hogy a megszakítások által generált \emph{Post} utasítások egy úgynevezett \emph{Interrupt Queue}-ba kerülnek, amit az \emph{Interrupt Queue Handler} taszk dolgoz fel. Ezen taszk a legmagasabb elérhetõ prioritással rendelkezik, ezért a megszakítási rutin befejeztével rögtön \emph{Futó} állapotba kerül. A \emph{Post} metódus és paramétereinek bemásolása a sorba, illetve kimásolása a sorból processzoridõt igényel. A módszer komplexitása és a szükséges extra processzor-használat hátrányt jelenthet.
+
+%----------------------------------------------------------------------------
+\subsection{Erõforrás-kezelés}
+%----------------------------------------------------------------------------
+
+A korábban bemutatott szemfor és mutex mellett az erõforrások védelmére használhatunk kritikus szakaszokat az megosztott erõforrások védelmére. Ahogy azt a \emph{Megszakítás-kezelés} részben ismertettem, a \textmugreek C/OS--III a kritikus szakaszokban beállítástól függõen vagy letiltja a megszakításokat, vagy csak az ütemezõt függeszti fel. Fontos megjegyezni, hogy amennyiben egy megszakítási rutinnal szeretnénk közös memóriaterületet (változót; adatstruktúrát) használni, úgy csak a megszakítások letiltása nyújt védelmet az adat korruptálódásának lehetõsége ellen.
+
+%----------------------------------------------------------------------------
+\subsection{Memória-kezelés}
+%----------------------------------------------------------------------------
+
+A \textmugreek C/OS--III a \emph{malloc()} és \emph{free()} utasítások használata helyett a fix méretû memóriarekeszek használatát javasolja dinamikus memóriafoglalás céljára. Erre a megoldásra beépített struktúrát nyújt a fejlesztõ számára, ami folytonos memóriaterületen azonos méretû blokkokat foglal le, és ezen blokkokat lehet igényelni a rendszertõl.
+
+Egy alkalmazáson belül több, különbözõ méretû és számú blokkokat tartalmazó memóriaterület is létrehozható. A memóriaterület lefoglalásakor meg kell adni a blokkok méretét és számát. A foglaláshoz használhatjuk a tömböknél megszokott módon történõ foglalást, de akár a \emph{malloc()} függvényt is (amennyiben az nem kerül felszabadításra a késõbbiekben), hiszen jól megtervezett szoftver esetén ez csak a program indulásakor fut le.
+
+Az operációs rendszertõl \emph{OSMemGet()} függvényhívással kérhetünk egy szeletet a területbõl, míg az \emph{OSMemPut()} függvény segítségével adhatjuk azt vissza a rendszer számára.
+
+A fix méretû memóriaterület használatához az \emph{os\_cfg.h} fájlban az \emph{OS\_CFG\_MEM\_EN} makrót kell 1 értékre állítani. 
