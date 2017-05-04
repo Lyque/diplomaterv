@@ -89,13 +89,19 @@ Minden olyan mérésnél, amelynél a bemenetet használni kellett, ott megszakítás k
 
 Azon méréseknél, amelyeknél nem a bemenetre érkezõ jel indítja a mért paramétert, azoknál létrehoztam egy mérést indító taszkot, ami másodpecenként tízszer indítja el az adott mérési folyamatot.
 
+%----------------------------------------------------------------------------
 \subsection{Késleltetés és Jitter}
+%----------------------------------------------------------------------------
 
  A késleltetés mérésénél az megszakítás hatására a bemeneten levõ jelet másoltam a kimenetre a megszakítási rutinban. Mivel mindkét operációs rendszer kezeli a megszakításokat, így ezzel a módszerrel információt kapunk a rendszer sebességérõl.
 
+%----------------------------------------------------------------------------
  \subsection{Rhealstone értékek}
+%----------------------------------------------------------------------------
 
+%----------------------------------------------------------------------------
  \subsubsection{Mérések indítása}
+%----------------------------------------------------------------------------
 
  A Rhealstone értékek mérésénél (a megszakítás-késleltetési idõ kivételével) a mérési folyamat független a bemenetre érkezõ jeltõl. Hogy az egyes mérések ne terheljék folyamatosan a processzort, illetve hogy a mérés során az adatok könnyen feldolgozhatóak legyenek, létrehoztam egy taszkot, mely periodikusan elindítja a mérést, majd várakozik a következõ indítási eseményig. A mérés kezdetének jelzését szemaforral oldottam meg. A taszk mûködése látható \afigref{StartMeas}án.
 
@@ -107,7 +113,9 @@ Azon méréseknél, amelyeknél nem a bemenetre érkezõ jel indítja a mért paramétert
 \label{fig:StartMeas}
 \end{figure}
 
+%----------------------------------------------------------------------------
  \subsubsection{Taszkváltási idõ}
+%----------------------------------------------------------------------------
 
  A taszkváltási idõ méréséhez három, azonos prioritású taszkot hoztam létre. Az elsõ -- \emph{A} jelû -- taszk szemaforon keresztül várakozik az indító jelzésre. Ennek beérkezése után szemafor segítségével elindítja a \emph{B} jelú taszkot, amely ugyanígy indítja el a \emph{C} jelû taszkot. Ezután egy hosszabb lefutású ciklusba lépnek, így folyamatosan processzoridõt kérnek az operációs rendszertõl. A ciklus lejártával várakoznak a következõ indításra. A folyamat \afigref{TaskSwitching}án látható.
 
@@ -119,7 +127,9 @@ Azon méréseknél, amelyeknél nem a bemenetre érkezõ jel indítja a mért paramétert
 \label{fig:TaskSwitching}
 \end{figure}
 
+%----------------------------------------------------------------------------
 \subsubsection{Preemptálási idõ}
+%----------------------------------------------------------------------------
 
 A preemptálási idõ méréséhez három, különbözõ prioritású taszkot használtam. Az taszkok indítása a már megismert módon történik, viszont a közepes és magas prioritású taszkok (\emph{B} és \emph{C} jelû) kis ideig várakoznak, így adva az \emph{A} jelû taszknak futási jogot. Különbség még a \emph{taszkváltási idõ} méréséhez képest, hogy a három taszk ciklusa különbözõ hosszú. A várakozási idõt és a ciklusok hosszát úgy választottam meg, hogy a közepes prioritású \emph{B} taszk preemptálja \emph{A}-t, és a magas prioritású \emph{C} taszk preemptálja \emph{B}-t. A folyamat \afigref{Preemption}án látható.
 
@@ -129,9 +139,11 @@ A preemptálási idõ méréséhez három, különbözõ prioritású taszkot használtam. Az 
 \includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/Preemption.eps}
 \caption{Preemtálási idõ méréséhez használt taszkok folyamatábrája.}
 \label{fig:Preemption}
-\end{figure} 
+\end{figure}
 
+%----------------------------------------------------------------------------
 \subsubsection{Megszakítás-késleletetési idõ}
+%----------------------------------------------------------------------------
 
 A megszakítás-késleltetési idõ mérése során a bemenetre érkezõ jel fel- és lefutó éle által generált megszakítás szemaforon keresztül kerül jelzésre a kezelõ taszk számára. Mivel a meghatározás szerint a megszakítás bekövetkezésétõl az elsõ hasznos utasításig eltelt idõt kell meghatározni, ezért a gépi kód generálását nem bízom a fordítóra, hanem \mbox{\emph{assembly}} nyelven végzem el a bemeneti láb beolvasását és a kimeneti láb beállítását. Így az egyes utasítások végrehajtásának ideje egyértelmûen meghatározható. A mérési folyamat \afigref{InterruptLatency}án látható.
 
@@ -143,7 +155,9 @@ A megszakítás-késleltetési idõ mérése során a bemenetre érkezõ jel fel- és lefut
 \label{fig:InterruptLatency}
 \end{figure}
 
+%----------------------------------------------------------------------------
 \subsubsection{Szemafor-váltási idõ}
+%----------------------------------------------------------------------------
 
 A mérést két taszk valósítja meg,a mik különbözõ prioritással rendelkeznek. Miután minkét taszk indult, a magasabb prioritású \emph{B} taszk várakozik. Ezen idõ alatt az alacsony prioritású \emph{A} taszk lefoglalja a szemafort, majd hosszabb lefutási ciklusba lép. Eközben a \emph{B} jelû taszk újból futni kezd (preemptálva \emph{A}-t), és megpróbálja lefoglalni a szemafort. Ekkort újból az \emph{A} taszk kapja meg a futás jogát, és a ciklus lejártával elengedi a szemafort. Ekkor a \emph{B} taszk lefoglalja, majd egybõl el is engedi a szemafort, és a két taszk várakozik a következõ indításra. A mérést megvalósító taszkok \afigref{SemaphoreShuffling}án láthatóak.
 
@@ -155,7 +169,9 @@ A mérést két taszk valósítja meg,a mik különbözõ prioritással rendelkeznek. Miut
 \label{fig:SemaphoreShuffling}
 \end{figure}
 
+%----------------------------------------------------------------------------
 \subsubsection{Deadlock-feloldási idõ}
+%----------------------------------------------------------------------------
 
 Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elindult -- és a magasabb prioritásúak várakoznak, hogy az alacsony prioritású taszk futási jogot kapjon -- az alacsony prioritású \emph{A} taszk lefoglalja a mutex-et, majd hosszú lefutású ciklusba lép. Közben a közepes prioritású \emph{B} taszk késleltetése letelik, és preemtálja \emph{A}-t. A \emph{B} taszk is üres ciklus futtatásába kezd. Mikor a \emph{C} taszk várakozási ideje is lejár, akkor megpróbálja lefoglalni a mutex-et, amit az alacsony prioritású taszk birtokol. Az ezt követõ viselkedés függ attól, hogy az \emph{A} taszk örökli-e a \emph{C} taszk prioritását vagy sem. De valamikor az alacsony prioritású taszk befejezi a ciklus futtatását, majd felszabadítja a mutex-et, amit a magas prioritású \emph{C} taszk lefoglal, majd azonnal el is engedi. A folyamat \afigref{DeadlockBreaking}án látható.
 
@@ -167,7 +183,9 @@ Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elin
 \label{fig:DeadlockBreaking}
 \end{figure}
 
+%----------------------------------------------------------------------------
 \subsubsection{Datagram-átviteli idõ}
+%----------------------------------------------------------------------------
 
 A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg. Az adat vételét szemaforral jelzi a vételi oldalt megvalósító taszk, amit már a mérés kezdete elõtt birtokol. A taszkok elindulása után a magas prioritású \emph{B} jelû taszk a kimeneti lábat magas értékbe állítja, majd a $32$-bites \emph{i} változó értékét $256$ alkalommal betölti a sorba ($1~kB$ adat). Ezután megpróbálja elvenni a méréshez használt szemafort, aminek következtében az alacsony prioritású \emph{A} jelû taszk folytatja futását. A sorból elveszi a betöltött adatokat, majd a szemafor elengedésével jelez a \emph{B} jelû taszknak, amely egybõl felszabadítja a szemafort, majd a kimeneti láb alacsony szintre állításával jelzi az adatátvitel befejezõdését. A kimeneti láb írása ebben az esetben is assembly nyelven történik. A mérés folyamata \afigref{DatagramThroughput}án látható.
 
@@ -178,3 +196,28 @@ A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg.
 \caption{Datagram-átviteli idõ méréséhez használt taszkok folyamatábrája.}
 \label{fig:DatagramThroughput}
 \end{figure}
+
+%----------------------------------------------------------------------------
+ \subsection{Legrosszabb válaszidõ}
+%----------------------------------------------------------------------------
+
+A legrosszabb válaszidõ mérését a Rhealstone értékek meghatározásánál használt \emph{megszakítás-késleltetési idõ} szoftverével hajtom végre. Mivel a mérés során szükség van olyan számlálóra, mely rendelkezik felfele és lefele számláló bemenettel, így megoldást kellett találnom a mérés kivitelezésére.
+
+Új hardver tervezése idõigényes folyamat lett volna, és a megfelelõ alkatrészek megtalálása esetén is meg kellett volna oldali az aktuális érték kijelzését. Végül amellett döntöttem, hogy FPGA-t használok a feladat elvégzésére.
+
+Rendelkezésemre állt egy \emph{Basys~3} FPGA fejlesztõkártya, amin megfelelõ kivezetések és hétszegmenses kijelzõ is található. A kártyához kapott példaprogramok között volt olyan, amiben megtalálható volt BCD-hétszegmens dekóder, így az én feladatom a BCD számláló megvalósítására és a bemeneti jelek helyes kezelésére terjedt ki. Az éldetektálást végzõ logika \afigref{BidirectionalCounter}án látható módon lett megvalósítva\footnote{A közvetlenül a bemenetre helyezett tárolók feleslegesnek tûnhetnek, viszont ha az idõzítési követelmények nem teljesülnek, akkor az elsõ flip-flop kimenetén metastabil állapot alakulhat ki. Ennek elkerülésére ökölszabályként alkalmazandó, hogy az elsõ tároló kimenete mindig csak egy áramköri elem bemenetére csatlakozik.}. A \emph{COUNT UP} és \emph{COUNT DOWN} jelek felhasználásával növelem, illetve csökkentem a számláló értékét, figyelve arra, hogy az értéket ne módosítsam, ha a két jel egyszerre érkezik.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=9cm]{figures/Eval_Boards/04_basys3.png}
+\caption{Basys~3 fejlesztõkártya.}
+\label{fig:Basys3}
+\end{figure} 
+
+% Bidirectional counter
+\begin{figure}[h!]
+\centering
+\includegraphics[width=12cm]{figures/Measurements/01_bidirectional_counter.eps}
+\caption{A bemeneti jelek éldetektálását végzõ áramkör.}
+\label{fig:BidirectionalCounter}
+\end{figure} 
