@@ -37,6 +37,9 @@
 % Hogy egy-egy oldalon meg lehessen változtatni a margókat
 \usepackage{geometry}
 
+% Hogy a képeket ne úsztassa fejezetek között
+\usepackage[section]{placeins}
+
 % Paragraph formázásának felülírása
 \titleformat{\paragraph}
 {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
@@ -126,13 +129,16 @@
 \newcommand{\listref}[1]{\ref{listing:#1}.}
 \newcommand{\sectref}[1]{\ref{sect:#1}.~fejezet}
 \newcommand{\tabref}[1]{\ref{tab:#1}.~táblázat}
+\newcommand{\appref}[1]{\ref{app:#1}.~Függelék}
 
 \newcommand{\asecref}[1]{\aref{sec:#1}.~fejezet}
 \newcommand{\afigref}[1]{\aref{fig:#1}.~ábr}
 \newcommand{\atabref}[1]{\aref{tab:#1}.~táblázat}
+\newcommand{\aappref}[1]{\aref{app:#1}.~Függelék}
 \newcommand{\Asecref}[1]{\Aref{sec:#1}.~fejezet}
 \newcommand{\Afigref}[1]{\Aref{fig:#1}.~ábr}
 \newcommand{\Atabref}[1]{\Aref{tab:#1}.~táblázat}
+\newcommand{\Aappref}[1]{\Aref{app:#1}.~Függelék}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 %\DeclareMathOperator*[1]{\floor}{arg\,max}
@@ -154,6 +160,7 @@
 	chapter4,%
 	chapter5,%
 	chapter6,%
+	chapter7,%
 	acknowledgement,%
 	appendices,%
 	figures,%
@@ -192,6 +199,7 @@ aboveskip=10pt}
 \include{chapter4}
 \include{chapter5}
 \include{chapter6}
+\include{chapter7}
 \include{acknowledgement}
 \include{figures}
 

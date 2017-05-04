@@ -6,14 +6,175 @@
 \section{Megvalósítandó feladat}
 %----------------------------------------------------------------------------
 
-%----------------------------------------------------------------------------
-\section{Kapcsolási rajz}
-%----------------------------------------------------------------------------
+Az eszköznek könnyen kezelhetõ interfészt kell biztosítania a mérések elvégzéséhez és az ipari alkalmazáshoz szükséges alkatrészeket is tartalmaznia kell.
+
+Az ipari alkalmazás tervezésekor törekedtem arra, hogy használjak olyan perifériákat, melyek egy termék mûködése során elõfordulhatnak. Ez egy egyszerû GPIO-tól kezdve a vezeték nélküli kommunikációt is magában foglalja.
+
+A szimulált alkalmazás mögötti gondolat egy helyi és egy távoli állomás monitorozása. A helyi állomáson egy hõmérõ, egy potméter, két LED, illetve két kapcsoló kapott helyet. A távoli állomást egy \emph{TI Sensortag} valósítja meg, mellyel a kapcsolatot Bluetooth low energy használatával oldottam meg. A mért adatokat valamilyen módon megjelenítem és ezzel egyidõben SD kártyára is mentésre kerülnek az értékek.
+
+A TI Sensortag egy megvásárolható, több szenzort tartalmazó kis méretû modul, melyet a \emph{Texas Instruments} gyárt kifejezetten IoT alkalmazások prototípusának tervezéséhez. Különbözõ vezetéknélküli technológiát használó verziója elérhetõ. Az általam választott Sensortag \emph{CC2650} mikrokontrollert használ központi egységként, melyet kifejezetten $2,4~GHz$-en kommunikáló alkalmazásokhoz fejlesztettek. A mikrokontroller alacsony fogyasztása lehetõvé teszi az elemrõl történõ táplálást, és a beépített 32-bites ARM Cortex-M3 processzornak és a tartalmazott széleskörõ periféria-készletnek köszönhetõen különálló alkalmazások fejlesztésére is alkalmas.
+
+A merõkártyán a Bluetooth kapcsolat létrehozását a Bluegiga \emph{BLE112} moduljával valósítottam meg. A modul \emph{CC2540} mikrokontroller köré épül, mely 8051 magot tartalmaz. Az eszköz vezérelhetõ soros kommunikáción vagy USB keresztül is, de akár különálló alkalmazás is megvalósítható a használatával. A gyártó ún. \emph{BGScript} nyelvet kínál az eszközhöz, mellyel a modul összetettebb feladatokra is felprogramozható.
+
+Érdemes pár mondatban áttekinteni a Bluetooth Low Energy kommunikáció történetét és mûködését.
+
+A Bluetooth low energy (gyakran BLE-ként vagy Bluetooth Smart-ként találkozhatunk vele) a Bluetooth~4.0-ás verzióval került bevezetésre. Célja, hogy alacsony fogyasztású, gyors csatlakozási lehetõséggel bíró és biztonságos vezeték nélküli kommunikációt valósíthassunk meg. Kétféle Bluetooth~4.0 eszköz különböztethetõ meg a támogatott protokollok alapján:
+\begin{description}
+  \item[Single-mode eszköz:] kizárólag a Bluetooth low energy protokollt támogatja,
+  \item[Dual-mode eszköz:] a Bluetooth low energy protokoll mellett a klasszikus Bluetooth technológiákat is támogatja, beleértve a Bluetooth korábbi verzióit is.
+\end{description}
+
+BLE alkalmazásokban általában egy \emph{kliens} és legalább egy \emph{szerver} eszköz vesz részt. A szerver szolgáltatja a gyûjtött információkat. Tipikusan szenzorral rendelkezõ eszközök, mint hõmérõ vagy szívritmus-figyelõ eszközök. A kliens gyûjti be az adatokat a szerverektõl, és jeleníti meg valamilyen formában a felhasználó számára. Kliensként mûködhet akár egy telefon vagy számítógép is.
+
+Minden szerver rendelkezik profillal (Profile), melyben az eszközrõl, illetve a lekérhetõ adatokról található információ. Az adatokat szolgáltatások (Service) tartalmazzák. A profil több szolgáltatást is tartalmazhat, és bizonyos alkalmazások esetén lehetnek kötelezõen megvalósítandó szolgáltatások (például szívritmus-figyelõ esetén). A szolgáltatások határozzák meg, hogy milyen adatok olvashatóak ki az eszközbõl, ezen adatokat miként lehet elérni és milyen biztonsági követelmények vannak az adatokra nézve. A szolgáltatásokon belül találhatóak a karakterisztikák (Characteristic), amik a tényleges adatot teszik elérhetõvé. A karakterisztika ismert típussal rendelkezõ érték. Mind a profil, a szolgáltatások és a karakterisztikák rendelkeznek UUID-val, ami egyértelmûen azonosítja õket. A karakteriszikák elérhetõek ún. handle-n keresztül is, mely egy kezelhetõbb módot kínál az érték kiolvasására és írására.
 
 %----------------------------------------------------------------------------
-\section{Nyomtatott áramköri terv}
+\section{Részletes terv}
 %----------------------------------------------------------------------------
+
+Elsõ körben az elérhetõ perifériákat és a felhasználható eszközöket sorakoztattam fel.
+
+A specifikációban szerepel, hogy SD kártyára kell a laplózást végeznem. Ezen kívül hõmérséklet mérését is meg kell valósítanom, amihez analóg kimenetû hõmérõt választottam (\emph{MCP9700A}). Szintén a specifikációban szerepel két szabadon állítható LED, illetve két kapcsoló is, melyek GPIO lábakat foglalnak el. További GPIO lábakat igényel az \emph{IN}, a négy darab \emph{ID} és az \emph{OUT} mérési pontok. A kapcsolók és az \emph{IN} lábak esetén megszakítást is támogatnia kell a lábaknak. A potméter kimeneti lába szintén analóg jelet közvetít a fejlesztõkártyák felé, így a szükséges analóg lábak száma összesen kettõ. Mivel a Raspberry~Pi nem rendelkezik analog-digital konverziót támogató lábakkal, ezért választanom kellett egy olyan digitális interfésszel rendelkezõ ADC IC-t, mely a mért adatokat a Raspberry~Pi számára elérhetõvé teszi. Erre a célra az \emph{ADS7924} négy csatornás IC-t választottam, mely I2C-n keresztül vezérelhetõ, és ugyanezen interfészen keresztül olvasható ki belõle a mért adat.
+
+A vezeték nélküli kommunikációhoz használt BLE112 modul vezérelhetõ soros interfészen (\emph{flow-control} használatával és nélküle egyaránt) vagy USB-n keresztül. A fejlesztés során felmerülõ hibák megtalálása szempontjából a soros kommunikáció kedvezõbb, ezért azt választottam.
+
+Az STM32F4-Discovery kártya nem rendelkezik kijelzõvel, és a kiegészítõ kártyához kapható TFT kijelzõ sem állt rendelkezésemre, ezért az adatok megjelenítését és a LED-ek vezérlését asztali alkalmazással oldottam meg, amely soros kommunikáción keresztül küldi és fogadja az adatokat.
+
+Külsõ megtáplálásra is lehetõséget akartam teremteni, ezért \emph{DC Jack} csatlakozó is került az áramköri lapra. Mivel az STM32F4-Discovery rendelkezik $5~V$-os kivezetésekkel, ezért a külsõ feszültségforrás feszültségét is $5~V$-ra választottam, és az áramköri elemeknek szükséges $3~V$-ot \emph{LM317} feszültség-stabilizátor IC-vel állítottam elõ. A bemeneti feszültség forrásának (külsõ feszültségforrás vagy a fejlesztõkártya megfelelõ lába) kiválasztása jumper megfelelõ helyzetbe állításával történik.
+
+Ezen kívül még SD kártya foglalat is helyet kapott a lemezen. Bár a STM32F4 - Base Board és a Raspberry~Pi is rendelkezik foglalattal, ezzel a kiegészítéssel a Base Board használata opcionálissá válik.
+
+A BLE112 modul programozható, és erre a fejlesztés során is szükség volt. A programozást lehetõvé tevõ csatlakozó is rákerült a mérõkártyára.
+
+A fejlesztõkártyák felé a kapcsolatot tüskesorok alkalmazásával oldottam meg. Ez a megoldás egyszerûsíti a tervezést, mert nem kellett mindkét kártyához illeszkedõ hüvelysorokat elhelyeznem, figyelve a helyes lábkiosztásra, miközben a lábak nagy részét nem használja az alkalmazás. A fõbb kivezetéseket $2\times10$-es csatlakozóval terveztem, ezáltal húsz polusú szalagkábellel és a hozzá tartozó csatlakozóval a kártya oldali csatlakoztatás egyszerûsödik. A csatlakozóra az alábbi eszközök kerültek kivezetésre:
+
+\begin{itemize}
+  \item Tápfeszültség ($5~V$),
+  \item Kapcsolók ($2~db$),
+  \item LED-ek ($2~db$),
+  \item UART (BLE112 vezérléséhez),
+  \item Mérés bemenete,
+  \item Mérés során használt \emph{ID} lábak ($4~db$),
+  \item Mérés kimenete,
+  \item Hõmérõ analóg kivezetése,
+  \item Potméter kivezetése,
+  \item I2C.
+\end{itemize}
+
+Emellett tüskesorokat alkalmaztam a mérési pontok kivezetésére (IN, OUT és ID lábak), illetve az SD kártya foglalat csatlakoztatása is tüskesoron keresztül történhet. A BLE112 modul lábainak többsége szintén kivezetésre került, ezáltal a modul képességeinek tesztelésekhez is használható a kártya.
+
+%----------------------------------------------------------------------------
+\section{Hardverterv}
+%----------------------------------------------------------------------------
+
+A tápfeszültséget szolgáltathatja az STM32F4-Discovery fejlesztõkártya, vagy külsõ feszültségforrás is. A külsõ forrásból való táplálás esetén a túláram-védelmet \emph{multifuse} alkalmazásával oldottam meg. A multifuse védett oldala és az STM kártyáról érkezõ $5~V$-os feszültség $1\times 3$-as tüskesor két szélsõ lábára csatlakozik, ahol jumper kapcsolja a kiválasztott forrást a középsõ lábra. A középsõ láb látja el a mérõkártya többi részét $5~V$-os feszültséggel, és ebbõl állítja elõ az \emph{LM317} a $3~V$-os feszültséget. A bemenet védett a fordított polaritással rákapcsolt feszültséggel szemben. A tápfeszültség kapcsolási rajza \aappref{schematics} \figref{07_power_sch}áján látható.
+
+A szenzorok (hõmérõ és potméter) analóg kimenete szûrés után a kimeneti tüskesorra és az ADC IC bemeneteire csatlakoznak. A használt ADS7924 IC kihasználatlan bemeneteit földre kötöttem. Az IC a bemeneteit multiplexálva az egyik kimeneti lábára vezeti ki, ahova tetszés szerint jelkondícionáló áramkört helyezhetünk, így nem kell minden bemenethez külön áramkört használni. A tervezés során nem használtam jelkondícionáló áramkört, viszont késõbbi alkalmazásokhoz ezt lehetõvé tettem $1\times 2$-es tüskesor elhelyezésével. A mérések során jumper zárja rövidre a tüskesor két lábát. Az ADC IC tápfeszültsége lekapcsolható. A szenzorok bekötése \aappref{schematics} \figref{02_sensors_sch}áján látható.
+
+A Bluetooth modul kommunikációt megvalósító lábai a fejlesztõkártyákhoz csatlakoztatott tüskesorra vannak kivezetve. Ezen kívül a programozáshoz szükséges lábak a programozó csatlakozóra lettek kötve. Emellett a modul tápfeszültséget szolgáltathatja a programozó vagy a mérõkártya, amit szintén jumper határoz meg. A BLE112 modul bekötése látható \aappref{schematics} \figref{05_ble112_sch}áján.
+
+Az SD kártya foglalatának lábai (védõellenállások használatával) tüskesorra vannak kivezetve. Az SD kártya tápellátása független a mérõkártya többi részétõl, abból a célból, hogy késõbb más tesztalkalmazásokhoz is felhasználható legyen. Két jumper segítségével közösíthetõ a tápfeszültség és föld is.
+
+A méréshez használt kivezetések visszajelzõ LED-eket is kaptak, egyrészt a fejlesztés során felmerülõ problémák felderítésének elõsegítésére, másrészt egyéb alkalmazásoknál legyen lehetõség a használatukra. A LED-ek (és a hozzájuk tartozó kiegészítõ áramkör) beültetése opcionális. A méréshez a bemeneti lábhoz BNC csatlakozó is elhelyezésre került, ezzel megkönnyítve a jelgenerátor csatlakoztatását.
+
+Az elkészült nyomtatott áramköri terv \aappref{pcb} \ref{fig:01_top_layer}. és \figref{02_bottom_layer}áján látható.
 
 %----------------------------------------------------------------------------
 \section{Szoftverterv}
 %----------------------------------------------------------------------------
+
+A méréshez használt szoftver tervezésekor figyelnem kellett arra, hogy a mérések könnyen elvégezhetõek legyenek, miközben az mért értékeket ne befolyásoljam. Emellett szempont volt a mérési adatok egyszerû feldolgozhatósága is.
+
+Minden olyan mérésnél, amelynél a bemenetet használni kellett, ott megszakítás következik be a bemenetre érkezõ szintváltásoknál. A megszakítás-kezelõ rutinban az adott mérésnek megfelelõen végeztem el a további mûveleteket.
+
+Azon méréseknél, amelyeknél nem a bemenetre érkezõ jel indítja a mért paramétert, azoknál létrehoztam egy mérést indító taszkot, ami másodpecenként tízszer indítja el az adott mérési folyamatot.
+
+\subsection{Késleltetés és Jitter}
+
+ A késleltetés mérésénél az megszakítás hatására a bemeneten levõ jelet másoltam a kimenetre a megszakítási rutinban. Mivel mindkét operációs rendszer kezeli a megszakításokat, így ezzel a módszerrel információt kapunk a rendszer sebességérõl.
+
+ \subsection{Rhealstone értékek}
+
+ \subsubsection{Mérések indítása}
+
+ A Rhealstone értékek mérésénél (a megszakítás-késleltetési idõ kivételével) a mérési folyamat független a bemenetre érkezõ jeltõl. Hogy az egyes mérések ne terheljék folyamatosan a processzort, illetve hogy a mérés során az adatok könnyen feldolgozhatóak legyenek, létrehoztam egy taszkot, mely periodikusan elindítja a mérést, majd várakozik a következõ indítási eseményig. A mérés kezdetének jelzését szemaforral oldottam meg. A taszk mûködése látható \afigref{StartMeas}án.
+
+ % StartMeasure
+\begin{figure}[h!]
+\centering
+\includegraphics[height=5cm]{figures/FlowCharts/StartMeasure.eps}
+\caption{StartMeasure taszk folyamatábrája.}
+\label{fig:StartMeas}
+\end{figure}
+
+ \subsubsection{Taszkváltási idõ}
+
+ A taszkváltási idõ méréséhez három, azonos prioritású taszkot hoztam létre. Az elsõ -- \emph{A} jelû -- taszk szemaforon keresztül várakozik az indító jelzésre. Ennek beérkezése után szemafor segítségével elindítja a \emph{B} jelú taszkot, amely ugyanígy indítja el a \emph{C} jelû taszkot. Ezután egy hosszabb lefutású ciklusba lépnek, így folyamatosan processzoridõt kérnek az operációs rendszertõl. A ciklus lejártával várakoznak a következõ indításra. A folyamat \afigref{TaskSwitching}án látható.
+
+ % TaskSwitching
+\begin{figure}[h!]
+\centering
+\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/TaskSwitching.eps}
+\caption{Taszkváltási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:TaskSwitching}
+\end{figure}
+
+\subsubsection{Preemptálási idõ}
+
+A preemptálási idõ méréséhez három, különbözõ prioritású taszkot használtam. Az taszkok indítása a már megismert módon történik, viszont a közepes és magas prioritású taszkok (\emph{B} és \emph{C} jelû) kis ideig várakoznak, így adva az \emph{A} jelû taszknak futási jogot. Különbség még a \emph{taszkváltási idõ} méréséhez képest, hogy a három taszk ciklusa különbözõ hosszú. A várakozási idõt és a ciklusok hosszát úgy választottam meg, hogy a közepes prioritású \emph{B} taszk preemptálja \emph{A}-t, és a magas prioritású \emph{C} taszk preemptálja \emph{B}-t. A folyamat \afigref{Preemption}án látható.
+
+% Preemption
+\begin{figure}[h!]
+\centering
+\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/Preemption.eps}
+\caption{Preemtálási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:Preemption}
+\end{figure} 
+
+\subsubsection{Megszakítás-késleletetési idõ}
+
+A megszakítás-késleltetési idõ mérése során a bemenetre érkezõ jel fel- és lefutó éle által generált megszakítás szemaforon keresztül kerül jelzésre a kezelõ taszk számára. Mivel a meghatározás szerint a megszakítás bekövetkezésétõl az elsõ hasznos utasításig eltelt idõt kell meghatározni, ezért a gépi kód generálását nem bízom a fordítóra, hanem \mbox{\emph{assembly}} nyelven végzem el a bemeneti láb beolvasását és a kimeneti láb beállítását. Így az egyes utasítások végrehajtásának ideje egyértelmûen meghatározható. A mérési folyamat \afigref{InterruptLatency}án látható.
+
+% InterruptLatency
+\begin{figure}[h!]
+\centering
+\includegraphics[height=6.8cm]{figures/FlowCharts/InterruptLatency.eps}
+\caption{Megszakítás-késleltetési idõ méréséhez használt taszk folyamatábrája.}
+\label{fig:InterruptLatency}
+\end{figure}
+
+\subsubsection{Szemafor-váltási idõ}
+
+A mérést két taszk valósítja meg,a mik különbözõ prioritással rendelkeznek. Miután minkét taszk indult, a magasabb prioritású \emph{B} taszk várakozik. Ezen idõ alatt az alacsony prioritású \emph{A} taszk lefoglalja a szemafort, majd hosszabb lefutási ciklusba lép. Eközben a \emph{B} jelû taszk újból futni kezd (preemptálva \emph{A}-t), és megpróbálja lefoglalni a szemafort. Ekkort újból az \emph{A} taszk kapja meg a futás jogát, és a ciklus lejártával elengedi a szemafort. Ekkor a \emph{B} taszk lefoglalja, majd egybõl el is engedi a szemafort, és a két taszk várakozik a következõ indításra. A mérést megvalósító taszkok \afigref{SemaphoreShuffling}án láthatóak.
+
+% SemaphoreShuffling
+\begin{figure}[h!]
+\centering
+\includegraphics[height=12cm]{figures/FlowCharts/SemaphoreShuffling.eps}
+\caption{Szemafor-váltási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:SemaphoreShuffling}
+\end{figure}
+
+\subsubsection{Deadlock-feloldási idõ}
+
+Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elindult -- és a magasabb prioritásúak várakoznak, hogy az alacsony prioritású taszk futási jogot kapjon -- az alacsony prioritású \emph{A} taszk lefoglalja a mutex-et, majd hosszú lefutású ciklusba lép. Közben a közepes prioritású \emph{B} taszk késleltetése letelik, és preemtálja \emph{A}-t. A \emph{B} taszk is üres ciklus futtatásába kezd. Mikor a \emph{C} taszk várakozási ideje is lejár, akkor megpróbálja lefoglalni a mutex-et, amit az alacsony prioritású taszk birtokol. Az ezt követõ viselkedés függ attól, hogy az \emph{A} taszk örökli-e a \emph{C} taszk prioritását vagy sem. De valamikor az alacsony prioritású taszk befejezi a ciklus futtatását, majd felszabadítja a mutex-et, amit a magas prioritású \emph{C} taszk lefoglal, majd azonnal el is engedi. A folyamat \afigref{DeadlockBreaking}án látható.
+
+% DeadlockBreaking
+\begin{figure}[h!]
+\centering
+\includegraphics[height=11.81cm, angle=90]{figures/FlowCharts/DeadlockBreaking.eps}
+\caption{Deadlock-feloldási idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:DeadlockBreaking}
+\end{figure}
+
+\subsubsection{Datagram-átviteli idõ}
+
+A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg. Az adat vételét szemaforral jelzi a vételi oldalt megvalósító taszk, amit már a mérés kezdete elõtt birtokol. A taszkok elindulása után a magas prioritású \emph{B} jelû taszk a kimeneti lábat magas értékbe állítja, majd a $32$-bites \emph{i} változó értékét $256$ alkalommal betölti a sorba ($1~kB$ adat). Ezután megpróbálja elvenni a méréshez használt szemafort, aminek következtében az alacsony prioritású \emph{A} jelû taszk folytatja futását. A sorból elveszi a betöltött adatokat, majd a szemafor elengedésével jelez a \emph{B} jelû taszknak, amely egybõl felszabadítja a szemafort, majd a kimeneti láb alacsony szintre állításával jelzi az adatátvitel befejezõdését. A kimeneti láb írása ebben az esetben is assembly nyelven történik. A mérés folyamata \afigref{DatagramThroughput}án látható.
+
+% DatagramThroughput
+\begin{figure}[h!]
+\centering
+\includegraphics[height=16.53cm]{figures/FlowCharts/DatagramThroughput.eps}
+\caption{Datagram-átviteli idõ méréséhez használt taszkok folyamatábrája.}
+\label{fig:DatagramThroughput}
+\end{figure}

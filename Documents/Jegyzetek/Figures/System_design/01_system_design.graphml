@@ -396,10 +396,10 @@ Potméter<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e1" source="n2" target="n1">
+    <edge id="e1" source="n2" target="n13">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="-201.48479808000053" ty="16.724999999999568"/>
+          <y:Path sx="0.0" sy="0.0" tx="-0.05444934655912448" ty="-35.400000000000205"/>
           <y:LineStyle color="#333333" type="line" width="7.0"/>
           <y:Arrows source="standard" target="standard"/>
           <y:BendStyle smoothed="false"/>

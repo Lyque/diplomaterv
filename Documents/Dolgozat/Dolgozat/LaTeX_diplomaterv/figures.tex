@@ -102,7 +102,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Késleltetés és Jitter terheléssel és terhelés nélkül.}
-\label{fig:LatencyAndJitter}
+\label{fig:PlotLatencyAndJitter}
 \end{figure}
 
 % TaskSwitching
@@ -200,7 +200,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Taszkváltási idõ terheléssel és terhelés nélkül.}
-\label{fig:TaskSwitching}
+\label{fig:PlotTaskSwitching}
 \end{figure}
 
 % Preemption
@@ -293,8 +293,8 @@
   \addlegendentry{\textmugreek C/OS--III terheléssel}
 \end{axis}
 \end{tikzpicture}
-\caption[]{Premptálási idõ terheléssel és terhelés nélkül.}
-\label{fig:Preemption}
+\caption[]{Preemptálási idõ terheléssel és terhelés nélkül.}
+\label{fig:PlotPreemption}
 \end{figure}
 
 % Interrupt Latncy
@@ -398,7 +398,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Megszakítás-késleltetési idõ terheléssel és terhelés nélkül.}
-\label{fig:InterruptLatency}
+\label{fig:PlotInterruptLatency}
 \end{figure}
 
 % SemaphoreShuffling
@@ -492,7 +492,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Szemafor-váltási idõ terheléssel és terhelés nélkül.}
-\label{fig:SemaphoreShuffling}
+\label{fig:PlotSemaphoreShuffling}
 \end{figure}
 
 % DeadlockBreaking
@@ -586,7 +586,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Deadlock-feloldási idõ terheléssel és terhelés nélkül.}
-\label{fig:DeadlockBreaking}
+\label{fig:PlotDeadlockBreaking}
 \end{figure}
 
 % DatagramThroughput
@@ -684,7 +684,7 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Datagram-átviteli idõ terheléssel és terhelés nélkül.}
-\label{fig:DatagramThroughput}
+\label{fig:PlotDatagramThroughput}
 \end{figure}
 
 % LatencyAndJitter Raspberry
@@ -791,183 +791,9 @@
 \end{axis}
 \end{tikzpicture}
 \caption[]{Késleltetés és Jitter Raspberry Pi-n futó rendszereknél terheléssel és terhelés nélkül.}
-\label{fig:LatencyAndJitterRaspi}
+\label{fig:PlotLatencyAndJitterRaspi}
 \end{figure}
 
 
 %FlowCharts
-% StartMeasure
-\begin{figure}[h!]
-\centering
-\includegraphics[height=5cm]{figures/FlowCharts/StartMeasure.eps}
-\caption{StartMeasure taszk folyamatábrája.}
-\label{fig:StartMeas}
-\end{figure}
 
-% TaskSwitching
-\begin{figure}[h!]
-\centering
-\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/TaskSwitching.eps}
-\caption{Taszkváltási idõ méréséhez használt taszkok folyamatábrája.}
-\label{fig:TaskSwitching}
-\end{figure}
-
-% Preemption
-\begin{figure}[h!]
-\centering
-\includegraphics[height=10.7cm, angle=90]{figures/FlowCharts/Preemption.eps}
-\caption{Preemtálási idõ méréséhez használt taszkok folyamatábrája.}
-\label{fig:Preemption}
-\end{figure}
-
-% InterruptLatency
-\begin{figure}[h!]
-\centering
-\includegraphics[height=6.8cm]{figures/FlowCharts/InterruptLatency.eps}
-\caption{Megszakítás-késleltetési idõ méréséhez használt taszk folyamatábrája.}
-\label{fig:InterruptLatency}
-\end{figure}
-
-% SemaphoreShuffling
-\begin{figure}[h!]
-\centering
-\includegraphics[height=12cm]{figures/FlowCharts/SemaphoreShuffling.eps}
-\caption{Szemafor-váltási idõ méréséhez használt taszkok folyamatábrája.}
-\label{fig:SemaphoreShuffling}
-\end{figure}
-
-% DeadlockBreaking
-\begin{figure}[h!]
-\centering
-\includegraphics[height=11.81cm, angle=90]{figures/FlowCharts/DeadlockBreaking.eps}
-\caption{Deadlock-feloldási idõ méréséhez használt taszkok folyamatábrája.}
-\label{fig:DeadlockBreaking}
-\end{figure}
-
-% DatagramThroughput
-\begin{figure}[h!]
-\centering
-\includegraphics[height=16.53cm]{figures/FlowCharts/DatagramThroughput.eps}
-\caption{Datagram-átviteli idõ méréséhez használt taszkok folyamatábrája.}
-\label{fig:DatagramThroughput}
-\end{figure}
-
-% A3 paper size
-\clearpage
-\begingroup
-\advance\textwidth\pdfpagewidth
-\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
-\pdfpagewidth=2\pdfpagewidth
-
-% ADCTask
-\begin{figure}[h!]
-\centering
-\includegraphics[height=24.8cm, angle=90]{figures/FlowCharts/ADCTask.eps}
-\caption{Analog-Digital konverziót végzõ taszkok folyamatábrája.}
-\label{fig:ADCTask}
-\end{figure}
-
-% ChangeLEDState
-\begin{figure}[h!]
-\centering
-\includegraphics[height=23.25cm, angle=90]{figures/FlowCharts/ChangeLEDState.eps}
-\caption{A LED-ek állapotát vezérlõ taszkok folyamatábrája.}
-\label{fig:ChangeLEDState}
-\end{figure}
-
-\clearpage
-\endgroup
-
-% A3 paper size
-\clearpage
-\begingroup
-\advance\textwidth\pdfpagewidth
-\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
-\pdfpagewidth=2\pdfpagewidth
-
-% SwitchChanged
-\begin{figure}[h!]
-\centering
-\includegraphics[height=31cm, angle=90]{figures/FlowCharts/SwitchChanged.eps}
-\caption{Kapcsolók változását kezelõ taszkok folyamatábrája.}
-\label{fig:SwitchChanged}
-\end{figure}
-
-\clearpage
-\endgroup
-
-% A3 paper size
-\clearpage
-\begingroup
-\advance\textwidth\pdfpagewidth
-\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
-\pdfpagewidth=2\pdfpagewidth
-
-% BLE
-\begin{figure}[h!]
-\centering
-\includegraphics[height=28.62cm, angle=90]{figures/FlowCharts/BLE.eps}
-\caption{BLE112 modult vezérlõ taszk folyamatábrája.}
-\label{fig:BLE}
-\end{figure}
-
-\clearpage
-\endgroup
-
-% BLEReceive
-\begin{figure}[h!]
-\centering
-\includegraphics[height=15.83cm]{figures/FlowCharts/BLEReceive.eps}
-\caption{BLE112 modultól érkezõ válaszok feldolgozását taszk folyamatábrája.}
-\label{fig:BLEReceive}
-\end{figure}
-
-% BLESend
-\begin{figure}[h!]
-\centering
-\includegraphics[height=7.09cm]{figures/FlowCharts/BLESend.eps}
-\caption{BLE112 modulnak küldött üzenetek továbbítását végzõ taszk folyamatábrája.}
-\label{fig:BLESend}
-\end{figure}
-
-% UARTSend
-\begin{figure}[h!]
-\centering
-\includegraphics[height=7.09cm]{figures/FlowCharts/UARTSend.eps}
-\caption{A vezérlõnek küldött üzenetek továbbítását végzõ taszk folyamatábrája.}
-\label{fig:UARTSend}
-\end{figure}
-
-\begingroup
-\clearpage
-\newgeometry{top = 0.7cm}
-
-% UARTReceive
-\begin{figure}[h!]
-\centering
-\includegraphics[height=24.8cm]{figures/FlowCharts/UARTReceive.eps}
-\caption{A vezérlõ felöl érkezõ üzenetek feldolgozását végzõ taszk folyamatábrája.}
-\label{fig:UARTReceive}
-\end{figure}
-
-\clearpage
-\endgroup
-\restoregeometry
-
-% A3 paper size
-\clearpage
-\begingroup
-\advance\textwidth\pdfpagewidth
-\hsize=\textwidth\linewidth=\hsize\columnwidth=\hsize
-\pdfpagewidth=2\pdfpagewidth
-
-% RemoteControlConnected
-\begin{figure}[h!]
-\centering
-\includegraphics[height=20.11cm]{figures/FlowCharts/RemoteControlConnected.eps}
-\caption{A vezérlõ program csatlakozását kezelõ taszk folyamatábrája.}
-\label{fig:RemoteControlConnected}
-\end{figure} 
-
-\clearpage
-\endgroup
