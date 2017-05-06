@@ -7,7 +7,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumerate}
-\usepackage[thmmarks]{ntheorem}
+%\usepackage[thmmarks]{ntheorem}
+\usepackage[amsmath,amsthm,thmmarks]{ntheorem}
 \usepackage{graphics}
 \usepackage{epsfig}
 \usepackage{listings}
@@ -39,6 +40,13 @@
 
 % Hogy a képeket ne úsztassa fejezetek között
 \usepackage[section]{placeins}
+
+% Multirow használatához
+\usepackage{multirow}
+
+% Cella színezése
+\usepackage{colortbl}
+
 
 % Paragraph formázásának felülírása
 \titleformat{\paragraph}
@@ -130,15 +138,20 @@
 \newcommand{\sectref}[1]{\ref{sect:#1}.~fejezet}
 \newcommand{\tabref}[1]{\ref{tab:#1}.~táblázat}
 \newcommand{\appref}[1]{\ref{app:#1}.~Függelék}
+\newcommand{\lstref}[1]{\ref{lst:#1}.~list}
 
 \newcommand{\asecref}[1]{\aref{sec:#1}.~fejezet}
 \newcommand{\afigref}[1]{\aref{fig:#1}.~ábr}
 \newcommand{\atabref}[1]{\aref{tab:#1}.~táblázat}
 \newcommand{\aappref}[1]{\aref{app:#1}.~Függelék}
+\newcommand{\alstref}[1]{\aref{lst:#1}.~list}
 \newcommand{\Asecref}[1]{\Aref{sec:#1}.~fejezet}
 \newcommand{\Afigref}[1]{\Aref{fig:#1}.~ábr}
 \newcommand{\Atabref}[1]{\Aref{tab:#1}.~táblázat}
 \newcommand{\Aappref}[1]{\Aref{app:#1}.~Függelék}
+\newcommand{\Alstref}[1]{\Aref{lst:#1}.~list}
+
+\def\tm{\leavevmode\hbox{$\rm {}^{\text{\tiny $TM$}}$}}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 %\DeclareMathOperator*[1]{\floor}{arg\,max}
@@ -164,7 +177,6 @@
     chapter8,%
 	acknowledgement,%
 	appendices,%
-	figures,%
 }
 %--------------------------------------------------------------------------------------
 %	Setup captions
@@ -203,7 +215,6 @@ aboveskip=10pt}
 \include{chapter7}
 \include{chapter8}
 \include{acknowledgement}
-\include{figures}
 
 \listoffigures%\addcontentsline{toc}{chapter}{Ábrák jegyzéke}
 \listoftables%\addcontentsline{toc}{chapter}{Táblázatok jegyzéke}

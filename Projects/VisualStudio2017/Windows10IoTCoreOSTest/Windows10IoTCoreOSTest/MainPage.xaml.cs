@@ -60,12 +60,12 @@ namespace Windows10IoTCoreOSTest
         private const byte ADC_I2C_MAX_ACQ_TIME     = 0x1F;
 
         // BLE SensorTag Address
-        private const byte SENSORTAG_ADDRESS_0 = 0x80;//0x01;
-        private const byte SENSORTAG_ADDRESS_1 = 0xC8;//0x47;
-        private const byte SENSORTAG_ADDRESS_2 = 0xBE;//0xC1;
-        private const byte SENSORTAG_ADDRESS_3 = 0x89;//0x89;
-        private const byte SENSORTAG_ADDRESS_4 = 0x71;//0x71;
-        private const byte SENSORTAG_ADDRESS_5 = 0x24;//0x24;
+        private const byte SENSORTAG_ADDRESS_0 = 0x01;
+        private const byte SENSORTAG_ADDRESS_1 = 0x47;
+        private const byte SENSORTAG_ADDRESS_2 = 0xC1;
+        private const byte SENSORTAG_ADDRESS_3 = 0x89;
+        private const byte SENSORTAG_ADDRESS_4 = 0x71;
+        private const byte SENSORTAG_ADDRESS_5 = 0x24;
         // BLE Handles
         //  Temperature
         private const byte BLETEMPDATAHNDL          = 0x0024;

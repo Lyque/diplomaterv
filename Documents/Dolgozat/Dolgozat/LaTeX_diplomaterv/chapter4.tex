@@ -34,13 +34,13 @@ Minden szerver rendelkezik profillal (Profile), melyben az eszközrõl, illetve a 
 
 Elsõ körben az elérhetõ perifériákat és a felhasználható eszközöket sorakoztattam fel.
 
-A specifikációban szerepel, hogy SD kártyára kell a laplózást végeznem. Ezen kívül hõmérséklet mérését is meg kell valósítanom, amihez analóg kimenetû hõmérõt választottam (\emph{MCP9700A}). Szintén a specifikációban szerepel két szabadon állítható LED, illetve két kapcsoló is, melyek GPIO lábakat foglalnak el. További GPIO lábakat igényel az \emph{IN}, a négy darab \emph{ID} és az \emph{OUT} mérési pontok. A kapcsolók és az \emph{IN} lábak esetén megszakítást is támogatnia kell a lábaknak. A potméter kimeneti lába szintén analóg jelet közvetít a fejlesztõkártyák felé, így a szükséges analóg lábak száma összesen kettõ. Mivel a Raspberry~Pi nem rendelkezik analog-digital konverziót támogató lábakkal, ezért választanom kellett egy olyan digitális interfésszel rendelkezõ ADC IC-t, mely a mért adatokat a Raspberry~Pi számára elérhetõvé teszi. Erre a célra az \emph{ADS7924} négy csatornás IC-t választottam, mely I2C-n keresztül vezérelhetõ, és ugyanezen interfészen keresztül olvasható ki belõle a mért adat.
+A specifikációban szerepel, hogy SD kártyára kell a laplózást végeznem. Ezen kívül hõmérséklet mérését is meg kell valósítanom, amihez analóg kimenetû hõmérõt választottam (\emph{MCP9700A}). Szintén a specifikációban szerepel két szabadon állítható LED, illetve két kapcsoló is, melyek GPIO lábakat foglalnak el. További GPIO lábakat igényel az \emph{IN}, a négy darab \emph{ID} és az \emph{OUT} mérési pontok. A kapcsolók és az \emph{IN} lábak esetén megszakítást is támogatnia kell a lábaknak. A potméter kimeneti lába szintén analóg jelet közvetít a fejlesztõkártyák felé, így a szükséges analóg lábak száma összesen kettõ. Mivel a Raspberry~Pi nem rendelkezik analog-digital konverziót támogató lábakkal, ezért választanom kellett egy olyan digitális interfésszel rendelkezõ ADC IC-t, mely a mért adatokat a Raspberry~Pi számára elérhetõvé teszi. Erre a célra az \emph{ADS7924} négy csatornás IC-t választottam, mely I$^\textrm{2}$C-n keresztül vezérelhetõ, és ugyanezen interfészen keresztül olvasható ki belõle a mért adat.
 
 A vezeték nélküli kommunikációhoz használt BLE112 modul vezérelhetõ soros interfészen (\emph{flow-control} használatával és nélküle egyaránt) vagy USB-n keresztül. A fejlesztés során felmerülõ hibák megtalálása szempontjából a soros kommunikáció kedvezõbb, ezért azt választottam.
 
-Az STM32F4-Discovery kártya nem rendelkezik kijelzõvel, és a kiegészítõ kártyához kapható TFT kijelzõ sem állt rendelkezésemre, ezért az adatok megjelenítését és a LED-ek vezérlését asztali alkalmazással oldottam meg, amely soros kommunikáción keresztül küldi és fogadja az adatokat.
+Az STM32F4 Discovery kártya nem rendelkezik kijelzõvel, és a kiegészítõ kártyához kapható TFT kijelzõ sem állt rendelkezésemre, ezért az adatok megjelenítését és a LED-ek vezérlését asztali alkalmazással oldottam meg, amely soros kommunikáción keresztül küldi és fogadja az adatokat.
 
-Külsõ megtáplálásra is lehetõséget akartam teremteni, ezért \emph{DC Jack} csatlakozó is került az áramköri lapra. Mivel az STM32F4-Discovery rendelkezik $5~V$-os kivezetésekkel, ezért a külsõ feszültségforrás feszültségét is $5~V$-ra választottam, és az áramköri elemeknek szükséges $3~V$-ot \emph{LM317} feszültség-stabilizátor IC-vel állítottam elõ. A bemeneti feszültség forrásának (külsõ feszültségforrás vagy a fejlesztõkártya megfelelõ lába) kiválasztása jumper megfelelõ helyzetbe állításával történik.
+Külsõ megtáplálásra is lehetõséget akartam teremteni, ezért \emph{DC Jack} csatlakozó is került az áramköri lapra. Mivel az STM32F4 Discovery rendelkezik $5~V$-os kivezetésekkel, ezért a külsõ feszültségforrás feszültségét is $5~V$-ra választottam, és az áramköri elemeknek szükséges $3~V$-ot \emph{LM317} feszültség-stabilizátor IC-vel állítottam elõ. A bemeneti feszültség forrásának (külsõ feszültségforrás vagy a fejlesztõkártya megfelelõ lába) kiválasztása jumper megfelelõ helyzetbe állításával történik.
 
 Ezen kívül még SD kártya foglalat is helyet kapott a lemezen. Bár a STM32F4 - Base Board és a Raspberry~Pi is rendelkezik foglalattal, ezzel a kiegészítéssel a Base Board használata opcionálissá válik.
 
@@ -58,16 +58,16 @@ A fejlesztõkártyák felé a kapcsolatot tüskesorok alkalmazásával oldottam meg. Ez
   \item Mérés kimenete,
   \item Hõmérõ analóg kivezetése,
   \item Potméter kivezetése,
-  \item I2C.
+  \item I$^\textrm{2}$C.
 \end{itemize}
 
-Emellett tüskesorokat alkalmaztam a mérési pontok kivezetésére (IN, OUT és ID lábak), illetve az SD kártya foglalat csatlakoztatása is tüskesoron keresztül történhet. A BLE112 modul lábainak többsége szintén kivezetésre került, ezáltal a modul képességeinek tesztelésekhez is használható a kártya.
+Emellett tüskesorokat alkalmaztam a mérési pontok kivezetésére (IN, OUT és ID lábak\footnote{Az ID lábakok az éppen futó taszk 4~bites azonosítója mérhetõ.}), illetve az SD kártya foglalat csatlakoztatása is tüskesoron keresztül történhet. A BLE112 modul lábainak többsége szintén kivezetésre került, ezáltal a modul képességeinek tesztelésekhez is használható a kártya.
 
 %----------------------------------------------------------------------------
 \section{Hardverterv}
 %----------------------------------------------------------------------------
 
-A tápfeszültséget szolgáltathatja az STM32F4-Discovery fejlesztõkártya, vagy külsõ feszültségforrás is. A külsõ forrásból való táplálás esetén a túláram-védelmet \emph{multifuse} alkalmazásával oldottam meg. A multifuse védett oldala és az STM kártyáról érkezõ $5~V$-os feszültség $1\times 3$-as tüskesor két szélsõ lábára csatlakozik, ahol jumper kapcsolja a kiválasztott forrást a középsõ lábra. A középsõ láb látja el a mérõkártya többi részét $5~V$-os feszültséggel, és ebbõl állítja elõ az \emph{LM317} a $3~V$-os feszültséget. A bemenet védett a fordított polaritással rákapcsolt feszültséggel szemben. A tápfeszültség kapcsolási rajza \aappref{schematics} \figref{07_power_sch}áján látható.
+A tápfeszültséget szolgáltathatja az STM32F4 Discovery fejlesztõkártya, vagy külsõ feszültségforrás is. A külsõ forrásból való táplálás esetén a túláram-védelmet \emph{multifuse} alkalmazásával oldottam meg. A multifuse védett oldala és az STM kártyáról érkezõ $5~V$-os feszültség $1\times 3$-as tüskesor két szélsõ lábára csatlakozik, ahol jumper kapcsolja a kiválasztott forrást a középsõ lábra. A középsõ láb látja el a mérõkártya többi részét $5~V$-os feszültséggel, és ebbõl állítja elõ az \emph{LM317} a $3~V$-os feszültséget. A bemenet védett a fordított polaritással rákapcsolt feszültséggel szemben. A tápfeszültség kapcsolási rajza \aappref{schematics} \figref{07_power_sch}áján látható.
 
 A szenzorok (hõmérõ és potméter) analóg kimenete szûrés után a kimeneti tüskesorra és az ADC IC bemeneteire csatlakoznak. A használt ADS7924 IC kihasználatlan bemeneteit földre kötöttem. Az IC a bemeneteit multiplexálva az egyik kimeneti lábára vezeti ki, ahova tetszés szerint jelkondícionáló áramkört helyezhetünk, így nem kell minden bemenethez külön áramkört használni. A tervezés során nem használtam jelkondícionáló áramkört, viszont késõbbi alkalmazásokhoz ezt lehetõvé tettem $1\times 2$-es tüskesor elhelyezésével. A mérések során jumper zárja rövidre a tüskesor két lábát. Az ADC IC tápfeszültsége lekapcsolható. A szenzorok bekötése \aappref{schematics} \figref{02_sensors_sch}áján látható.
 
@@ -81,6 +81,7 @@ Az elkészült nyomtatott áramköri terv \aappref{pcb} \ref{fig:01_top_layer}. és \
 
 %----------------------------------------------------------------------------
 \section{Szoftverterv}
+\label{sec:softwareDesign}
 %----------------------------------------------------------------------------
 
 A méréshez használt szoftver tervezésekor figyelnem kellett arra, hogy a mérések könnyen elvégezhetõek legyenek, miközben az mért értékeket ne befolyásoljam. Emellett szempont volt a mérési adatok egyszerû feldolgozhatósága is.
@@ -199,6 +200,7 @@ A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg.
 
 %----------------------------------------------------------------------------
  \subsection{Legrosszabb válaszidõ}
+ \label{sec:fpgaMeas}
 %----------------------------------------------------------------------------
 
 A legrosszabb válaszidõ mérését a Rhealstone értékek meghatározásánál használt \emph{megszakítás-késleltetési idõ} szoftverével hajtom végre. Mivel a mérés során szükség van olyan számlálóra, mely rendelkezik felfele és lefele számláló bemenettel, így megoldást kellett találnom a mérés kivitelezésére.
@@ -212,7 +214,7 @@ Rendelkezésemre állt egy \emph{Basys~3} FPGA fejlesztõkártya, amin megfelelõ kiv
 \includegraphics[width=9cm]{figures/Eval_Boards/04_basys3.png}
 \caption{Basys~3 fejlesztõkártya.}
 \label{fig:Basys3}
-\end{figure} 
+\end{figure}
 
 % Bidirectional counter
 \begin{figure}[h!]

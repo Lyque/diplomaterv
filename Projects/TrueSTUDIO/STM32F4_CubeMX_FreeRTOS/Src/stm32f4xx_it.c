@@ -149,6 +149,7 @@ void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
+	/* Ütemezõ azonosítójának kitétele a lábakra */
 	__asm volatile
 	(
 	"	push {r0, r1, r2}								\n"

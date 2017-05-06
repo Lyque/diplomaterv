@@ -1,3 +1,53 @@
 %----------------------------------------------------------------------------
 \chapter{Mérés}
-%---------------------------------------------------------------------------- 
+%----------------------------------------------------------------------------
+
+A méréseket \emph{Tektronix TLA5201B} logikai analizátorral, illetve \asecref{fpgaMeas}ben bemutatott FPGA használatával végeztem el\footnote{A tervezés során felmerült, hogy oszcilloszkóppal végezzem el a méréseket, viszont minden mérés többszöri elvégzése idõigényes folyamat lett volna.}.
+
+A Tektronix TLA5201B logikai analizátor $32$~csatornával, $2$~Mbit memóriával rendelkezik és a \emph{MagniVu\tm} technológia alkalmazásával akár $125~ps$-os mintavételezés is megvalósítható. A mérések során a memória mérete miatt egységesen $20~ns$-os mintavételi idõvel dolgoztam\footnote{A $20~ns$ mintavételezási idõ a mikrokontroller órajeléhez viszonyítva ($168~MHz$) pontatlan mérést tesz lehetõvé, de a mérési eredmények így jó összehasonlítási alapot nyújtanak.}, de egyes méréseknél már ez a beállítás is nagy méretû kimeneti fájlt generált.
+
+%----------------------------------------------------------------------------
+\section{Mérési elrendezés}
+%----------------------------------------------------------------------------
+
+A logikai analizátor \emph{A1} csatornájának $0$--$3$ számozású vezetékeit a mérõkártya \emph{ID} lábaira csatlakoztattam, míg a $6$-os és $7$-es vezetékeit rendre az \emph{IN} és \emph{OUT} lábakra kötöttem. Az analizátor beállításaiban elneveztem a vezetékeket és az \emph{ID} lábakat csoportba rendeztem.
+
+A \emph{késleltetés} és \emph{megszakítás-késleltetési idõ} mérésénél az \emph{IN} lábhoz tartozó jelszint változására, míg a többi mérés esetén az indító taszk azonosítójára ($2$) állítottam be a trigger-feltételt. A mérések során repetitív mérési módot alkalmaztam, melyek eredményeit minden mérés után külön fájlba mentettem.
+
+Azon méréseknél, ahol bemeneti jel használata szükséges, ott \emph{Hameg HMF2550} jelengenerátor szolgáltatta a gerjesztést a mérõkártyán található BNC csatlakozón keresztül. A STM32F4 fejlesztõkártyán futó rendszerek esetén $5~kHz$-es, a Raspberry Pi-n futó rendszerek esetén $2~kHz$-es négyszögjellel dolgoztam.
+
+A mérések feldolgozását \emph{Python} szkripttel végeztem el. Két szkript megírása vált szükségessé. Az egyik szkript a mérés során keletkezett száz fájlból készített egy darab fájlt, míg a másik szkript végezte az meghatározandó adatok kinyerését az egyesített fájlból.
+
+%----------------------------------------------------------------------------
+\section{Adatok feldolgozása}
+%----------------------------------------------------------------------------
+
+Az analizátor kimeneti fájlja az értékeket tabulátorral választja el egymástól, ami a feldolgozás során nehezítette volna a feladatot\footnote{A Python nyelv \emph{csv} fájlokat feldolgozó modulja nem mûködik megfelelõen \emph{whitespace} tagoló karakterek alkalmazása esetén.}. Ezért az egyesítés végzõ szkript reguláris kifejezés segítségével pontosvesszõre cseréli az elválasztó karaktert. Az eredeti és az egyesített fájl részlete\footnote{A sor végi pontosvesszõ oka, hogy az elsõ méréseknél az utolsó oszlopban a két minta közt eltelt idõ (fix $20~ns$) is mentésre került. Késõbb tárhely-takarékosság miatt ezt az oszlopot töröltem.} látható \aref{lst:tektronixOutput} és \alstref{mergerOutput}ában.
+
+\begin{lstlisting}[caption={A Tektronix TLA5201B logikai analizátor kimeneti fájljának részlete.}\label{lst:tektronixOutput}]
+Sample   	ID	IN    	OUT
+        0	1 	0     	1
+        1	1 	0     	1
+        2	1 	0     	1
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Az egyesített fájl részlete}\label{lst:mergerOutput}]
+Sample;ID;IN;OUT;
+0;1;0;1;
+1;1;0;1;
+2;1;0;1;
+\end{lstlisting}
+
+Az egyesített fájlokat feldolgozó Python szkript bemeneti paraméterként a fájl nevét és a mérés azonosítóját várja. Az argumentumok függvényében feldolgozza az adatokat, és kimeneti fájlba másolja az egyes idõtartamokat $\mu s$ mértékegységben kifejezve, illetve a fájl végén az értékek várható értékét és az emprikus szórást is feltünteti.
+
+Az adatok várható értéke a mért értékek átlaga (\eqref{meanValue}~képlet), míg a tapasztalati szórás értékét \aref({eq:devValue})~kifejezés szerint határoztam meg.
+
+\begin{equation}
+\label{eq:meanValue}
+\hat{\mu}=\frac{\sum\limits_{i=1}^{N}t_{i}}{N}.
+\end{equation}
+
+\begin{equation}
+\label{eq:devValue}
+\sigma=\sqrt{\frac{\sum\limits_{i=1}^{N}(t_{i}-\mu)^2}{N-1}}.
+\end{equation} 

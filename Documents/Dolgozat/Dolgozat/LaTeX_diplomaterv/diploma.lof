@@ -49,24 +49,28 @@
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {B.1.}{\ignorespaces A m\'ert rendszer csatlakoztat\'as\'at megval\'os\IeC {\'\i }t\'o t\"uskesort \'es az egyes modulokat tartalmaz\'o rajz.\relax }}{82}{figure.caption.60}
-\select@language {magyar} \contentsline {figure}{\numberline {B.2.}{\ignorespaces T\'apfesz\"ults\'eg el\H o\'all\IeC {\'\i }t\'asa \'es jelz\'ese LED-ek haszn\'alat\'aval.\relax }}{82}{figure.caption.61}
-\select@language {magyar} \contentsline {figure}{\numberline {B.3.}{\ignorespaces A helyi \'allom\'ason elhelyezett h\H om\'er\H o \'es potm\'eter bek\"ot\'ese.\relax }}{83}{figure.caption.62}
-\select@language {magyar} \contentsline {figure}{\numberline {B.4.}{\ignorespaces ADC IC bek\"ot\'ese.\relax }}{83}{figure.caption.63}
-\select@language {magyar} \contentsline {figure}{\numberline {B.5.}{\ignorespaces BLE112 Bluetooth modul \'es a hozz\'a csatlakoz\'o programoz\'o t\"uskesor bek\"ot\'ese.\relax }}{83}{figure.caption.64}
-\select@language {magyar} \contentsline {figure}{\numberline {B.6.}{\ignorespaces SD k\'artya foglalat kivezet\'ese a t\"uskesorra.\relax }}{84}{figure.caption.65}
-\select@language {magyar} \contentsline {figure}{\numberline {B.7.}{\ignorespaces Vez\'erelhet\H o LED-ek \'es kapcsol\'ok bek\"ot\'ese.\relax }}{84}{figure.caption.66}
-\select@language {magyar} \contentsline {figure}{\numberline {B.8.}{\ignorespaces A m\'er\'esi folyamatot egyszer\H us\IeC {\'\i }t\H o kivezet\'esek bek\"ot\'ese.\relax }}{85}{figure.caption.67}
+\select@language {magyar} \contentsline {figure}{\numberline {B.1.}{\ignorespaces A m\'ert rendszer csatlakoztat\'as\'at megval\'os\IeC {\'\i }t\'o t\"uskesort \'es az egyes modulokat tartalmaz\'o rajz.\relax }}{94}{figure.caption.65}
+\select@language {magyar} \contentsline {figure}{\numberline {B.2.}{\ignorespaces T\'apfesz\"ults\'eg el\H o\'all\IeC {\'\i }t\'asa \'es jelz\'ese LED-ek haszn\'alat\'aval.\relax }}{94}{figure.caption.66}
+\select@language {magyar} \contentsline {figure}{\numberline {B.3.}{\ignorespaces A helyi \'allom\'ason elhelyezett h\H om\'er\H o \'es potm\'eter bek\"ot\'ese.\relax }}{95}{figure.caption.67}
+\select@language {magyar} \contentsline {figure}{\numberline {B.4.}{\ignorespaces ADC IC bek\"ot\'ese.\relax }}{95}{figure.caption.68}
+\select@language {magyar} \contentsline {figure}{\numberline {B.5.}{\ignorespaces BLE112 Bluetooth modul \'es a hozz\'a csatlakoz\'o programoz\'o t\"uskesor bek\"ot\'ese.\relax }}{95}{figure.caption.69}
+\select@language {magyar} \contentsline {figure}{\numberline {B.6.}{\ignorespaces SD k\'artya foglalat kivezet\'ese a t\"uskesorra.\relax }}{96}{figure.caption.70}
+\select@language {magyar} \contentsline {figure}{\numberline {B.7.}{\ignorespaces Vez\'erelhet\H o LED-ek \'es kapcsol\'ok bek\"ot\'ese.\relax }}{96}{figure.caption.71}
+\select@language {magyar} \contentsline {figure}{\numberline {B.8.}{\ignorespaces A m\'er\'esi folyamatot egyszer\H us\IeC {\'\i }t\H o kivezet\'esek bek\"ot\'ese.\relax }}{97}{figure.caption.72}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {C.1.}{\ignorespaces Alkatr\'esz oldali rajzolat.\relax }}{86}{figure.caption.68}
-\select@language {magyar} \contentsline {figure}{\numberline {C.2.}{\ignorespaces Forraszt\'asi oldali rajzolat.\relax }}{86}{figure.caption.69}
+\select@language {magyar} \contentsline {figure}{\numberline {C.1.}{\ignorespaces Alkatr\'esz oldali rajzolat.\relax }}{98}{figure.caption.73}
+\select@language {magyar} \contentsline {figure}{\numberline {C.2.}{\ignorespaces Forraszt\'asi oldali rajzolat.\relax }}{98}{figure.caption.74}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {D.1.}{\ignorespaces BLE112 modult\'ol \'erkez\H o v\'alaszok feldolgoz\'as\'at taszk folyamat\'abr\'aja.\relax }}{87}{figure.caption.70}
-\select@language {magyar} \contentsline {figure}{\numberline {D.2.}{\ignorespaces Analog-Digital konverzi\'ot v\'egz\H o taszkok folyamat\'abr\'aja.\relax }}{88}{figure.caption.71}
-\select@language {magyar} \contentsline {figure}{\numberline {D.3.}{\ignorespaces A LED-ek \'allapot\'at vez\'erl\H o taszkok folyamat\'abr\'aja.\relax }}{88}{figure.caption.72}
-\select@language {magyar} \contentsline {figure}{\numberline {D.4.}{\ignorespaces Kapcsol\'ok v\'altoz\'as\'at kezel\H o taszkok folyamat\'abr\'aja.\relax }}{89}{figure.caption.73}
-\select@language {magyar} \contentsline {figure}{\numberline {D.5.}{\ignorespaces BLE112 modult vez\'erl\H o taszk folyamat\'abr\'aja.\relax }}{90}{figure.caption.74}
-\select@language {magyar} \contentsline {figure}{\numberline {D.6.}{\ignorespaces BLE112 modulnak k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{91}{figure.caption.75}
-\select@language {magyar} \contentsline {figure}{\numberline {D.7.}{\ignorespaces A vez\'erl\H onek k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{91}{figure.caption.76}
-\select@language {magyar} \contentsline {figure}{\numberline {D.8.}{\ignorespaces A vez\'erl\H o fel\"ol \'erkez\H o \"uzenetek feldolgoz\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{92}{figure.caption.77}
-\select@language {magyar} \contentsline {figure}{\numberline {D.9.}{\ignorespaces A vez\'erl\H o program csatlakoz\'as\'at kezel\H o taszk folyamat\'abr\'aja.\relax }}{93}{figure.caption.78}
+\select@language {magyar} \contentsline {figure}{\numberline {D.1.}{\ignorespaces BLE112 modult\'ol \'erkez\H o v\'alaszok feldolgoz\'as\'at taszk folyamat\'abr\'aja.\relax }}{99}{figure.caption.75}
+\select@language {magyar} \contentsline {figure}{\numberline {D.2.}{\ignorespaces Analog-Digital konverzi\'ot v\'egz\H o taszkok folyamat\'abr\'aja.\relax }}{100}{figure.caption.76}
+\select@language {magyar} \contentsline {figure}{\numberline {D.3.}{\ignorespaces A LED-ek \'allapot\'at vez\'erl\H o taszkok folyamat\'abr\'aja.\relax }}{100}{figure.caption.77}
+\select@language {magyar} \contentsline {figure}{\numberline {D.4.}{\ignorespaces Kapcsol\'ok v\'altoz\'as\'at kezel\H o taszkok folyamat\'abr\'aja.\relax }}{101}{figure.caption.78}
+\select@language {magyar} \contentsline {figure}{\numberline {D.5.}{\ignorespaces BLE112 modult vez\'erl\H o taszk folyamat\'abr\'aja.\relax }}{102}{figure.caption.79}
+\select@language {magyar} \contentsline {figure}{\numberline {D.6.}{\ignorespaces BLE112 modulnak k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{103}{figure.caption.80}
+\select@language {magyar} \contentsline {figure}{\numberline {D.7.}{\ignorespaces A vez\'erl\H onek k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{103}{figure.caption.81}
+\select@language {magyar} \contentsline {figure}{\numberline {D.8.}{\ignorespaces A vez\'erl\H o fel\"ol \'erkez\H o \"uzenetek feldolgoz\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{104}{figure.caption.82}
+\select@language {magyar} \contentsline {figure}{\numberline {D.9.}{\ignorespaces A vez\'erl\H o program csatlakoz\'as\'at kezel\H o taszk folyamat\'abr\'aja.\relax }}{105}{figure.caption.83}
+\select@language {magyar} \addvspace {10\p@ }
+\select@language {magyar} \contentsline {figure}{\numberline {E.1.}{\ignorespaces T\'avoli vez\'erl\'est v\'egz\H o felhaszn\'al\'oi fel\"ulet.\relax }}{106}{figure.caption.84}
+\select@language {magyar} \contentsline {figure}{\numberline {E.2.}{\ignorespaces Windows 10 IoT Core alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{106}{figure.caption.85}
+\select@language {magyar} \contentsline {figure}{\numberline {E.3.}{\ignorespaces Raspbian alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{107}{figure.caption.86}
