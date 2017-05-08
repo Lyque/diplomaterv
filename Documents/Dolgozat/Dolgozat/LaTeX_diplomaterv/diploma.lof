@@ -2,11 +2,11 @@
 \select@language {magyar} \contentsline {figure}{\numberline {1.1.}{\ignorespaces L\'atsz\'olag a folyamatok p\'arhuzamosan futnak.\relax }}{11}{figure.caption.5}
 \select@language {magyar} \contentsline {figure}{\numberline {1.2.}{\ignorespaces A val\'os\'agban minden folyamat egy kis id\H oszeletet kap a processzort\'ol.\relax }}{12}{figure.caption.6}
 \select@language {magyar} \contentsline {figure}{\numberline {1.3.}{\ignorespaces Multilevel queue \"utemez\'es.\relax }}{14}{figure.caption.7}
-\select@language {magyar} \contentsline {figure}{\numberline {1.4.}{\ignorespaces Szinkroniz\'aci\'o bin\'aris szemafor seg\IeC {\'\i }ts\'eg\'evel.\relax }}{16}{figure.caption.8}
+\select@language {magyar} \contentsline {figure}{\numberline {1.4.}{\ignorespaces Szinkroniz\'aci\'o bin\'aris szemafor seg\IeC {\'\i }ts\'eg\'evel\cite {FreeRTOSManual}.\relax }}{16}{figure.caption.8}
 \select@language {magyar} \contentsline {figure}{\numberline {1.5.}{\ignorespaces Esem\'eny bek\"ovetkez\'es\'enek elveszt\'ese bin\'aris szemafor haszn\'alata sor\'an.\relax }}{17}{figure.caption.9}
-\select@language {magyar} \contentsline {figure}{\numberline {1.6.}{\ignorespaces Sz\'aml\'al\'o szemafor m\H uk\"od\'es\'enek szeml\'eltet\'ese.\relax }}{18}{figure.caption.10}
-\select@language {magyar} \contentsline {figure}{\numberline {1.7.}{\ignorespaces Mutex m\H uk\"od\'es\'enek szeml\'eltet\'ese.\relax }}{21}{figure.caption.11}
-\select@language {magyar} \contentsline {figure}{\numberline {1.8.}{\ignorespaces Sor m\H uk\"od\'es\'enek szeml\'eltet\'ese.\relax }}{22}{figure.caption.12}
+\select@language {magyar} \contentsline {figure}{\numberline {1.6.}{\ignorespaces Sz\'aml\'al\'o szemafor m\H uk\"od\'es\'enek szeml\'eltet\'ese\cite {FreeRTOSManual}.\relax }}{18}{figure.caption.10}
+\select@language {magyar} \contentsline {figure}{\numberline {1.7.}{\ignorespaces Mutex m\H uk\"od\'es\'enek szeml\'eltet\'ese\cite {FreeRTOSManual}.\relax }}{21}{figure.caption.11}
+\select@language {magyar} \contentsline {figure}{\numberline {1.8.}{\ignorespaces Sor m\H uk\"od\'es\'enek szeml\'eltet\'ese\cite {FreeRTOSManual}.\relax }}{22}{figure.caption.12}
 \select@language {magyar} \contentsline {figure}{\numberline {1.9.}{\ignorespaces Priorit\'as inverzi\'o jelens\'ege.\relax }}{22}{figure.caption.13}
 \select@language {magyar} \contentsline {figure}{\numberline {1.10.}{\ignorespaces Priorit\'as \"or\"okl\'es, mint a priorit\'as inverzi\'o egyik megold\'asa.\relax }}{23}{figure.caption.14}
 \select@language {magyar} \contentsline {figure}{\numberline {1.11.}{\ignorespaces Holtponti helyzet kialakul\'as\'anak egy egyszer\H u p\'eld\'aja.\relax }}{23}{figure.caption.15}
@@ -14,63 +14,64 @@
 \select@language {magyar} \contentsline {figure}{\numberline {2.1.}{\ignorespaces STM32F4 Discovery fejleszt\H ok\'artya.\relax }}{25}{figure.caption.16}
 \select@language {magyar} \contentsline {figure}{\numberline {2.2.}{\ignorespaces STM32F4 Discovery BaseBoard kieg\'esz\IeC {\'\i }t\H o k\'artya.\relax }}{26}{figure.caption.17}
 \select@language {magyar} \contentsline {figure}{\numberline {2.3.}{\ignorespaces Raspberry~Pi~3 bankk\'artya m\'eret\H u PC.\relax }}{26}{figure.caption.18}
-\select@language {magyar} \contentsline {figure}{\numberline {2.4.}{\ignorespaces Az UBM~Tech \'altal 2015-ben publik\'alt be\'agyazott oper\'aci\'os rendszer haszn\'alati statisztika.\relax }}{28}{figure.caption.19}
+\select@language {magyar} \contentsline {figure}{\numberline {2.4.}{\ignorespaces Az UBM~Tech \'altal 2015-ben publik\'alt be\'agyazott oper\'aci\'os rendszer haszn\'alati statisztika\cite {UBMStudy}.\relax }}{28}{figure.caption.19}
 \select@language {magyar} \contentsline {figure}{\numberline {2.5.}{\ignorespaces Taszk lehets\'eges \'allapotai a \unhbox \voidb@x \hbox {FreeRTOS} rendszerben (egyszer\H us\IeC {\'\i }tett).\relax }}{30}{figure.caption.21}
 \select@language {magyar} \contentsline {figure}{\numberline {2.6.}{\ignorespaces Taszk lehets\'eges \'allapotai a \unhbox \voidb@x \hbox {FreeRTOS} rendszerben.\relax }}{30}{figure.caption.22}
 \select@language {magyar} \contentsline {figure}{\numberline {2.7.}{\ignorespaces Megszak\IeC {\'\i }t\'asok k\'esleletett feldolgoz\'as\'anak szeml\'eltet\'ese.\relax }}{34}{figure.caption.23}
 \select@language {magyar} \contentsline {figure}{\numberline {2.8.}{\ignorespaces A heap\_1.c implement\'aci\'oj\'anak m\H uk\"od\'ese.\relax }}{37}{figure.caption.24}
 \select@language {magyar} \contentsline {figure}{\numberline {2.9.}{\ignorespaces A heap\_2.c implement\'aci\'oj\'anak m\H uk\"od\'ese.\relax }}{38}{figure.caption.25}
-\select@language {magyar} \contentsline {figure}{\numberline {2.10.}{\ignorespaces Taszk lehets\'eges \'allapotai a \unhbox \voidb@x \hbox {\textmugreek C/OS--III} rendszerben.\relax }}{39}{figure.caption.26}
+\select@language {magyar} \contentsline {figure}{\numberline {2.10.}{\ignorespaces Taszk lehets\'eges \'allapotai a \unhbox \voidb@x \hbox {\textmugreek C/OS--III} rendszerben.\relax }}{40}{figure.caption.26}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {3.1.}{\ignorespaces Az oper\'aci\'os rendszer k\'esleltet\'es\'enek szeml\'eltet\'ese.\relax }}{45}{figure.caption.28}
-\select@language {magyar} \contentsline {figure}{\numberline {3.2.}{\ignorespaces A k\'esleltet\'es jitter\'enek szeml\'eltet\'ese.\relax }}{45}{figure.caption.29}
-\select@language {magyar} \contentsline {figure}{\numberline {3.3.}{\ignorespaces A taszv\'alt\'asi id\H o szeml\'eltet\'ese.\relax }}{46}{figure.caption.30}
-\select@language {magyar} \contentsline {figure}{\numberline {3.4.}{\ignorespaces A preempt\'al\'asi id\H o szeml\'eltet\'ese.\relax }}{47}{figure.caption.31}
-\select@language {magyar} \contentsline {figure}{\numberline {3.5.}{\ignorespaces A megszak\IeC {\'\i }t\'as-k\'esleltet\'esi id\H o szeml\'eltet\'ese.\relax }}{47}{figure.caption.32}
-\select@language {magyar} \contentsline {figure}{\numberline {3.6.}{\ignorespaces A szemafor-v\'alt\'asi id\H o szeml\'eltet\'ese (1989-es meghat\'aroz\'as alapj\'an).\relax }}{48}{figure.caption.33}
-\select@language {magyar} \contentsline {figure}{\numberline {3.7.}{\ignorespaces A szemafor-v\'alt\'asi id\H o szeml\'eltet\'ese (1990-es meghat\'aroz\'as alapj\'an).\relax }}{48}{figure.caption.34}
-\select@language {magyar} \contentsline {figure}{\numberline {3.8.}{\ignorespaces A deadlock-felold\'asi id\H o szeml\'eltet\'ese.\relax }}{49}{figure.caption.35}
-\select@language {magyar} \contentsline {figure}{\numberline {3.9.}{\ignorespaces A datagram-\'atviteli id\H o szeml\'eltet\'ese.\relax }}{49}{figure.caption.36}
-\select@language {magyar} \contentsline {figure}{\numberline {3.10.}{\ignorespaces A taszk k\"oz\"otti \"uzenet-k\'esleltet\'esi id\H o szeml\'eltet\'ese.\relax }}{49}{figure.caption.37}
-\select@language {magyar} \contentsline {figure}{\numberline {3.11.}{\ignorespaces A legrosszabb v\'alaszid\H o m\'er\'esi \"ossze\'all\IeC {\'\i }t\'asa.\relax }}{51}{figure.caption.38}
+\select@language {magyar} \contentsline {figure}{\numberline {3.1.}{\ignorespaces Az oper\'aci\'os rendszer k\'esleltet\'es\'enek szeml\'eltet\'ese.\relax }}{46}{figure.caption.28}
+\select@language {magyar} \contentsline {figure}{\numberline {3.2.}{\ignorespaces A k\'esleltet\'es jitter\'enek szeml\'eltet\'ese.\relax }}{46}{figure.caption.29}
+\select@language {magyar} \contentsline {figure}{\numberline {3.3.}{\ignorespaces A taszv\'alt\'asi id\H o szeml\'eltet\'ese.\relax }}{47}{figure.caption.30}
+\select@language {magyar} \contentsline {figure}{\numberline {3.4.}{\ignorespaces A preempt\'al\'asi id\H o szeml\'eltet\'ese.\relax }}{48}{figure.caption.31}
+\select@language {magyar} \contentsline {figure}{\numberline {3.5.}{\ignorespaces A megszak\IeC {\'\i }t\'as-k\'esleltet\'esi id\H o szeml\'eltet\'ese.\relax }}{48}{figure.caption.32}
+\select@language {magyar} \contentsline {figure}{\numberline {3.6.}{\ignorespaces A szemafor-v\'alt\'asi id\H o szeml\'eltet\'ese (1989-es meghat\'aroz\'as alapj\'an).\relax }}{49}{figure.caption.33}
+\select@language {magyar} \contentsline {figure}{\numberline {3.7.}{\ignorespaces A szemafor-v\'alt\'asi id\H o szeml\'eltet\'ese (1990-es meghat\'aroz\'as alapj\'an).\relax }}{49}{figure.caption.34}
+\select@language {magyar} \contentsline {figure}{\numberline {3.8.}{\ignorespaces A deadlock-felold\'asi id\H o szeml\'eltet\'ese.\relax }}{50}{figure.caption.35}
+\select@language {magyar} \contentsline {figure}{\numberline {3.9.}{\ignorespaces A datagram-\'atviteli id\H o szeml\'eltet\'ese.\relax }}{50}{figure.caption.36}
+\select@language {magyar} \contentsline {figure}{\numberline {3.10.}{\ignorespaces A taszk k\"oz\"otti \"uzenet-k\'esleltet\'esi id\H o szeml\'eltet\'ese.\relax }}{50}{figure.caption.37}
+\select@language {magyar} \contentsline {figure}{\numberline {3.11.}{\ignorespaces A legrosszabb v\'alaszid\H o m\'er\'esi \"ossze\'all\IeC {\'\i }t\'asa.\relax }}{52}{figure.caption.38}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {4.1.}{\ignorespaces StartMeasure taszk folyamat\'abr\'aja.\relax }}{57}{figure.caption.39}
-\select@language {magyar} \contentsline {figure}{\numberline {4.2.}{\ignorespaces Taszkv\'alt\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{58}{figure.caption.40}
-\select@language {magyar} \contentsline {figure}{\numberline {4.3.}{\ignorespaces Preemt\'al\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{59}{figure.caption.41}
-\select@language {magyar} \contentsline {figure}{\numberline {4.4.}{\ignorespaces Megszak\IeC {\'\i }t\'as-k\'esleltet\'esi id\H o m\'er\'es\'ehez haszn\'alt taszk folyamat\'abr\'aja.\relax }}{60}{figure.caption.42}
-\select@language {magyar} \contentsline {figure}{\numberline {4.5.}{\ignorespaces Szemafor-v\'alt\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{61}{figure.caption.43}
-\select@language {magyar} \contentsline {figure}{\numberline {4.6.}{\ignorespaces Deadlock-felold\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{62}{figure.caption.44}
-\select@language {magyar} \contentsline {figure}{\numberline {4.7.}{\ignorespaces Datagram-\'atviteli id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{63}{figure.caption.45}
-\select@language {magyar} \contentsline {figure}{\numberline {4.8.}{\ignorespaces Basys~3 fejleszt\H ok\'artya.\relax }}{64}{figure.caption.46}
-\select@language {magyar} \contentsline {figure}{\numberline {4.9.}{\ignorespaces A bemeneti jelek \'eldetekt\'al\'as\'at v\'egz\H o \'aramk\"or.\relax }}{64}{figure.caption.47}
-\select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \addvspace {10\p@ }
+\select@language {magyar} \contentsline {figure}{\numberline {4.1.}{\ignorespaces Az elk\'esz\"ult m\'er\H ok\'artya.\relax }}{58}{figure.caption.39}
+\select@language {magyar} \contentsline {figure}{\numberline {4.2.}{\ignorespaces StartMeasure taszk folyamat\'abr\'aja.\relax }}{59}{figure.caption.40}
+\select@language {magyar} \contentsline {figure}{\numberline {4.3.}{\ignorespaces Taszkv\'alt\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{60}{figure.caption.41}
+\select@language {magyar} \contentsline {figure}{\numberline {4.4.}{\ignorespaces Preemt\'al\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{61}{figure.caption.42}
+\select@language {magyar} \contentsline {figure}{\numberline {4.5.}{\ignorespaces Megszak\IeC {\'\i }t\'as-k\'esleltet\'esi id\H o m\'er\'es\'ehez haszn\'alt taszk folyamat\'abr\'aja.\relax }}{62}{figure.caption.43}
+\select@language {magyar} \contentsline {figure}{\numberline {4.6.}{\ignorespaces Szemafor-v\'alt\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{62}{figure.caption.44}
+\select@language {magyar} \contentsline {figure}{\numberline {4.7.}{\ignorespaces Deadlock-felold\'asi id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{63}{figure.caption.45}
+\select@language {magyar} \contentsline {figure}{\numberline {4.8.}{\ignorespaces Datagram-\'atviteli id\H o m\'er\'es\'ehez haszn\'alt taszkok folyamat\'abr\'aja.\relax }}{64}{figure.caption.46}
+\select@language {magyar} \contentsline {figure}{\numberline {4.9.}{\ignorespaces Basys~3 fejleszt\H ok\'artya.\relax }}{65}{figure.caption.47}
+\select@language {magyar} \contentsline {figure}{\numberline {4.10.}{\ignorespaces A bemeneti jelek \'eldetekt\'al\'as\'at v\'egz\H o \'aramk\"or.\relax }}{66}{figure.caption.48}
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {B.1.}{\ignorespaces A m\'ert rendszer csatlakoztat\'as\'at megval\'os\IeC {\'\i }t\'o t\"uskesort \'es az egyes modulokat tartalmaz\'o rajz.\relax }}{94}{figure.caption.65}
-\select@language {magyar} \contentsline {figure}{\numberline {B.2.}{\ignorespaces T\'apfesz\"ults\'eg el\H o\'all\IeC {\'\i }t\'asa \'es jelz\'ese LED-ek haszn\'alat\'aval.\relax }}{94}{figure.caption.66}
-\select@language {magyar} \contentsline {figure}{\numberline {B.3.}{\ignorespaces A helyi \'allom\'ason elhelyezett h\H om\'er\H o \'es potm\'eter bek\"ot\'ese.\relax }}{95}{figure.caption.67}
-\select@language {magyar} \contentsline {figure}{\numberline {B.4.}{\ignorespaces ADC IC bek\"ot\'ese.\relax }}{95}{figure.caption.68}
-\select@language {magyar} \contentsline {figure}{\numberline {B.5.}{\ignorespaces BLE112 Bluetooth modul \'es a hozz\'a csatlakoz\'o programoz\'o t\"uskesor bek\"ot\'ese.\relax }}{95}{figure.caption.69}
-\select@language {magyar} \contentsline {figure}{\numberline {B.6.}{\ignorespaces SD k\'artya foglalat kivezet\'ese a t\"uskesorra.\relax }}{96}{figure.caption.70}
-\select@language {magyar} \contentsline {figure}{\numberline {B.7.}{\ignorespaces Vez\'erelhet\H o LED-ek \'es kapcsol\'ok bek\"ot\'ese.\relax }}{96}{figure.caption.71}
-\select@language {magyar} \contentsline {figure}{\numberline {B.8.}{\ignorespaces A m\'er\'esi folyamatot egyszer\H us\IeC {\'\i }t\H o kivezet\'esek bek\"ot\'ese.\relax }}{97}{figure.caption.72}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {C.1.}{\ignorespaces Alkatr\'esz oldali rajzolat.\relax }}{98}{figure.caption.73}
-\select@language {magyar} \contentsline {figure}{\numberline {C.2.}{\ignorespaces Forraszt\'asi oldali rajzolat.\relax }}{98}{figure.caption.74}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {D.1.}{\ignorespaces BLE112 modult\'ol \'erkez\H o v\'alaszok feldolgoz\'as\'at taszk folyamat\'abr\'aja.\relax }}{99}{figure.caption.75}
-\select@language {magyar} \contentsline {figure}{\numberline {D.2.}{\ignorespaces Analog-Digital konverzi\'ot v\'egz\H o taszkok folyamat\'abr\'aja.\relax }}{100}{figure.caption.76}
-\select@language {magyar} \contentsline {figure}{\numberline {D.3.}{\ignorespaces A LED-ek \'allapot\'at vez\'erl\H o taszkok folyamat\'abr\'aja.\relax }}{100}{figure.caption.77}
-\select@language {magyar} \contentsline {figure}{\numberline {D.4.}{\ignorespaces Kapcsol\'ok v\'altoz\'as\'at kezel\H o taszkok folyamat\'abr\'aja.\relax }}{101}{figure.caption.78}
-\select@language {magyar} \contentsline {figure}{\numberline {D.5.}{\ignorespaces BLE112 modult vez\'erl\H o taszk folyamat\'abr\'aja.\relax }}{102}{figure.caption.79}
-\select@language {magyar} \contentsline {figure}{\numberline {D.6.}{\ignorespaces BLE112 modulnak k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{103}{figure.caption.80}
-\select@language {magyar} \contentsline {figure}{\numberline {D.7.}{\ignorespaces A vez\'erl\H onek k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{103}{figure.caption.81}
-\select@language {magyar} \contentsline {figure}{\numberline {D.8.}{\ignorespaces A vez\'erl\H o fel\"ol \'erkez\H o \"uzenetek feldolgoz\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{104}{figure.caption.82}
-\select@language {magyar} \contentsline {figure}{\numberline {D.9.}{\ignorespaces A vez\'erl\H o program csatlakoz\'as\'at kezel\H o taszk folyamat\'abr\'aja.\relax }}{105}{figure.caption.83}
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {figure}{\numberline {E.1.}{\ignorespaces T\'avoli vez\'erl\'est v\'egz\H o felhaszn\'al\'oi fel\"ulet.\relax }}{106}{figure.caption.84}
-\select@language {magyar} \contentsline {figure}{\numberline {E.2.}{\ignorespaces Windows 10 IoT Core alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{106}{figure.caption.85}
-\select@language {magyar} \contentsline {figure}{\numberline {E.3.}{\ignorespaces Raspbian alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{107}{figure.caption.86}
+\select@language {magyar} \contentsline {figure}{\numberline {B.1.}{\ignorespaces A m\'ert rendszer csatlakoztat\'as\'at megval\'os\IeC {\'\i }t\'o t\"uskesort \'es az egyes modulokat tartalmaz\'o rajz.\relax }}{99}{figure.caption.70}
+\select@language {magyar} \contentsline {figure}{\numberline {B.2.}{\ignorespaces T\'apfesz\"ults\'eg el\H o\'all\IeC {\'\i }t\'asa \'es jelz\'ese LED-ek haszn\'alat\'aval.\relax }}{99}{figure.caption.71}
+\select@language {magyar} \contentsline {figure}{\numberline {B.3.}{\ignorespaces A helyi \'allom\'ason elhelyezett h\H om\'er\H o \'es potm\'eter bek\"ot\'ese.\relax }}{100}{figure.caption.72}
+\select@language {magyar} \contentsline {figure}{\numberline {B.4.}{\ignorespaces ADC IC bek\"ot\'ese.\relax }}{100}{figure.caption.73}
+\select@language {magyar} \contentsline {figure}{\numberline {B.5.}{\ignorespaces BLE112 Bluetooth modul \'es a hozz\'a csatlakoz\'o programoz\'o t\"uskesor bek\"ot\'ese.\relax }}{100}{figure.caption.74}
+\select@language {magyar} \contentsline {figure}{\numberline {B.6.}{\ignorespaces SD k\'artya foglalat kivezet\'ese a t\"uskesorra.\relax }}{101}{figure.caption.75}
+\select@language {magyar} \contentsline {figure}{\numberline {B.7.}{\ignorespaces Vez\'erelhet\H o LED-ek \'es kapcsol\'ok bek\"ot\'ese.\relax }}{101}{figure.caption.76}
+\select@language {magyar} \contentsline {figure}{\numberline {B.8.}{\ignorespaces A m\'er\'esi folyamatot egyszer\H us\IeC {\'\i }t\H o kivezet\'esek bek\"ot\'ese.\relax }}{102}{figure.caption.77}
+\select@language {magyar} \addvspace {10\p@ }
+\select@language {magyar} \contentsline {figure}{\numberline {C.1.}{\ignorespaces Alkatr\'esz oldali rajzolat.\relax }}{103}{figure.caption.78}
+\select@language {magyar} \contentsline {figure}{\numberline {C.2.}{\ignorespaces Forraszt\'asi oldali rajzolat.\relax }}{103}{figure.caption.79}
+\select@language {magyar} \addvspace {10\p@ }
+\select@language {magyar} \contentsline {figure}{\numberline {D.1.}{\ignorespaces BLE112 modult\'ol \'erkez\H o v\'alaszok feldolgoz\'as\'at taszk folyamat\'abr\'aja.\relax }}{104}{figure.caption.80}
+\select@language {magyar} \contentsline {figure}{\numberline {D.2.}{\ignorespaces Analog-Digital konverzi\'ot v\'egz\H o taszkok folyamat\'abr\'aja.\relax }}{105}{figure.caption.81}
+\select@language {magyar} \contentsline {figure}{\numberline {D.3.}{\ignorespaces A LED-ek \'allapot\'at vez\'erl\H o taszkok folyamat\'abr\'aja.\relax }}{105}{figure.caption.82}
+\select@language {magyar} \contentsline {figure}{\numberline {D.4.}{\ignorespaces Kapcsol\'ok v\'altoz\'as\'at kezel\H o taszkok folyamat\'abr\'aja.\relax }}{106}{figure.caption.83}
+\select@language {magyar} \contentsline {figure}{\numberline {D.5.}{\ignorespaces BLE112 modult vez\'erl\H o taszk folyamat\'abr\'aja.\relax }}{107}{figure.caption.84}
+\select@language {magyar} \contentsline {figure}{\numberline {D.6.}{\ignorespaces BLE112 modulnak k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{108}{figure.caption.85}
+\select@language {magyar} \contentsline {figure}{\numberline {D.7.}{\ignorespaces A vez\'erl\H onek k\"uld\"ott \"uzenetek tov\'abb\IeC {\'\i }t\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{108}{figure.caption.86}
+\select@language {magyar} \contentsline {figure}{\numberline {D.8.}{\ignorespaces A vez\'erl\H o fel\"ol \'erkez\H o \"uzenetek feldolgoz\'as\'at v\'egz\H o taszk folyamat\'abr\'aja.\relax }}{109}{figure.caption.87}
+\select@language {magyar} \contentsline {figure}{\numberline {D.9.}{\ignorespaces A vez\'erl\H o program csatlakoz\'as\'at kezel\H o taszk folyamat\'abr\'aja.\relax }}{110}{figure.caption.88}
+\select@language {magyar} \addvspace {10\p@ }
+\select@language {magyar} \contentsline {figure}{\numberline {E.1.}{\ignorespaces T\'avoli vez\'erl\'est v\'egz\H o felhaszn\'al\'oi fel\"ulet.\relax }}{111}{figure.caption.89}
+\select@language {magyar} \contentsline {figure}{\numberline {E.2.}{\ignorespaces Windows 10 IoT Core alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{111}{figure.caption.90}
+\select@language {magyar} \contentsline {figure}{\numberline {E.3.}{\ignorespaces Raspbian alkalmaz\'as felhaszn\'al\'oi fel\"ulete.\relax }}{112}{figure.caption.91}

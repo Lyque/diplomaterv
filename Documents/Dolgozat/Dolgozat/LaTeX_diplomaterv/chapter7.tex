@@ -1,6 +1,132 @@
 %----------------------------------------------------------------------------
 \chapter{Eredmények kiértékelése}
 %----------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------
+\section{Memóriaigény}
+%----------------------------------------------------------------------------
+
+Az Atollic TrueSTUDIO \emph{GCC toolchain}-t használt a bináris állomány elõállítására, ezáltal minden fordítás után információt kapunk a felhasznált memóriaterületekrõl az alábbi formában:
+\begin{lstlisting}
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  61752	     16	  55032	 116800	  1c840 <outputFile>
+\end{lstlisting}
+
+Minden érték byte-ban értendõ. A \verb;text; a flash memóriába kerülõ adat méretét jelöli, a \verb;data; a RAM-ban tárolt, inicializált adat mérete, míg a \verb;bss; a RAM-ban tárolt inicializálatlan adat. Végül az összesített értéket láthatjuk decimális és hexadecimális alakban.
+
+Az eredményeken látszik, hogy a \textmugreek C/OS nagyobb területet használ a ROM-ból, de szignifikánsan kevesebb a RAM igénye (\ref{tab:freeRtosMemory}. és \tabref{ucosMemory}). A taszkok létrehozása mindkét rendszer esetén jelentõs területet igényelt a flash memóriából, viszont az egyes mérések között nem változott jelentõsen a memóriaigény.
+
+Az ipari alkalmazást szimuláló taszkok hozzáadásával a két rendszer közötti összesített különbség csökkent, de különbözõ arányban használják a csak olvasható és az írható memóriaterületet.
+
+\begin{table}[h!]
+\caption{A FreeRTOS által elfoglalt memória az ipari alkalmazás taszkjai nélkül.}
+\label{tab:freeRtosMemory}
+\center
+\begin{tabular}{|l||r|r|r|r|}
+\hline
+ & \multicolumn{1}{c|}{text} & \multicolumn{1}{c|}{data} & \multicolumn{1}{c|}{bss} & \multicolumn{1}{c|}{Összesített} \\
+\hline
+\hline
+Késleltetés & 11872 & 16 & 58792 & 70680 \\
+\hline
+Taszkváltási idõ & 16504 & 16 & 58816 & 75336 \\
+\hline
+Preemptálási idõ & 16520 & 16 & 58816 & 75352 \\
+\hline
+Megszakítás-késleltetési idõ & 16264 & 16 & 58800 & 75080 \\
+\hline
+Szemafor-váltási idõ & 16440 & 16 & 58816 & 75272 \\
+\hline
+Deadlock-feloldási idõ & 17048 & 16 & 58820 & 75884 \\
+\hline
+Datagram-átviteli idõ & 17344 & 16 & 58820 & 76180 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{A \textmugreek C/OS--III által elfoglalt memória az ipari alkalmazás taszkjai nélkül.}
+\label{tab:ucosMemory}
+\center
+\begin{tabular}{|l||r|r|r|r|}
+\hline
+ & \multicolumn{1}{c|}{text} & \multicolumn{1}{c|}{data} & \multicolumn{1}{c|}{bss} & \multicolumn{1}{c|}{Összesített} \\
+\hline
+\hline
+Késleltetés & 17400 & 12 & 38692 & 56104 \\
+\hline
+Taszkváltási idõ & 18700 & 12 & 40744 & 59456 \\
+\hline
+Preemptálási idõ & 18732 & 12 & 40744 & 59488 \\
+\hline
+Megszakítás-késleltetési idõ & 18460 & 12 & 39376 & 57848 \\
+\hline
+Szemafor-váltási idõ & 18680 & 12 & 40140 & 58832 \\
+\hline
+Deadlock-feloldási idõ & 20016 & 12 & 40792 & 60820 \\
+\hline
+Datagram-átviteli idõ & 20436 & 12 & 40188 & 60636 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{A FreeRTOS által elfoglalt memória az ipari alkalmazás taszkjaival.}
+\label{tab:freeRtosMemoryLoad}
+\center
+\begin{tabular}{|l||r|r|r|r|}
+\hline
+ & \multicolumn{1}{c|}{text} & \multicolumn{1}{c|}{data} & \multicolumn{1}{c|}{bss} & \multicolumn{1}{c|}{Összesített} \\
+\hline
+\hline
+Késleltetés & 58536 & 20 & 59452 & 118008 \\
+\hline
+Taszkváltási idõ & 59008 & 20 & 59468 & 118496 \\
+\hline
+Preemptálási idõ & 59024 & 20 & 59468 & 118512 \\
+\hline
+Megszakítás-késleltetési idõ & 58692 & 20 & 59452 & 118164 \\
+\hline
+Szemafor-váltási idõ & 58944 & 20 & 59472 & 118436 \\
+\hline
+Deadlock-feloldási idõ & 59556 & 20 & 59476 & 119052 \\
+\hline
+Datagram-átviteli idõ & 59132 & 20 & 59476 & 118628 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{A \textmugreek C/OS--III által elfoglalt memória az ipari alkalmazás taszkjaival.}
+\label{tab:ucosMemoryLoad}
+\center
+\begin{tabular}{|l||r|r|r|r|}
+\hline
+ & \multicolumn{1}{c|}{text} & \multicolumn{1}{c|}{data} & \multicolumn{1}{c|}{bss} & \multicolumn{1}{c|}{Összesített} \\
+\hline
+\hline
+Késleltetés & 60928 & 16 & 53536 & 114480 \\
+\hline
+Taszkváltási idõ & 61436 & 16 & 55584 & 117036 \\
+\hline
+Preemptálási idõ & 61468 & 16 & 55584 & 117068 \\
+\hline
+Megszakítás-késleltetési idõ & 61120 & 16 & 54216 & 115352 \\
+\hline
+Szemafor-váltási idõ & 61412 & 16 & 54984 & 116412 \\
+\hline
+Deadlock-feloldási idõ & 62752 & 16 & 55632 & 118400 \\
+\hline
+Datagram-átviteli idõ & 61752 & 16 & 55032 & 116800 \\
+\hline
+\end{tabular}
+\end{table}
+
+%----------------------------------------------------------------------------
+\section{Mérések}
+%----------------------------------------------------------------------------
+
 \newcounter{halftick}
 
 A mért adatokból számolt várható értékeket és a tapasztalati szórás értékeit \atabref{rhealstoneMeasurements} foglalja össze. A megjelenített hisztogrammok nem minden esetben tartalmazzák a teljes mintahalmazt, mert bizonyos értékek nagy szórással rendelkeztek, és a hasznos tartomány áttekinthetõsége romlott volna. A táblázatban feltüntetett értékek meghatározásában azonban részt vettek. A minták száma a mérések során változó volt, és a terheléses méréseknél minden esetben kevesebb minta állt rendelkezésre, mert amennyiben a mérési folyamatot egy másik taszk futása megszakította, úgy az adat nem került felhasználásra.
@@ -469,7 +595,7 @@ A megszakítás-késleltetési idõ hisztogramjainak alakja hasonló a \emph{késleltet
 \label{fig:PlotInterruptLatency}
 \end{figure}
 
-A szemafor-váltási idõt mindkét rendszernél nagyon kicsi szórás jellemzi. Ennél a mérésnél is megfigyelhetõ, hogy terhelés hatására kis mértékben gyorsabban végrehajtja az operációs rendszer az objektum kezelését.
+A szemafor-váltási idõt mindkét rendszernél nagyon kicsi szórás jellemzi. Ennél a mérésnél is megfigyelhetõ, hogy terhelés hatására kis mértékben gyorsabban végrehajtják az operációs rendszerek az objektum kezelését.
 
 % SemaphoreShuffling
 \begin{figure}
@@ -761,9 +887,9 @@ Nagyobb mennyiségû adat átvitelében a \textmugreek C/OS--III jelentõsen jobb ere
 \label{fig:PlotDatagramThroughput}
 \end{figure}
 
-A Raspberry Pi 3 rendszerei esetén a kapott értékek magasabbak, és nagy szórással rendelkeznek. Grafikus felület használata esetén mindkét rendszernél látható, ahogyan a minták széles tartományon terülnek szét. Raspbian esetében a grafikus felület kikapcsolásával az adathalmaz módusza egyértelmûvé válik, és az adatok szórása is lecsökken. A mérést megnövelt prioritással is elvégezve a módusz értéke csökken -- ezzel együtt a várható érték is --, de az adathalmaz szórására nincs pozitív hatással.
+A Raspberry Pi 3 rendszerei esetén a kapott értékek magasabbak, és nagy szórással rendelkeznek (\figref{PlotLatencyAndJitterRaspi}a). Grafikus felület használata esetén mindkét rendszernél látható, ahogyan a minták széles tartományon terülnek szét. Raspbian esetében a grafikus felület kikapcsolásával az adathalmaz módusza egyértelmûvé válik, és az adatok szórása is lecsökken. A mérést megnövelt prioritással is elvégezve a módusz értéke csökken -- ezzel együtt a várható érték is --, de az adathalmaz szórására nincs pozitív hatással.
 
-Windows 10 IoT Core esetén a grafikus felület mellõzése nem okozott jelentõsebb változást a módusz tekintetében, viszont \afigref{PlotLatencyAndJitterRaspi}án látható, hogy az értékek sokkal inkább csoportosulnak a módusz közelében, viszont ekkor is két kiugró érték is jelen van a hisztogrammon.
+Windows 10 IoT Core esetén a grafikus felület mellõzése nem okozott jelentõsebb változást a módusz tekintetében, viszont \afigref{PlotLatencyAndJitterRaspi}án látható, hogy az értékek sokkal inkább csoportosulnak a módusz közelében, viszont ekkor is két kiugró érték van jelen a hisztogrammon.
 
 % LatencyAndJitter Raspberry
 \begin{figure}
@@ -936,7 +1062,7 @@ Késleltetés megnövelt prioritás esetén & \multicolumn{1}{r@{}}{} &  & \multicolu
 
 A legrosszabb válaszidõ meghatározásánál követtem a leírt módszer lépéseit. FreeRTOS és \textmugreek C/OS--III esetében a frekvenciát $kHz$-ben, két tizedesjegy pontossággal kerestem meg, míg a Raspberry Pi rendszereinél csak tíz hertz pontosságot használtam\footnote{Az eredményekbõl látszik, hogy kifejezetten alacsony értékek adódtak. Ekkora frekvenciánál csak percek múltával derült ki, hogy az eszköz téveszt vagy sem. A pontosabb mérés aránytalanul sok idõbe telt volna.}.
 
-\Atabref{tab:worstResponseTime}ban foglalt eredmények leginkább a Raspberry Pi rendszerei esetén érdekesek. A Windows 10 IoT annak ellenére, hogy \afigref{PlotLatencyAndJitterRaspi}a alapján jobban teljesít a Raspbian rendszernél, már nagyon alacsony frekvenián is téveszt. Ezzel szempben grafikus felület nélkül a Raspbian nagyságrendekkel stabilabb mûködést mutat, mint amit a Raspberry Pi 3-on elvégzett többi mérés esetén tapasztaltam.
+\Atabref{worstResponseTime}ban foglalt eredmények leginkább a Raspberry Pi rendszerei esetén érdekesek. A Windows 10 IoT annak ellenére, hogy \afigref{PlotLatencyAndJitterRaspi}a alapján jobban teljesít a Raspbian rendszernél, már nagyon alacsony frekvenián is téveszt. Ezzel szemben grafikus felület nélkül a Raspbian nagyságrendekkel stabilabb mûködést mutat, mint amit a Raspberry Pi 3-on elvégzett többi mérés esetén tapasztaltam.
 
 \begin{table}[h!]
 \caption{A legrosszabb válaszidõ mérésének eredményei.}
@@ -960,7 +1086,7 @@ Raspbian grafikus felülettel & & \multicolumn{1}{r@{\,}}{70} & & Hz \\
 Raspbian grafikus felület nélkül & & 1 & 2 & kHz\\
 \hline
 \end{tabular}
-\end{table} 
+\end{table}
 
 A FreeRTOS és \textmugreek C/OS--III értékeit egyszerû számolás segítségével ellenõrizhetjük. A megszakítás-késleltetési idõ mérésénél a mérési adatok alapján a legrosszabb esetben $13,20~\mu s$ és $24,98~\mu s$ késleltetést okoztak a rendszerek. Ezeket az értékeket felhasználva \aref({eq:worstCaseCalculationFreeRTOS}) és \aref({eq:worstCaseCalculationuCOS}) kifejezések eredménye felsõ korlátot ad a legmagasabb frekvenciának\footnote{A késleltetés nem haladhatja meg a félperiódus hosszát, különben egy egész periódus elveszik. Ennek következménye a nevezõben levõ szorzó.}. A \textmugreek C/OS--III esetében számolt $20016~kHz$ nagyon közel áll a mért értékhez. A FreeRTOS esetében tapasztalt eltérés csak annyit jelent, hogy a megmért adatok nem tartalmaznak a legrosszabb válaszidõhöz közeli értékeket.
 

@@ -22,9 +22,9 @@
  * Terhelés engedélyezése:
  *	MEAS_W_LOAD
  */
-#define MEAS_LATENCY
+#define MEAS_DATAGRAM_THROUGHPUT_TIME
 //#define BLINKING_LED
-//#define MEAS_W_LOAD
+#define MEAS_W_LOAD
 
 /**
  * A task ID-k A-tól O-ig mehetnek.

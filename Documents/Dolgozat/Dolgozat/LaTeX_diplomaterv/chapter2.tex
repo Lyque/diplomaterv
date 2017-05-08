@@ -12,7 +12,7 @@
 
 Manapság egyre inkább teret nyernek maguknak az ARM alapú mikrokontrollerek, melyek nem csak nagy számítási kapacitásukkal, de egyre alacsonyabb árukkal szorítják ki versenytársaikat. Az egyik legelterjedtebb gyártó, az STMicroelectronics (továbbiakban STM) több fejlesztõkártyát is piacra bocsátott az elmúlt években, melyeken különbözõ mikrokontrollerek képességeit ismerheti meg a fejlesztõ. A kapható fejlesztõkártyák amellett, hogy megkímélik a fejlesztõt a saját hardver tervezésétõl -- így a tervezési hibából adódó problémák keresésétõl is --, a legtöbb esetben a gyártó széles körû támogatást is nyújt a termékekhez (mintaprogramok, fórumok, stb.).
 
-Az STM által gyártott fejlesztõkártyák közül ár-érték arányának köszönhetõen talán a leggyakrabban használt az STM32F407 Discovery kártya. A rajta található mikrokontroller rendelkezik a legtöbb alkalmazásban elõforduló perifériák mindegyikével. A teljesség igénye nélkül:
+Az STM által gyártott fejlesztõkártyák közül ár-érték arányának köszönhetõen talán a leggyakrabban használt az STM32F407 Discovery (továbbiakban STM32F4 Discovery) kártya. A rajta található mikrokontroller rendelkezik a legtöbb alkalmazásban elõforduló perifériák mindegyikével. A teljesség igénye nélkül:
 
 \begin{itemize}
 \item GPIO-k,
@@ -32,7 +32,7 @@ Az STM által gyártott fejlesztõkártyák közül ár-érték arányának köszönhetõen tal
 
 A nagyszámú periféria mellett a mikrokontroller számítási kapacitása is kimagaslik a hasonló árkategóriájú eszközök körébõl, köszönhetõen az akár 168~MHz-es órajelének, a beépített CRC és lebegõ pontos aritmetikai egységének, illetve a több perifériát is kezelni képes DMA-knak.
 
-Az eszköz 1~MByte Flash memóriával és 192~kbyte RAM-mal rendelkezik.
+Az eszköz 1~MByte Flash memóriával és 192~kbyte RAM-mal rendelkezik\cite{STMRef}.
 
 A kártyán megtalálható több periféria, mely a különbözõ interfészek kipróbálását teszi lehetõvé (mint például gyorsulásszenzor, mikrofon).
 
@@ -61,9 +61,9 @@ Az STM32F4 Discovery fejlesztõeszközhöz több kiegészítõ kártya is kapható, melye
 \subsection{Raspberry~Pi~3}
 %----------------------------------------------------------------------------
 
-A Raspberry Pi Foundation-t 2008-ban alapították azzal a céllal, hogy a informatikai tudományok területén segítse az oktatást.
+A Raspberry Pi Foundation-t 2008-ban alapították azzal a céllal, hogy a informatikai tudományok területén segítse az oktatást\cite{RaspiHistory}.
 
-Az elsõ nagyteljesítményû, bankkártya méretû számítógépüket 2012 februárjában bocsátották piacra, melynek ára töredéke volt az asztali számítógépekének. Azóta több verziója is megjelent az eszköznek, melyet folyamatosan fejlesztettek mind teljesítményben, mind az integrált funkciók számában. 2015 novemberében a világ elsõ 5\,\$-os számítógépével jelentek meg a piacon, melynek a Raspberry~Pi~Zero nevet adták.
+Az elsõ nagyteljesítményû, bankkártya méretû számítógépüket 2012 februárjában bocsátották piacra, melynek ára töredéke volt az asztali számítógépekének. Azóta több verziója is megjelent az eszköznek, melyet folyamatosan fejlesztettek mind teljesítményben, mind az integrált funkciók számában. 2015 novemberében a világ elsõ 5\,\$-os számítógépével jelentek meg a piacon, melynek a Raspberry~Pi~Zero nevet adták\cite{RaspiHistory}.
 
 A legújabb verziójú kártya, a Raspberry Pi 3 model B az elõzõ verzióhoz képest erõsebb processzort kapott, illetve tartalmaz beépített Bluetooth illetve WiFi modult.
 
@@ -122,7 +122,7 @@ Az UBM Tech minden évben készít kutatást a beágyazott rendszereket piacán, melyb
 \center
 \resizebox{15cm}{!}{
 \includegraphics{figures/OS_selection/01_OS_popularity.png}}
-\caption{Az UBM~Tech által 2015-ben publikált beágyazott operációs rendszer használati statisztika.}
+\caption{Az UBM~Tech által 2015-ben publikált beágyazott operációs rendszer használati statisztika\cite{UBMStudy}.}
 \label{fig:01_OS_popularity}
 \end{figure}
 
@@ -154,7 +154,7 @@ A Raspberry Pi megjelenése óta támogatja különbözõ linux disztribúciók futtatásá
 
 \paragraph*{}
 
-Sem a Raspbian-hoz, sem a Windows~10~IoT~Core-hoz nem érhetõ el részletes dokumentáció. Ez a Raspbian esetén magyarázható azzal, hogy egy elterjedt disztibúciót használ alapjául, ezáltal a rendszer mûködése nem különbözik nagy mértékben attól. A Windows~10~IoT~Core esetében a hivatalos oldalon elérhetõ \emph{Dokumentáció} szekció, de ott pár darab promóciós videót találunk a rendszerrõl.
+Sem a Raspbian-hoz, sem a Windows~10~IoT~Core-hoz nem érhetõ el részletes dokumentáció. Ez a Raspbian esetén magyarázható azzal, hogy egy elterjedt linux disztibúciót használ alapjául, ezáltal a rendszer mûködése nem különbözik nagy mértékben attól. A Windows~10~IoT~Core esetében a hivatalos oldalon elérhetõ \emph{Dokumentáció} szekció, de ott pár darab promóciós videót találunk a rendszerrõl.
 
 Mindkettõ rendszerrõl elmondható, hogy nem hard real-time alkalmazásokhoz fejlesztik\footnote{Raspbian-hoz elérhetõek kernel patch-ek, melyekkel a real-time mûködés megvalósítható.}.
 

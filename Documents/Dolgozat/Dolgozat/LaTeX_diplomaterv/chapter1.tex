@@ -20,7 +20,7 @@ A gyártó a felhasználás feltételeit saját maga szabhatja meg, így ebben az esetb
 \subsection{Nyílt forráskódú szoftver}
 %----------------------------------------------------------------------------
 
-A szoftverek másik nagy csoportját alkotják a nyílt forráskódú szoftverek. Ekkor a forráskód publikusan elérhetõ. A nyílt forráskódú szoftverek esetén is lehetõség van egyéni licenc használatára, azonban a szoftverek többségénél elterjedt, általánosan használt licencekkel találkozunk.
+A szoftverek másik nagy csoportját alkotják a nyílt forráskódú szoftverek. Ekkor a forráskód publikusan elérhetõ. A nyílt forráskódú szoftverek esetén is lehetõség van egyéni licenc használatára, azonban a szoftverek többségénél elterjedt, általánosan használt licencekkel találkozunk\cite{Licenses}.
 
 %----------------------------------------------------------------------------
 \subsubsection{MIT License}
@@ -32,13 +32,13 @@ Az MIT licenc a legegyszerûbb licencek egyike. A licenc alá esõ forráskód szabad
 \subsubsection{BSD licenc}
 %----------------------------------------------------------------------------
 
-A BSD licenc eredetileg egy egyszerû és szabad felfogású licenc számítógép szoftverek számára, amit elõször 1980-ban használtak a BSD UNIX operációs rendszerhez. Az idõ elõrehaladtával több módosítást kellett végrehajtani a licenc szövegezésén.
+A BSD licenc eredetileg egy egyszerû és szabad felfogású licenc számítógép szoftverek számára, amit elõször 1980-ban használtak a BSD UNIX operációs rendszerhez\cite{Linfo}. Az idõ elõrehaladtával több módosítást kellett végrehajtani a licenc szövegezésén.
 
 %----------------------------------------------------------------------------
 \paragraph{4-clause BSD (eredeti)}
 %----------------------------------------------------------------------------
 
-Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhasználás feltételeit. A licenc tartalmazza a szerzõi jog keletkezésének évét, a fejlesztõ szervezet nevét és a szerzõi jog tulajdonosának nevét. A licenc megengedi a szoftver használatát mind forrás, mind bináris formában, akár módosítással, akár anélkül, amennyiben a felhasználás feltételei teljesülnek. A szöveg azonban tartalmaz egy megkötést, amely a használat során gyakran kellemetlenségként jött elõ a felhasználók körében: amennyiben a szoftver bármilyen részére vagy a szoftver használatára hivatkozás történik egy reklámanyagban, úgy a szoftver fejlesztõjét fel kellett tüntetni a szövegben. Amennyiben több, eredeti BSD licenc alá esõ szoftvert tartalmazó rendszer került hivatkozásra, úgy az említett lista hamar nagy méretûvé válhatott. Ezen kellemetlenség miatt került elõször módosításra a BSD licenc.
+Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhasználás feltételeit. A licenc tartalmazza a szerzõi jog keletkezésének évét, a fejlesztõ szervezet nevét és a szerzõi jog tulajdonosának nevét. A licenc megengedi a szoftver használatát mind forrás, mind bináris formában, akár módosítással, akár anélkül, amennyiben a felhasználás feltételei teljesülnek. A szöveg azonban tartalmaz egy megkötést, amely a használat során gyakran kellemetlenségként jött elõ a felhasználók körében: amennyiben a szoftver bármilyen részére vagy a szoftver használatára hivatkozás történik egy reklámanyagban, úgy a szoftver fejlesztõjét fel kellett tüntetni a szövegben. Amennyiben több, eredeti BSD licenc alá esõ szoftvert tartalmazó rendszer került hivatkozásra, úgy az említett lista hamar nagy méretûvé válhatott\cite{Linfo}. Ezen kellemetlenség miatt került elõször módosításra a BSD licenc.
 
 A négy pont az alábbi feltételeket szabja a feljhasználó számára:
 
@@ -114,7 +114,7 @@ Az operációs rendszer elsõdleges feladata a használt processzor perifériáinak ke
 \subsection{Operációs rendszer definíciója}
 %----------------------------------------------------------------------------
 
-Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és szolgáltatásokat biztosít más programok (vagy alkalmazások) számára. Az alkalmazások valósítják meg azt a funkcionalitást, amire a számítógép felhasználójának szüksége van, vagy a számítógép felhasználója akar. Az operációs rendszer által nyújtott szolgálatások az alkalmazások fejlesztését egyszerûsítik, ezáltal felgyorsítják a fejlesztés folyamatát és karbantarthatóbbá teszik a szoftvert.
+Az operációs rendszer egy szoftver, ami kezeli a számítógép alap funkcióit és szolgáltatásokat biztosít más programok (vagy alkalmazások) számára. Az alkalmazások valósítják meg azt a funkcionalitást, amire a számítógép felhasználójának szüksége van, vagy a számítógép felhasználója akar. Az operációs rendszer által nyújtott szolgálatások az alkalmazások fejlesztését egyszerûsítik, ezáltal felgyorsítják a fejlesztés folyamatát és karbantarthatóbbá teszik a szoftvert\cite{FreeRTOSAbout}.
 
 Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyidejûleg kezelt felhasználók számának és az ütemezõ mûködésének függvényében. A továbbiakban csak a multitaszkot támogató operációs rendszerekkel foglalkozom.
 
@@ -122,7 +122,7 @@ Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyi
 \subsubsection{Valósidejû operációs rendszer}
 %----------------------------------------------------------------------------
 
-A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát (\figref{02_multitasking}a).
+A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát (\figref{02_multitasking}a)\cite{FreeRTOSAbout}.
 
 \begin{figure}[h!]
 \center
@@ -140,13 +140,13 @@ A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futt
 \label{fig:02_multitasking}
 \end{figure}
 
-Az operációs rendszer típusát az ütemezõ döntési mechanizmusa határozza meg. Egy real-time operációs rendszer ütemezõje úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejûség, vagyis hogy a rendszernek egy szigorúan meghatározott idõn belül reagálnia kell egy adott eseményre. A. valósidejû követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezõje elõre megjósolható döntéseket hoz.
+Az operációs rendszer típusát az ütemezõ döntési mechanizmusa határozza meg. Egy real-time operációs rendszer ütemezõje úgy van megtervezve, hogy a végrehajtási minta determinisztikus legyen. Ez beágyazott rendszerek esetén érdekes, mert a beágyazott rendszereknél gyakran követelmény a valósidejûség, vagyis hogy a rendszernek egy szigorúan meghatározott idõn belül reagálnia kell egy adott eseményre\cite{FreeRTOSAbout}. A valósidejû követelményeknek való megfelelés csak úgy lehetséges, ha az operációs rendszer ütemezõje elõre megjósolható döntéseket hoz.
 
 Valósidejû operációs rendszerek közül megkülönböztetjük a soft real-time és a hard real-time rendszereket.
 
 Soft real-time rendszer esetén nem probléma, ha nem érkezik válasz a megadott határidõn belül, az csak a rendszer minõsítését rontja.
 
-Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a feladatra, ha a határidõt nem tudja betartani. Például egy személygépjármû légzsákjának késedelmes nyitása akár halálos következményekkel is járhat.
+Hard real-time rendszer esetén viszont a rendszer alkalmatlanná válik a feladatra, ha a határidõt nem tudja betartani. Például egy személygépjármû légzsákjának késedelmes nyitása akár halálos következményekkel is járhat\cite{FreeRTOSManual}.
 
 %----------------------------------------------------------------------------
 \subsection{Ütemezés}
@@ -173,7 +173,7 @@ A továbbiakban ismertetem néhány elterjedt ütemezési mechanizmus alapelvét.
 
 A taszkok futtatása érkezési sorrendben történik. A beérkezõ taszkok egy sorba kerülnek, ahonnan sorrendben kapják meg a CPU használat jogát.
 
-Az átlagos várakozási idõ nagy lehet, ha egy idõigényes folyamatra több gyors lefutású folyamat várakozik.
+Az átlagos várakozási idõ nagy lehet, ha egy idõigényes folyamatra több gyors lefutású folyamat várakozik\cite{JerrySched}.
 
 Nem preemptív.
 
@@ -181,7 +181,8 @@ Nem preemptív.
 \subsubsection{Shortest Job First (Legrövidebb feladat elõször)}
 %----------------------------------------------------------------------------
 
-A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes mûködés esetén az átlagos várakozási idõ optimális lesz., viszont a gyakorlatban nehéz elõre megjósolni egy taszk futási idejét.
+A várhatóan leggyorsabban lefutó taszk kerül futási állapotba ütemezés bekövetkezésekor. Helyes mûködés esetén az átlagos várakozási idõ optimális lesz, viszont a gyakorlatban nehéz elõre megjósolni egy taszk futási idejét\cite{VoelkerSched}.
+
 
 Lehet preemptív és nem-preemptív is. Preemptív esetben Shortest Remaining Time First (Legrövidebb hátralevõ idejû elõször) ütemezésrõl beszélünk.
 
@@ -189,7 +190,7 @@ Lehet preemptív és nem-preemptív is. Preemptív esetben Shortest Remaining Time F
 \subsubsection{Prioritásos ütemezés}
 %----------------------------------------------------------------------------
 
-A következõ taszk kiválasztása a prioritása alapján történik. Növelni lehet a hatékonyságát más metódusok egyidejû használatával (például a prioritást a várható futási idejébõl határozzuk meg; a prioritást növeljük az idõ elteltével; a prioritást csökkentjük az eddigi futó állapotban töltött idõ arányában).
+A következõ taszk kiválasztása a prioritása alapján történik. Növelni lehet a hatékonyságát más metódusok egyidejû használatával (például a prioritást a várható futási idejébõl határozzuk meg; a prioritást növeljük az idõ elteltével; a prioritást csökkentjük az eddigi futó állapotban töltött idõ arányában)\cite{VoelkerSched}.
 
 Rossz tervezés esetén az alacsony prioritású feladatok nem jutnak processzoridõhöz (\mbox{kiéheztetés}).
 
@@ -205,7 +206,7 @@ Idõosztáson alapuló mechanizmus. A várakozási sor egy cirkuláris buffer. Minden 
 \subsubsection{Hibrid ütemezés}
 %----------------------------------------------------------------------------
 
-A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a \emph{multilevel queue}, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért (\figref{05_multilevel_queue_scheduling}a).
+A felsorolt ütemezési elveket akár keverve is lehet alkalmazni. Ilyen ütemezési mechanizmus például a \emph{multilevel queue}, ahol minden sor saját ütemezési algoritmussal rendelkezik, és egy külön algoritmus felel az egyes sorok arbitrációjáért (\figref{05_multilevel_queue_scheduling}a)\cite{JerrySched}.
 
 \begin{figure}[h!]
 \center
@@ -273,7 +274,7 @@ Szemaforokat leggyakrabban szinkronizációs célból, vagy erõforrások védelmére ha
 \paragraph{Bináris szemafor}
 %----------------------------------------------------------------------------
 
-Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására alkalmas (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem.
+Bináris szemafor esetén a szemafor két értéket vehet fel. Felfogható úgy is, mint egy egy adat tárolására alkalmas (egy elem hosszú) sor, melynek nem vizsgáljuk a tartalmazott értékét, csak azt, hogy éppen tartalmaz-e adatot vagy sem\cite{FreeRTOSManual}.
 
 Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a futásának egy adott pontján várakozik egy másik taszk jelzésére. Ezzel a módszerrel megvalósítható a megszakítások taszkokban történõ kezelése, ezzel is minimalizálva a megszakítási rutin hosszát. Erre láthatunk példát \afigref{06_binary_semaphore}án.
 
@@ -281,7 +282,7 @@ Leggyakoribb felhasználása a taszkok szinkronizálása. Ekkor az egyik taszk a fut
 \center
 \resizebox{8cm}{!}{
 \includegraphics{figures/RTOS/06_binary_semaphore.eps}}
-\caption{Szinkronizáció bináris szemafor segítségével.}
+\caption{Szinkronizáció bináris szemafor segítségével\cite{FreeRTOSManual}.}
 \label{fig:06_binary_semaphore}
 \end{figure}
 
@@ -299,20 +300,20 @@ Bináris szemafor használatakor különös figyelmet kell fordítani arra, hogy ha a 
 \paragraph{Számláló szemafor}
 %----------------------------------------------------------------------------
 
-A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül \emph{Blokkolt} állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor (\figref{08_counting_semaphore}a), melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
+A számláló típusú szemafor minden jelzéskor növeli az értékét. Ekkor (amíg el nem éri a maximális értékét) nem kerül \emph{Blokkolt} állapotba a jelzõ taszk. A számláló szemafor felfogható úgy, mint egy egynél több adat tárolására képes sor\cite{FreeRTOSManual} (\figref{08_counting_semaphore}a), melynek nem vizsgáljuk az értékét, csak azt, hogy éppen tartalmaz-e még adatot vagy sem.
 
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
 \includegraphics{figures/RTOS/08_counting_semaphore.eps}}
-\caption{Számláló szemafor mûködésének szemléltetése.}
+\caption{Számláló szemafor mûködésének szemléltetése\cite{FreeRTOSManual}.}
 \label{fig:08_counting_semaphore}
 \end{figure}
 
 Két felhasználása elterjedt a számláló szemaforoknak:
 \begin{description}
-\item[$\bullet$\ Események számlálása:] ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla.
-\item[$\bullet$\ Erõforrás menedzsment:] ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtokolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma.
+\item[$\bullet$\ Események számlálása:] ekkor minden esemény hatására növeljük a szemafor értékét (új elemet helyezünk a sorba). A szemafor aktuális értéke a beérkezett és a feldolgozott események különbsége. A számlálásra használt szemafor inicializálási értéke nulla\cite{FreeRTOSManual}.
+\item[$\bullet$\ Erõforrás menedzsment:] ekkor a szemafor értéke a rendelkezésre álló erõforrások számát mutatja. Mikor az operációs rendszertõl az erõforrást igényeljük, akkor a szemafor értékét csökkentjük, mikor felszabadítjuk a birtokolt erõforrást, akkor a szemafor értékét növeljük. Ha a szemafor értéke nulla, akkor nincs rendelkezésre álló erõforrás. Erõforrások kezelésére használt számláló szemafor esetén az inicializálási érték az elérhetõ erõforrások száma\cite{FreeRTOSManual}.
 \end{description}
 
 %----------------------------------------------------------------------------
@@ -325,11 +326,11 @@ Taszkok vagy taszkok és megszakítási rutinok között megosztott erõforrás kezelés
 \center
 \resizebox{8cm}{!}{
 \includegraphics{figures/RTOS/09_mutual_exclusion.eps}}
-\caption{Mutex mûködésének szemléltetése.}
+\caption{Mutex mûködésének szemléltetése\cite{FreeRTOSManual}.}
 \label{fig:09_mutual_exclusion}
 \end{figure}
 
-Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza.
+Látható, hogy a mutex nagyon hasonlít a bináris szemaforhoz. A különbség abból adódik, hogy mivel a bináris szemafort leggyakrabban szinkronizációra használjuk, ezért azt nem kell felszabadítani: a jelzõ taszk vagy megszakítás jelzést ad a szemforon keresztül a feldolgozó taszknak. A feldolgozó taszk elveszi a szemafort, de a feldolgozás befejeztével a szemafort nem adja vissza\cite{FreeRTOSManual}.
 
 %----------------------------------------------------------------------------
 \paragraph{Sor (Queue)}
@@ -341,7 +342,7 @@ A sorok fix méretû adatból tudnak véges számú üzenetet tárolni. Ezek a jellemzõk
 \center
 \resizebox{8cm}{!}{
 \includegraphics{figures/RTOS/10_queue.eps}}
-\caption{Sor mûködésének szemléltetése.}
+\caption{Sor mûködésének szemléltetése\cite{FreeRTOSManual}.}
 \label{fig:10_queue}
 \end{figure}
 
@@ -425,4 +426,4 @@ A holtponti helyzetek elkerülésére és feloldására több szabály létezik, de beágy
 
 Egy függvény reentráns (újrahívható), ha biztonságosan meghívható több különbözõ taszkból vagy megszakításból.
 
-Minden taszk rendelkezik saját stack-kel és saját regiszterekkel. Ha egy függvény minden adatot a stack-jén vagy a regisztereiben tárol (vagyis nem használ globális és statikus változókat), akkor a függvény reentráns. 
+Minden taszk rendelkezik saját stack-kel és saját regiszterekkel. Ha egy függvény minden adatot a stack-jén vagy a regisztereiben tárol (vagyis nem használ globális és statikus változókat), akkor a függvény reentráns\cite{OpreEmbed}. 

@@ -4,7 +4,7 @@
 
 A méréseket \emph{Tektronix TLA5201B} logikai analizátorral, illetve \asecref{fpgaMeas}ben bemutatott FPGA használatával végeztem el\footnote{A tervezés során felmerült, hogy oszcilloszkóppal végezzem el a méréseket, viszont minden mérés többszöri elvégzése idõigényes folyamat lett volna.}.
 
-A Tektronix TLA5201B logikai analizátor $32$~csatornával, $2$~Mbit memóriával rendelkezik és a \emph{MagniVu\tm} technológia alkalmazásával akár $125~ps$-os mintavételezés is megvalósítható. A mérések során a memória mérete miatt egységesen $20~ns$-os mintavételi idõvel dolgoztam\footnote{A $20~ns$ mintavételezási idõ a mikrokontroller órajeléhez viszonyítva ($168~MHz$) pontatlan mérést tesz lehetõvé, de a mérési eredmények így jó összehasonlítási alapot nyújtanak.}, de egyes méréseknél már ez a beállítás is nagy méretû kimeneti fájlt generált.
+A Tektronix TLA5201B logikai analizátor $32$~csatornával, $2$~Mbit memóriával rendelkezik és a \emph{MagniVu\tm} technológia alkalmazásával akár $125~ps$-os mintavételezés is megvalósítható. A mérések során a memória mérete miatt egységesen $20~ns$-os mintavételi idõvel dolgoztam\footnote{A $20~ns$ mintavételezési idõ a mikrokontroller órajeléhez viszonyítva ($168~MHz$) pontatlan mérést tesz lehetõvé, de a mérési eredmények így is jó összehasonlítási alapot nyújtanak.}, de egyes méréseknél már ez a beállítás is nagy méretû kimeneti fájlt generált.
 
 %----------------------------------------------------------------------------
 \section{Mérési elrendezés}
@@ -12,7 +12,7 @@ A Tektronix TLA5201B logikai analizátor $32$~csatornával, $2$~Mbit memóriával re
 
 A logikai analizátor \emph{A1} csatornájának $0$--$3$ számozású vezetékeit a mérõkártya \emph{ID} lábaira csatlakoztattam, míg a $6$-os és $7$-es vezetékeit rendre az \emph{IN} és \emph{OUT} lábakra kötöttem. Az analizátor beállításaiban elneveztem a vezetékeket és az \emph{ID} lábakat csoportba rendeztem.
 
-A \emph{késleltetés} és \emph{megszakítás-késleltetési idõ} mérésénél az \emph{IN} lábhoz tartozó jelszint változására, míg a többi mérés esetén az indító taszk azonosítójára ($2$) állítottam be a trigger-feltételt. A mérések során repetitív mérési módot alkalmaztam, melyek eredményeit minden mérés után külön fájlba mentettem.
+A \emph{késleltetés} és \emph{megszakítás-késleltetési idõ} mérésénél az \emph{IN} lábhoz tartozó jelszint változására, míg a többi mérés esetén az indító taszk azonosítójára\footnote{A mérést indító taszk minden esetben $2$-es azonosítóval rendelkezett.} állítottam be a trigger-feltételt. A mérések során repetitív mérési módot alkalmaztam, melyek eredményeit minden mérés után külön fájlba mentettem.
 
 Azon méréseknél, ahol bemeneti jel használata szükséges, ott \emph{Hameg HMF2550} jelengenerátor szolgáltatta a gerjesztést a mérõkártyán található BNC csatlakozón keresztül. A STM32F4 fejlesztõkártyán futó rendszerek esetén $5~kHz$-es, a Raspberry Pi-n futó rendszerek esetén $2~kHz$-es négyszögjellel dolgoztam.
 

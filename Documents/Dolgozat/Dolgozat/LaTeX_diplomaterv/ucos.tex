@@ -2,6 +2,8 @@
 \section{\textmugreek C/OS--III}
 %----------------------------------------------------------------------------
 
+A fejezet a \cite{uCOSManual} irodalom alapján készült.
+
 %----------------------------------------------------------------------------
 \subsection{Ismertetõ}
 %----------------------------------------------------------------------------
@@ -18,7 +20,7 @@ Az operációs mellett a vállalat további modulokat is elérhetõvé tesz, mellyel a 
 \subsection{Taszkok}
 %----------------------------------------------------------------------------
 
-A \textmugreek C/OS elõzõ verziójában a prioritások száma korlátozott volt és minden prioritási szinthez maximum egy tasz tartozhatott, ezáltal korlátozva a taszkok számát is. Az igényeket kielégítve ezt a korlátozást a rendszer harmadik verziójában eltörölték. Nincs megkötés sem a prioritásokra, sem a taszkok számára. Korlátot egyedül a használt mikrokontroller erõforrásai jelentenek.
+A \textmugreek C/OS elõzõ verziójában a prioritások száma korlátozott volt és minden prioritási szinthez maximum egy taszk tartozhatott, ezáltal korlátozva a taszkok számát is. Az igényeket kielégítve ezt a korlátozást a rendszer harmadik verziójában eltörölték. Nincs megkötés sem a prioritásokra, sem a taszkok számára. Korlátot egyedül a használt mikrokontroller erõforrásai jelentenek.
 
 A preemptív ütemezés mellett implementálásra került a Round-Robin ütemezés, amely lehetõvé teszi az azonos prioritásû taszkok között a processzoridõ periodikus kiosztását. A Round-Robin ütemezést fordítási idõben engedélyezni kell, majd ezután futási idõben  szabadon engedélyezhetjük vagy letilthatjuk.
 
@@ -51,9 +53,9 @@ NextPtr és PrevPtr & Ezen pointerek használatosak a futásra kész taszkok TCB-jén
 \hline
 NamePtr & A taszkhoz rendelt név. \\
 \hline
-StkBasePtr & A taszk stack-jéne alapcímére mutató pointer. \\
+StkBasePtr & A taszk stack-jének alapcímére mutató pointer. \\
 \hline
-TaskEntryAddr & A taszk belépési pontját tartalmazza. \\
+TaskEntryAddr & A taszk belépési pontja. \\
 \hline
 TaskEntryArg & A taszk indulásakor a taszk paramétereit tartalmazza. \\
 \hline
@@ -78,7 +80,7 @@ MsgPtr és MsgSize & Közvetlenül a taszknak küldött üzenetre mutató pointer és az
 
 A FreeRTOS-hoz hasonlóan a \textmugreek C/OS--III is támogatja a hook függvények használatát, melyekkel a rendszer funkcionalitását bõvíthetjük.
 
-Az Idle taszk is megtalálható, mely a legalacsonyabb prioritási szinten jön létre a rendszer inizializálásakor\footnote{A \textmugreek C/OS--III csak az Idle taszkot engedi a legalacsonyabb prioritási szinten futni, a fejlesztõ által létrehozott taszkoknak mindeképp magasabb prioritással kell rendelkeznie!}. Ellentétben a FreeRTOS-sal, itt az Idle taszk nem végez hasznos tevékenységet, csupán számlálók értékét növeli, illetve az Idle-hook függvényt hívja meg.
+Az Idle taszk is megtalálható, mely a legalacsonyabb prioritási szinten jön létre a rendszer inizializálásakor\footnote{A \textmugreek C/OS--III csak az Idle taszkot engedi a legalacsonyabb prioritási szinten futni, a fejlesztõ által létrehozott taszkoknak mindenképp magasabb prioritással kell rendelkeznie!}. Ellentétben a FreeRTOS-sal, itt az Idle taszk nem végez hasznos tevékenységet, csupán számlálók értékét növeli, illetve az Idle hook függvényt hívja meg.
 
 Az operációs rendszer beépített támogatással rendelkezik a különbözõ terhelési jellemzõk mérésére, Amennyiben fordítási idõben azt engedélyezzük, úgy információt kaphatunk a processzor kihasználtságáról, a taszkonkénti processzor-terhelésrõl és a taszkonkénti stack használatról is.
 
@@ -94,7 +96,7 @@ Az alap kommunikációs objektumok -- mint szemafor, mutex, sor -- mellett a rends
 
 Egy üzenet a küldött változóra, adatstruktúrára vagy akár függvényre mutató pointert, az adat méretét és az üzenet küldésének idõpontját tartalmazó bélyegzõt foglalja magában. Mivel az üzenet nem tartalmazza a tárolt adat típusát, ezért a fogadó taszknak ismernie kell a várt üzenet feldolgozásának módját. A sor több ilyen üzenet láncolt listáját jelenti.
 
-A \textmugreek C/OS--III-ban megvalósított sorok esetén az adat nem kerül másolásra, csupán az adat memóriacíme és merete jut el a fogadóhoz, ezért biztosítani kell, hogy az üzenet tartalma a feldolgozás befejeztéig változatlan maradjon. Ennek egyik lehetséges megvalósítása, hogy a küldõ dinamikusan lefoglalható memóriaszeletet kér az operációs rendszertõl, majd ezen memóriaterületre másolja a küldeni kívánt adatot. A fogadó oldalon, miután az adat feldolgozása befejezõdöt, a memóriaterület felszabadításra kerül.
+A \textmugreek C/OS--III-ban megvalósított sorok esetén az adat nem kerül másolásra, csupán az adat memóriacíme és merete jut el a fogadóhoz, ezért biztosítani kell, hogy az üzenet tartalma a feldolgozás befejeztéig változatlan maradjon. Ennek egyik lehetséges megvalósítása, hogy a küldõ dinamikusan lefoglalható memóriaszeletet kér az operációs rendszertõl, majd ezen memóriaterületre másolja a küldeni kívánt adatot. A fogadó oldalon, miután az adat feldolgozása befejezõdött, a memóriaterület felszabadításra kerül.
 
 %----------------------------------------------------------------------------
 \paragraph{Olvasás sorból}
@@ -116,7 +118,7 @@ A célzott üzenetek használata amellett, hogy átláthatóbb kódot eredményez, az üz
 \subsubsection{Szemaforok}
 %----------------------------------------------------------------------------
 
-A rendszer támogadtja a bináris és a számláló szemaforok használatát egyaránt. A szemafor létrehozásakor megadhatjuk annak inicializálási értékét.
+A rendszer támogatja a bináris és a számláló szemaforok használatát egyaránt. A szemafor létrehozásakor megadhatjuk annak inicializálási értékét.
 
 Minden taszk rendelkezik saját beépített szemaforral, melynek segítségével a taszkok közötti szinkronizáció hatékonyabban megoldható, és külön objektum létrehozására sincs szükség.
 
@@ -146,7 +148,7 @@ Késleltett módszer (\emph{Deferred Method}) esetén a kritikus szakaszokban a meg
 \subsection{Erõforrás-kezelés}
 %----------------------------------------------------------------------------
 
-A korábban bemutatott szemfor és mutex mellett az erõforrások védelmére használhatunk kritikus szakaszokat az megosztott erõforrások védelmére. Ahogy azt a \emph{Megszakítás-kezelés} részben ismertettem, a \textmugreek C/OS--III a kritikus szakaszokban beállítástól függõen vagy letiltja a megszakításokat, vagy csak az ütemezõt függeszti fel. Fontos megjegyezni, hogy amennyiben egy megszakítási rutinnal szeretnénk közös memóriaterületet (változót; adatstruktúrát) használni, úgy csak a megszakítások letiltása nyújt védelmet az adat korruptálódásának lehetõsége ellen.
+A korábban bemutatott szemfor és mutex mellett az erõforrások védelmére használhatunk kritikus szakaszokat is. Ahogy azt a \emph{Megszakítás-kezelés} részben ismertettem, a \textmugreek C/OS a kritikus szakaszokban beállítástól függõen vagy letiltja a megszakításokat, vagy csak az ütemezõt függeszti fel. Fontos megjegyezni, hogy amennyiben megszakítási rutinnal szeretnénk közös memóriaterületet (változót, adatstruktúrát) használni, úgy csak a megszakítások letiltása nyújt védelmet az adat hibás olvasásának lehetõsége ellen.
 
 %----------------------------------------------------------------------------
 \subsection{Memória-kezelés}

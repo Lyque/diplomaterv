@@ -15,7 +15,7 @@ A STM32F4~Discovery kártyára való fejlesztés során az \emph{Atollic~TrueSTUDIO} 
 
 Az STM honlapjáról letölthetõ STM32CubeMX alkalmazás támogatja a FreeRTOS és FatFS\footnote{Fat fájlrendszer használatához elérhetõ könyvtár, mely az SD kártya használatához szükséges.} használatát, így a megfelelõ perifériák beállítása és a szükséges modulok kiválasztása után mûködõ példaprogram generálható.
 
-A generált kód áttekintése közben észrevettem, hogy az operációs rendszer függvényeinek nevei nem egyeznek meg \asecref{freertos}ben megismert függvények neveivel. Ennek oka, hogy a CubeMX a FreeRTOS függvényeit a CMSiS-RTOS API-val elfedi, és egy egyszerûsített felületet biztosít a fejlesztõ számára. Ez az egyszerûsített felület például a szemaforok használatánál figyelhetõ meg, ahol nincs külön metódus a megszakításból történõ használatra, hanem az API vizsgálja meg, hogy megszakítás-kezelõ rutinból történt-e a hívás, és ennek megfelelõen végzi el a további mûveleteket. Mivel az összehasonlítás során a fejlesztési folyamat nehézségei is szempontként szerepelnek, ezért éltem az API használatával.
+A generált kód áttekintése közben észrevettem, hogy az operációs rendszer függvényeinek nevei nem egyeznek meg \asecref{freertos}ben megismert függvények neveivel. Ennek oka, hogy a CubeMX a FreeRTOS függvényeit a CMSIS-RTOS API-val elfedi, és egy egyszerûsített felületet biztosít a fejlesztõ számára. Ez az egyszerûsített felület például a szemaforok használatánál figyelhetõ meg, ahol nincs külön metódus a megszakításból történõ használatra, hanem az API vizsgálja meg, hogy megszakítás-kezelõ rutinból történt-e a hívás, és ennek megfelelõen végzi el a további mûveleteket. Mivel az összehasonlítás során a fejlesztési folyamat nehézségei is szempontként szerepelnek, ezért éltem az API használatával.
 
 Mielõtt \asecref{softwareDesign}ben ismertetett taszkokat implementáltam volna, a rendszer megismerésével foglalkoztam. Valahogy el kellett érnem, hogy az éppen futó taszkhoz azonosítót rendeljek, amit valahogy az ID lábakon jelezni is tudok. Ehhez kihasználtam azt, hogy minden taszk rendelkezik névvel, így megfontolt elnevezéssel minden taszkhoz rendelhetõ 4~bites azonosító, amit a TCB-bõl is egyszerûen kiolvashatok.
 
@@ -27,7 +27,7 @@ A következõ lépés volt a rendszer ütemezési mechanizmusának tanulmányozása. Meg 
   \item portYIELD() függvény hívásakor.
 \end{itemize}
 
-Ezért a \emph{portYIELD()} függvény elején, illetve a \emph{SysTick} megszakítás-kezelõ rutin elején \alstref{schedulerID}ában látható assembly utasításokkal helyeztem ki az ütemezõ azonosítóját. A \emph{portYIELD()} függvény minden esetben kontextus-váltást kér a \emph{PendSV} megszakításon keresztül, míg a \emph{SysTick} kezelõ csak szükséges esetben. Emiatt a \emph{SysTick} rutint módosítanom kellett, és amennyiben nem szükséges kontextus-váltás, úgy az aktuális taszk azonosítóját helyezem az ID lábakra.
+Ezért a \emph{portYIELD()} függvény elején, illetve a \emph{SysTick} megszakítás-kezelõ rutin elején \alstref{schedulerID}ában látható assembly utasításokkal helyeztem ki az ütemezõ azonosítóját. A \emph{portYIELD()} függvény minden esetben kontextus-váltást kér a \emph{PendSV} megszakításon keresztül, ellenben a \emph{SysTick} kezelõ csak szükséges esetben. Emiatt a \emph{SysTick} rutint módosítanom kellett, és amennyiben nem szükséges kontextus-váltás, úgy az aktuális taszk azonosítóját helyezem az ID lábakra.
 
 Kontextus-váltás esetén a \emph{PendSV} megszakítás-kezelõ végzi el az éppen futó taszk állapotának elmentését és a soron következõ taszk legutolsó állapotának betöltését. A taszkváltás elvégzése után, a megszakításból való visszatérés elõtt a betöltött taszk azonosítóját helyezem az ID lábakra \alstref{freertosTaskID}ában látható módon.
 
@@ -65,7 +65,7 @@ Minden mérésnek új projektet létrehozni nem lett volna célszerû, ezért makrók se
 
 A következõ lépés az ipari alkalmazás implementációja volt. Minden taszk mûködésének ismertetése hosszadalmas -- és egyben felesleges is -- volna, ezért csak a fejlesztés szempontjából érdekes részleteket emelem ki.
 
-A távoli vezérlést soros kommunikáció segítségével valósítottam meg, amihez célszerû volt valamilyen egyszerû protokollt meghatároznom. Mivel több szenzor adatát is továbbítanom kellett, és a küldött információk sorrendje változhatott, ezért a protokollnak tartalmaznia kellett az adatok forrását. A legnagyobb továbbítandó érték $4$~byte hosszú volt, ezért az üzenet formátumát az alábbi módon határoztam meg:
+A távoli felügyeletet soros kommunikáció segítségével valósítottam meg, amihez célszerû volt valamilyen egyszerû protokollt meghatároznom. Mivel több szenzor adatát is továbbítanom kellett, és a küldött információk sorrendje változhatott, ezért a protokollnak tartalmaznia kellett az adatok forrását. A legnagyobb továbbítandó érték $4$~byte hosszú volt, ezért az üzenet formátumát az alábbi módon határoztam meg:
 \begin{itemize}
   \item Az adat forrása (szenzor neve) nyolc karakteren,
   \item Elválasztó karakter (:),
@@ -93,7 +93,7 @@ A távoli vezérlést soros kommunikáció segítségével valósítottam meg, amihez céls
 //#define MEAS_W_LOAD
 \end{lstlisting}
 
-A kommunikáció során elõfordul, hogy a beérkezett karakter nem kerül idõben fogadásra, és a periféria tárolója túlcsordul. Ekkor a periféria kezelése utána az alkalmazás jelez a távoli vezérlõnek, hogy küldje újra az utolsó parancsot.
+A kommunikáció során elõfordul, hogy a mikrokontroller számára küldött karakter nem kerül idõben fogadásra, és a periféria tárolója túlcsordul. Ekkor a periféria kezelése után az alkalmazás jelez a távoli vezérlõnek, hogy küldje újra az utolsó parancsot.
 
 Az SD kártyára való naplózás során két probléma merült fel, melynek megoldása hosszabb idõt vett igénybe. Egyrészt amikor a naplófájl mérete elérte a kártya formázása során megadott szektorméretet, akkor az írás nem folytatódott. Erre hosszas kutatás után sem találtam elfogadható megoldást, viszont a fájl módosítását végzõ függvények kritikusz szakaszba ágyazásával a probléma megoldódott\footnote{Mivel a fájl kezelése viszonylag hosszú ideig tart, ezért ez a megoldás egy valós alkalmazásban nem felelne meg!}. A másik probléma akkor jelentkezett, ha mûködés közben eltávolítottam a memória kártyát, majd újból visszahelyeztem a foglalatba. A visszahelyezés után a kártyára való írás nem történt meg, a kezelõ függvények hibával tértek vissza. A \emph{FatFS} fügvényeinek tanulmányozásával azt vettem észre, hogy tagváltozóban tárolja, hogy az adott eszköz inicializálása megtörtént-e. Az inicilaizálást tároló változót csak az eszközt kezelõ \emph{driver} beállításakor törli, így a kártya inicializálása a többszöri behelyezés esetén nem valósul meg. Az alkalmazásban a kártya lecsatolásakor törlöm a változó értékét.
 
@@ -107,7 +107,7 @@ Az egyes taszkok mûködése \aappref{flowCharts}ben található.
 \subsection{\textmugreek C/OS--III}
 %----------------------------------------------------------------------------
 
-A \textmugreek C/OS--III ütemezõje szintén a \emph{SysTick} esemény használja a periodikus ütemezés megvalósítására, viszont a mechanizmus különbözik a FreeRTOS esetében megismerttõl.
+A \textmugreek C/OS--III ütemezõje szintén a \emph{SysTick} eseményt használja a periodikus ütemezés megvalósítására, viszont a mechanizmus különbözik a FreeRTOS esetében megismerttõl.
 
 A Idle taszk mellet az operációs rendszer inicializálásakor létrejön \emph{Tick} taszk is, ami periodikusan várakozik a beépített szemaforára. \emph{SysTick} megszakítás érkezésekor a megszakítás-kezelõ rutin jelez a Tick taszknak a szemaforon keresztül, majd a \emph{Pend} függvényhívás következtében az ütemezõ lefut. Mivel a \emph{Tick} taszk magas prioritással rendelkezik, ezért a késleltetés kicsi. A Tick taszk elvégzi a számlálók kezelését, majd várakozik a következõ jelzésre, ezzel újabb ütemezést elindítva.
 
@@ -121,11 +121,11 @@ Az \emph{OSSched()} lefutása során két lehetõség áll fenn:
   \item Kontextusváltás következik be. Ekkor a \emph{PendSV} megszakítás befejezõdése elõtt kerül az azonosító kihelyezésre.
 \end{itemize}
 
-Mivel a \textmugreek C/OS--III TCB struktúrája különbözik a FreeRTOS-nál használt TCB struktúrájától. Egyrészt nem a TCB nem tartalmazza a nevet, csak arra mutató pointert, másrészt a TCB kezdetétõl számított ofszet is különbözik. Az ofszet értéke $32$~byte, mely \alstref{ucosTaskID}ában az ötödik sorban látható. A kinyert memóriacímrõl még be kell olvasni az azonosítót, ami a kilencedik sorban történik.
+A \textmugreek C/OS--III TCB struktúrája különbözik a FreeRTOS-nál használt TCB struktúrájától. Egyrészt a TCB nem tartalmazza a nevet, csak arra mutató pointert, másrészt a TCB kezdetétõl számított ofszet is különbözik. Az ofszet értéke $32$~byte, mely \alstref{ucosTaskID}ában az ötödik sorban látható. A kinyert memóriacímrõl még be kell olvasni az azonosítót, ami a kilencedik sorban történik.
 
 A \textmugreek C/OS--III a szemaforok és sorok mellett támogatja a közvetlenül a taszkoknak küldött jelzések és üzenetek használatát, mely hatékonyabb futás eredményez. Mivel a két rendszer összehasonlítása volt a cél, ezért úgy döntöttem, hogy azonos implementációt használok, és nem használom a beépített objektumokat.
 
-Az datagram-átviteli idõ taszkjainak implementációja során felmerült a probléma, hogy a \textmugreek C/OS--III az üzenetre mutató pointereket használ a továbbítás során. A mérés leírásában hangsúlyozva szerepelt, hogy az átvitel ne pointer használatával történjen, ezért a mérés során a sorba az adat címe helyett magát az adatot helyeztem, és a fogadó taszk esetében is figyeltem, hogy helyesen olvassam ki az üzenet tartalmát.
+Az datagram-átviteli idõ taszkjainak implementációja során felmerült a probléma, hogy a \textmugreek C/OS--III az üzenetre mutató pointereket használja a továbbítás során. A mérés leírásában hangsúlyozva szerepelt, hogy az átvitel ne pointer használatával történjen, ezért a mérés során a sorba az adat címe helyett magát az adatot helyeztem, és a fogadó taszk esetében is figyeltem, hogy helyesen olvassam ki az üzenet tartalmát\footnote{Mivel az adattovábbítás során $32$~bites adatot használtam, és az architektúra által használt pointerek is $32$~bitesek, ezért a megvalósítás nem okozott problémát. Összetett struktúra átvitele esetén bonyolultabb lett volna a helyzet.}.
 
 A további taszkok implementációja úgy történik, mint ahogy a FreeRTOS esetében láthattuk.
 
@@ -154,7 +154,7 @@ A további taszkok implementációja úgy történik, mint ahogy a FreeRTOS esetében l
 
 A távoli vezérlést megvalósító szoftvert Qt fejlesztõkörnyezet használatával valósítottam meg.
 
-A vezérlõ és az eszköz között a kommunikációt soros port\footnote{A soros kommunikáció beállításához a példaprogramok között megtalálható \emph{Terminal} alkalmazást vettem alapul.} valósítja meg a \emph{Base Board}-on elérhetõ kivezetésen keresztül. A csatlakozáskor a vezérlõ jelzi az eszköz számára, amire az eszköz a LED-ek és kapcsolók aktuális állapotával válaszol. A kapott értékeknek megfelelõen az szoftver frissíti a felhasználói felületet.
+A vezérlõ és az eszköz között a kommunikációt UART\footnote{A soros kommunikáció beállításához a példaprogramok között megtalálható \emph{Terminal} alkalmazást vettem alapul.} valósítja meg a \emph{Base Board}-on elérhetõ kivezetésen keresztül. A csatlakozáskor a vezérlõ jelzi az eszköz számára, amire az eszköz a LED-ek és kapcsolók aktuális állapotával válaszol. A kapott értékeknek megfelelõen az szoftver frissíti a felhasználói felületet.
 
 A felületen a helyi és távoli hõmréséklet mellett a potméter állása grafikusan is megjelenítésre kerül, míg a környezeti hõmérséklet és a fényerõsség számértéke olvasható le a felületrõl. Jobb oldalon a kapcsolók és LED-ek jelenlegi állapotára utaló indikátorok láthatóak. A LED-ek értéke változtatható.
 
@@ -166,7 +166,7 @@ A grafikus felület \aappref{gui} \figref{remoteControl}áján látható.
 \section{Raspberry~Pi~3}
 %----------------------------------------------------------------------------
 
-A Raspberry~Pi~3-on használt rendszerek a Rhealstone értékek mérése nem megvalósítható\footnote{A Windows~10~IoT~Code nem forráskódja nem elérhetõ, és a Raspbian rendszer esetében is kernelmódosításokat kéne eszközölni.}, és a háttérben futó több tíz -- esetenként több száz -- egyéb folyamat mellett nem is lenne célszerû. Ezért a két rendszer esetén a késleltetés és a legrosszabb válaszidõ kerül meghatározásra, illetve szubjetív szempontok alapján értékelem majd õket.
+A Raspberry~Pi~3-on használt rendszereknél a Rhealstone értékek mérése nem megvalósítható\footnote{A Windows~10~IoT~Code forráskódja nem elérhetõ, és a Raspbian rendszer esetében is kernelmódosításokat kéne eszközölni.}, és a háttérben futó több tíz -- esetenként több száz -- egyéb folyamat mellett nem is lenne célszerû. Ezért a két rendszer esetén a késleltetés és a legrosszabb válaszidõ kerül meghatározásra, illetve szubjetív szempontok alapján értékelem majd õket.
 
 Mintkét rendszernél két alkalmazás került implementációra:
 \begin{itemize}
@@ -194,9 +194,9 @@ A fejlesztés során \emph{Visual Studio 2017}-et használtam. Az új projekt létreh
 
 A háttérben zajló folyamatok implementációja során sem ütköztem komolyabb problémába, a legtöbb periféria beépített osztályok segítségével könnyen kezelhetõ volt. Viszont a Bluetooth használata nehézséget okozott. Alapos kutatás után arra jutottam, hogy a Windows 10 UWP Bluetooth API még aktív fejlesztés alatt áll, és amennyiben a kommunikáció létrehozása sikerülne, valószínûleg a továbbiakban újabb problémák merülnének fel. Ezért altenatív megoldást kerestem, és mivel a Raspberry Pi rendelkezik UART interfésszel is, ezért a BLE112 modul használata mellett döntöttem.
 
-A Bluegiga egyik mérnökének GitHub oldalán elérhetõ a Bluetooth modulhoz könyvtár, mely az MIT liszensz feltételei mellett használható. \Asecref{freertosImplementation}ben ismeretett metódusok megvalósítása után a kommunikáció az elvárt módon mûködött.
+A Bluegiga egyik mérnökének GitHub oldalán elérhetõ a Bluetooth modulhoz könyvtár, mely az MIT licenc feltételei mellett használható. \Asecref{freertosImplementation}ben ismeretett metódusok megvalósítása után a kommunikáció az elvárt módon mûködött.
 
-Az alkalmazás felülete \aappref{gui} \afigref{windows10Gui}áján látható.
+Az alkalmazás felülete \aappref{gui} \figref{windows10Gui}áján látható.
 
 A headless alkalmazás pár sorban megvalósítható volt. Feliratkoztam a kijelölt GPIO láb változását jelzõ eseményre, és az eseményhez rendelt függvényben a kimeneti lábra másoltam a bemenet értékét.
 
@@ -210,7 +210,7 @@ A fejlesztés megoldható lett volna asztali számítógépen, viszont a Raspbian lehe
 
 Mivel a Qt nem rendelkezik kiemelt támogatással a Raspberry Pi-vel kapcsolatban, ezért elõször az egyes perifériákat bírtam mûködésre.
 
-Linux rendszerek esetén a legtöbb periféria állományként jelenik meg a fájlrendszeren belül[ref!opre]. Ez Raspbian esetén is igaz maradt, és a GPIO lábakat a \verb;/sys/class/gpio/; elérési útvonalon érhetjük el. Itt található \verb;export; fájlba a használni kívánt láb számát beírva megjelenik a láb kezelését lehetõvé tevõ fájlokat tartalmazó mappa. Például az
+Linux rendszerek esetén a legtöbb periféria állományként jelenik meg a fájlrendszeren belül\cite{OpreLin}. Ez Raspbian esetén is igaz maradt, és a GPIO lábakat a \verb;/sys/class/gpio/; elérési útvonalon érhetjük el. Itt található \verb;export; fájlba a használni kívánt láb számát beírva megjelenik a láb kezelését lehetõvé tevõ fájlokat tartalmazó mappa. Például az
 \begin{lstlisting}
 echo 4 > /sys/class/gpio/export
 \end{lstlisting}
@@ -232,10 +232,12 @@ A GPIO lábak kezeléséhez létrehoztam egy osztályt, ami négy tagfüggvényt tartalm
 
 Az implementáció során az ismertetett állományok segítségével inicializálom a lábat. Olvasás és írás esetén a lábhoz tartozó \verb;value; fájl tartalmát olvasom ki, illetve módosítom. Az éldetektálás engedélyezésekor az \verb;edge; fájl írásával mind a felfutó, mind a lefutó él változásának jelzését engedélyezem, és \emph{QFileSystemWatcher} objektum használatával figyelem a \verb;value; fájl változását. Amennyiben a fájlon változás történik, úgy összehasonlítom a láb aktuális értékét a legutóbb kiolvasott értékkel (valóban történt-e változás), és az osztály \emph{EdgeDetected(value)} signal-ján keresztül jelzést küldök.
 
-Tekintettel arra, hogy Windows 10 IoT Core rendszer esetén nem a Raspberry Pi beépített Bluetooth eszközét használtam, úgy döntöttem, hogy Raspbian esetén is a BLE112 Bluetooth modul segítségével valósítom meg a vezeték nélküli kommunikációt. Ehhez szükség volt az utasítások magas szitû kezelését lehetõvé tevõ objektumra, illetve a UART kommunikációra. A soros kommunikáció használatát a Qt támogatja, és mivel az asztali alkalmazásnál is alkalmaztam, így ez a lépés nem okozott gondot. Viszont a modulhoz nem találtam \Cpp fejlesztéshez használható könyvtárakat, ezért végül a \Csh programozás során használt könyvtár alapján implementáltam a szükséges függvényeket.
+Tekintettel arra, hogy Windows 10 IoT Core rendszer esetén nem a Raspberry Pi beépített Bluetooth eszközét használtam, úgy döntöttem, hogy Raspbian esetén is a BLE112 Bluetooth modul segítségével valósítom meg a vezeték nélküli kommunikációt. Ehhez szükség volt az utasítások magas szintû kezelését lehetõvé tevõ objektumra, amely UART-on keresztül kezeli a modult.
+
+A soros kommunikáció használatát a Qt támogatja, és mivel az asztali alkalmazásnál is alkalmaztam, így a beállítása nem okozott gondot. Viszont a Bluetooth modulhoz nem találtam \Cpp{ } fejlesztéshez használható könyvtárakat, ezért végül a \Csh{ }programozás során használt könyvtár alapján implementáltam a szükséges függvényeket.
 
 Az I$^\textrm{2}$C kommunikáció megvalósításához a \emph{wiringPi} függvénykönyvtárat használtam.
 
 Az perifériákat egyesével tesztelve megbizonyosodtam a mûködésükrõl, majd a tesztelés során készített programok felhasználásával összeállítottam a teljes alkalmazást. Az alkalmazás felületérõl \aappref{gui} \figref{raspbianGui}áján láthatunk képet.
 
-A grafikus felület nélküli alkalmazás a Raspbian esetében is néhány sorral megvalósítható volt.
+A grafikus felület nélküli alkalmazás a Raspbian esetében is néhány sorral megvalósítható volt. 

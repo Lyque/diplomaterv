@@ -3,13 +3,15 @@
 \label{sec:freertos}
 %----------------------------------------------------------------------------
 
+A fejezet a \cite{FreeRTOSManual} irodalom alapján készült.
+
 %----------------------------------------------------------------------------
 \subsection{Ismertetõ}
 %----------------------------------------------------------------------------
 
 A \mbox{FreeRTOS} a Real Time Engineers Ltd. által fejlesztett valósidejû operációs rendszer. A fejlesztõk céljai között volt a rendszer erõforrásigényének minimalizálása, hogy a legkisebb beágyazott rendszereken is futtatható legyen. Ebbõl adódóan csak az alap funkciók vannak megvalósítva, mint ütemezés, taszkok közötti kommunikáció lehetõsége, memóriamenedzsment, de nincs beépített támogatás hálózati kommunikációra vagy bármiféle külsõ hardver használatára (ezeket vagy nekünk kell megírnunk, vagy harmadik féltõl származó könyvtárakat kell használnunk).
 
-A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetõvé teszi GPL-tõl eltérõ licenccel ellátott modulok használatát, amennyiben azok a \mbox{FreeRTOS}-sal kizárólag a \mbox{FreeRTOS} API-n keresztül kommunikálnak.
+A rendszer módosított GPLv2 licencet használ. A licencmódosítás lehetõvé teszi GPL-tõl eltérõ licenccel ellátott modulok használatát, amennyiben azok a \mbox{FreeRTOS}-sal kizárólag a \mbox{FreeRTOS} API-n keresztül kommunikálnak\cite{FreeRTOSLicDet}.
 
 %----------------------------------------------------------------------------
 \subsection{Taszkok}
@@ -147,6 +149,8 @@ Sorból való olvasás során az olvasó függvény paramétereként megadhatunk egy vára
 
 Egy sorból egyszerre több taszk is kezdeményezhet olvasást, ezért elõfordulhat az az eset, hogy több taszk is \emph{Blokkolt} állapotban várja az adat érkezését. Ebben az esetben csak egy taszk kerülhet \emph{Futásra kész} állapotba az adat érkezésének hatására. A rendszer a legnagyobb prioritású taszkot választja, vagy ha a várakozó taszkok azonos prioritásúak, akkor a legrégebben várakozót helyezi a \emph{Futásra kész} állapotba.
 
+A sorok ún. halmazba (set) foglalhatóak, így lehetõség nyílik egyszerre több adatra is várakozni. A taszk \emph{Futásra kész} állapotba kerül, amint valamelyik sorba adat érkezik\cite{FreeRTOSManual}.
+
 %----------------------------------------------------------------------------
 \paragraph{Írás sorba}
 %----------------------------------------------------------------------------
@@ -180,7 +184,7 @@ Beágyazott rendszereknél gyakran kell a környezettõl származó eseményekre reagál
 
 Megszakítás használata esetén figyelni kell arra, hogy a megszakítási rutinokban csak \emph{FromISR}-re végzõdõ API függvényeket hívhatunk. Ellenkezõ esetben nem várt mûködés következhet be (blokkoljuk a megszakítási rutint, ami az alkalmazás fagyásához vezethet; kontextus-váltást okozunk, amibõl nem térünk vissza, így a megszakítási rutinból sosem lépünk ki, stb.).
 
-A \mbox{FreeRTOS} ütemezõje a (STM32-re épülõ rendszerekben) a SysTick megszakítást használja az ütemezõ periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására \emph{Futásra kész} állapotba kerül, akkor vagy a következõ ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszert az ütemezõ futtatására.
+A \mbox{FreeRTOS} ütemezõje a (STM32-re épülõ rendszerekben) a SysTick eseményt használja az ütemezõ periodikus futtatásához. A megszakítási rutin futása közben emiatt nem történik ütemezés. Amennyiben valamely magasabb prioritású taszkunk a megszakítás hatására \emph{Futásra kész} állapotba kerül, akkor vagy a következõ ütemezéskor kapja meg a processzort, vagy explicit függvényhívással kell kérni az operációs rendszert az ütemezõ futtatására.
 
 Az alacsonyabb prioritású megszakítások szintén nem tudnak érvényre jutni, így azok bekövetkezésérõl nem kapunk értesítést (az elsõ beérkezõ, alacsonyabb prioritású megszakítás jelzõ bitje bebillen az esemény hatására, de amennyiben több is érkezik a magasabb prioritású megszakítási rutin futása alatt, úgy azok elvesznek).
 Az említett problémák végett a megszakítási rutint a lehetõ legrövidebb idõ alatt be kell fejezni.
@@ -293,7 +297,7 @@ A \emph{pvPortMalloc()} függvény a \mbox{FreeRTOS} heap-jét osztja fel kisebb te
 \subsubsection{Heap\_2.c}
 %----------------------------------------------------------------------------
 
-A \emph{heap\_2.c} szintén a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs értéket használja, viszont a \emph{pvPortMalloc()} mellett már implementálva van a \emph{pvPortFree()} is. A legjobban illeszkedõ (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb esõ, elegendõ nagyságú blokkból legyen kiszolgálva. Fontos megjegyezni, hogy a megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
+A \emph{heap\_2.c} szintén a \emph{configTOTAL\_HEAP\_SIZE} konfigurációs értéket használja, viszont a \emph{pvPortMalloc()} mellett már implementálva van a \emph{pvPortFree()} is. A legjobban illeszkedõ (best fit) algoritmus biztosítja, hogy a memóriakérés a hozzá méretben legközelebb esõ, elegendõ nagyságú blokkból legyen kiszolgálva. Fontos megjegyezni, hogy a megvalósítás nem egyesíti a szomszédos szabad területeket egy nagyobb egységes blokkba, így töredezettség léphet fel\footnote{A \emph{heap\_4.} megvalósítás hasonló a \emph{heap\_2.c} féjlban található megvalósításokkal, viszont védett a memória-töredezettség ellen.}. Ez nem okoz gondot, ha a lefoglalt és felszabadított memória mérete nem változik.
 
 A \emph{heap\_2.c} fájl használata javasolt, ha az alkalmazás ismételve létrehoz és töröl taszkokat, és a taszkokhoz tartozó stack mérete nem változik (\figref{05_heap2}a).
 
