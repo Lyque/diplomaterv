@@ -8,7 +8,7 @@ Nem ez a helyzet beágyazott rendszerek esetén. A rendszer központi egységének sz
 
 Az operációs rendszer választása összetett folyamattá is bonyolódhat, mert mérlegelni kell az alkalmazásunk igényeit, az operációs rendszer támogatottságát (támogatott mikrokontrollerek, fórumok, gyártói támogatás), a becsülhetõ fejlesztési idõt és az ezzel járó költségeket, illetve fizetõs operációs rendszer esetén a rendszer árát.
 
-A választást az sem segíti elõre, hogy nincs egyértelmû módszer az operációs rendszerek értékelésére\footnote{Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN) az 1980-as évek végén hozott létre szabványt a folyamatirányító számítógépes rendszerek teljesítménymutatóinak mérésére (DIN~19242 szabvány-sorozat), a valósidejû operációs rendszerek értékelésére ez nem jelent megoldást\cite{RealTimeSystemsQoS}.}.
+A választást az sem segíti elõre, hogy nincs egyértelmû módszer az operációs rendszerek értékelésére\footnote{Bár a Német Szabványügyi Intézet (Deutsche Institut für Normung - DIN) az 1980-as évek végén hozott létre szabványt a folyamatirányító számítógépes rendszerek teljesítménymutatóinak mérésére (DIN~19242 szabványsorozat), a valósidejû operációs rendszerek értékelésére ez nem jelent megoldást\cite{RealTimeSystemsQoS}.}.
 
 Az alkalmazott mérési folyamatnak több szempontnak is eleget kell tennie, hogy az eredmény használható legyen. Egy mérés során több forrásból is eredhet hiba, melyek mértékét szeretnénk a lehetõ legkisebb szintre csökkenteni.
 A kulcsfontosságú szempontok az alábbiak\cite{HardwareSoftwareComparison,SoftwareMetrics}:
@@ -198,7 +198,7 @@ Az egy évvel késõbb megjelent cikkben ezt a kategóriát is módosították kis mérté
 \subsubsection{Rhealstone jellemzõk összegzése}
 %----------------------------------------------------------------------------
 
-Az elvégzett mérések várhatóan mikroszekundum és milliszekumdum nagyságrendû értékeket adnak vissza\cite{Rhealstone89}. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetõek egy reprezentatív értékké. Az átváltásnak köszönhetõen a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
+Az elvégzett mérések várhatóan mikroszekundum és milliszekundum nagyságrendû értékeket adnak vissza\cite{Rhealstone89}. Minden értéket másodpercre váltva, majd a reciprokát véve az értékek összegezhetõek egy reprezentatív értékké. Az átváltásnak köszönhetõen a nagyobb érték jobb teljesítményt jelent, ami a teljesítménymutatók világában elvárt.
 
 %----------------------------------------------------------------------------
 \paragraph{Objektív Rhealstone érték}
@@ -239,14 +239,14 @@ Az súlytényezõk értéke nulla is lehet.
 \subsection{Legrosszabb válaszidõ}
 %----------------------------------------------------------------------------
 
-2001-ben a Nemzetközi Automatizálási Társaság (International Society of Automation - ISA) egy jelentésben fejtette ki azt az álláspontját, miszerint a késleltetés nem jellemzi a valósidejû rendszert, mert lehet, hogy a legtöbb esetben az elõírt idõn belül válaszol, de ritkán elõfordulhatnak késleltetések vagy kihagyott események, amiket a mérés során nem lehet detektálni\cite{RealtimeDeterminism}.
+2001-ben a Nemzetközi Automatizálási Társaság (International Society of Automation -- ISA) egy jelentésben fejtette ki azt az álláspontját, miszerint a késleltetés nem jellemzi a valósidejû rendszert, mert lehet, hogy a legtöbb esetben az elõírt idõn belül válaszol, de ritkán elõfordulhatnak késleltetések vagy kihagyott események, amiket a mérés során nem lehet detektálni\cite{RealtimeDeterminism}.
 
 A Társaság egy olyan mérési összeállítást javasol a fejlesztõknek, ami egyszerûsége ellenére képes meghatározni a rendszer legrosszabb válaszidejét (\figref{11_worst_case_response_time}a).
 
 A méréshez szükséges eszközök:
 \begin{itemize}
 \item Mérendõ rendszer (legalább egy be- és kimenettel),
-\item Jelgenerátor.
+\item Jelgenerátor,
 \item Két darab digitális számláló.
 \end{itemize}
 

@@ -7,7 +7,7 @@
 \label{sec:specification}
 %----------------------------------------------------------------------------
 
-Az eszköznek könnyen kezelhetõ interfészt kell biztosítania a mérések elvégzéséhez és az ipari alkalmazáshoz szükséges alkatrészeket is tartalmaznia kell.
+A mérések elvégzéséhez tervezni kellett egy olyan eszközt, amely könnyen kezelhetõ interfészt biztosít a mérések elvégzéséhez és az ipari alkalmazáshoz szükséges alkatrészeket is tartalmazza.
 
 Az ipari alkalmazás tervezésekor törekedtem arra, hogy használjak olyan perifériákat, melyek egy termék mûködése során elõfordulhatnak. Ez egy egyszerû GPIO-tól kezdve a vezeték nélküli kommunikációt is magában foglalja.
 
@@ -19,7 +19,7 @@ A merõkártyán a Bluetooth kapcsolat létrehozását a Bluegiga \emph{BLE112} modulj
 
 Érdemes pár mondatban áttekinteni a Bluetooth low energy kommunikáció történetét és mûködését.
 
-A Bluetooth low energy (gyakran BLE-ként vagy Bluetooth Smart-ként találkozhatunk vele) a Bluetooth~4.0-ás verzióval került bevezetésre. Célja, hogy alacsony fogyasztású, gyors csatlakozási lehetõséggel bíró és biztonságos vezeték nélküli kommunikációt valósíthassunk meg. Kétféle Bluetooth~4.0 eszköz különböztethetõ meg a támogatott protokollok alapján:
+A Bluetooth low energy (gyakran BLE-ként vagy Bluetooth Smart-ként találkozhatunk vele) a Bluetooth~4.0-ás verzióval került bevezetésre. Célja, hogy olyan vezeték nélküli kommunikációt valósíthassunk meg, ami alacsony fogyasztású, gyors csatlakozási lehetõséggel bír és biztonságos. Kétféle Bluetooth~4.0 eszköz különböztethetõ meg a támogatott protokollok alapján:
 \begin{description}
   \item[Single-mode eszköz:] kizárólag a Bluetooth low energy technológiát támogatja,
   \item[Dual-mode eszköz:] a Bluetooth low energy technológia mellett a klasszikus Bluetooth technológiákat is támogatja, beleértve a Bluetooth korábbi verzióit is.
@@ -35,7 +35,7 @@ Minden szerver rendelkezik profillal (Profile), melyben az eszközrõl, illetve a 
 
 Elsõ körben az elérhetõ perifériákat és a felhasználható eszközöket sorakoztattam fel.
 
-\Asecref{specification}ben leírtak szerint a laplózás SD kártyára történik. Ezen kívül hõmérséklet mérését is meg kell valósítanom, amihez analóg kimenetû hõmérõt választottam (\emph{MCP9700A}). A helyi állomáson található két szabadon állítható LED, illetve két kapcsoló is, melyek GPIO lábakat foglalnak el. További GPIO lábakat igényel az \emph{IN}, a négy darab \emph{ID} és az \emph{OUT} mérési pontok. A kapcsolók és az \emph{IN} lábak esetén megszakítást is támogatnia kell a lábaknak. A potméter kimeneti lába szintén analóg jelet közvetít a fejlesztõkártyák felé, így a szükséges analóg lábak száma összesen kettõ. Mivel a Raspberry~Pi nem rendelkezik analog-digital konverziót támogató lábakkal, ezért választanom kellett egy olyan digitális interfésszel rendelkezõ ADC IC-t, mely a mért adatokat a Raspberry~Pi számára elérhetõvé teszi. Erre a célra az \emph{ADS7924} négy csatornás IC-t választottam, mely I$^\textrm{2}$C-n keresztül vezérelhetõ, és ugyanezen interfészen keresztül olvasható ki belõle a mért adat.
+\Asecref{specification}ben leírtak szerint a naplózás SD kártyára történik. Ezen kívül hõmérséklet mérését is meg kell valósítanom, amihez analóg kimenetû hõmérõt választottam (\emph{MCP9700A}). A helyi állomáson található két szabadon állítható LED, illetve két kapcsoló is, melyek GPIO lábakat foglalnak el. További GPIO lábakat igényel az \emph{IN}, a négy darab \emph{ID}\footnote{Az ID lábakok az éppen futó taszk 4~bites azonosítója mérhetõ.} és az \emph{OUT} mérési pontok. A kapcsolók és az \emph{IN} lábak esetén megszakítást is támogatnia kell a lábaknak. A potméter kimeneti lába szintén analóg jelet közvetít a fejlesztõkártyák felé, így a szükséges analóg lábak száma összesen kettõ. Mivel a Raspberry~Pi nem rendelkezik analog-digital konverziót támogató lábakkal, ezért választanom kellett egy olyan digitális interfésszel rendelkezõ ADC IC-t, mely a mért adatokat a Raspberry~Pi számára elérhetõvé teszi. Erre a célra az \emph{ADS7924} négy csatornás IC-t választottam, mely I$^\textrm{2}$C-n keresztül vezérelhetõ, és ugyanezen interfészen keresztül olvasható ki belõle a mért adat.
 
 A vezeték nélküli kommunikációhoz használt BLE112 modul vezérelhetõ soros interfészen (\emph{flow-control} használatával és nélküle egyaránt) vagy USB-n keresztül. A fejlesztés során felmerülõ hibák megtalálása szempontjából a soros kommunikáció kedvezõbb, ezért azt választottam.
 
@@ -62,7 +62,7 @@ A fejlesztõkártyák felé a kapcsolatot tüskesorok alkalmazásával oldottam meg. Ez
   \item I$^\textrm{2}$C.
 \end{itemize}
 
-Emellett tüskesorokat alkalmaztam a mérési pontok kivezetésére (IN, OUT és ID lábak\footnote{Az ID lábakok az éppen futó taszk 4~bites azonosítója mérhetõ.}), illetve az SD kártya foglalat csatlakoztatása is tüskesoron keresztül történhet. A BLE112 modul lábainak többsége szintén kivezetésre került, ezáltal a modul képességeinek tesztelésekhez is használható a kártya.
+Emellett tüskesorokat alkalmaztam a mérési pontok kivezetésére (IN, OUT és ID lábak), illetve az SD kártya foglalat csatlakoztatása is tüskesoron keresztül történhet. A BLE112 modul lábainak többsége szintén kivezetésre került, ezáltal a modul képességeinek tesztelésekhez is használható a kártya.
 
 %----------------------------------------------------------------------------
 \section{Hardverterv}
@@ -126,7 +126,7 @@ Azon méréseknél, amelyeknél nem a bemenetre érkezõ jelre indul a mérés, azoknál 
  \subsubsection{Taszkváltási idõ}
 %----------------------------------------------------------------------------
 
- A taszkváltási idõ méréséhez három, azonos prioritású taszkot hoztam létre. Az elsõ -- \emph{A} jelû -- taszk szemaforon keresztül várakozik az indító jelzésre. Ennek beérkezése után szemafor segítségével elindítja a \emph{B} jelû taszkot, amely ugyanígy indítja el a \emph{C} jelû taszkot. Ezután egy hosszabb lefutású ciklusba lépnek, így folyamatosan processzoridõt kérnek az operációs rendszertõl. A ciklus lejártával várakoznak a következõ indításra. A folyamat \afigref{TaskSwitching}án látható.
+ A taszkváltási idõ méréséhez három, azonos prioritású taszkot hoztam létre. Az elsõ -- $\mathcal{A}$ jelû -- taszk szemaforon keresztül várakozik az indító jelzésre. Ennek beérkezése után szemafor segítségével elindítja a $\mathcal{B}$ jelû taszkot, amely ugyanígy indítja el a $\mathcal{C}$ jelû taszkot. Ezután egy hosszabb lefutású ciklusba lépnek, így folyamatosan processzoridõt kérnek az operációs rendszertõl. A ciklus lejártával várakoznak a következõ indításra. A folyamat \afigref{TaskSwitching}án látható.
 
  % TaskSwitching
 \begin{figure}[h!]
@@ -140,7 +140,7 @@ Azon méréseknél, amelyeknél nem a bemenetre érkezõ jelre indul a mérés, azoknál 
 \subsubsection{Preemptálási idõ}
 %----------------------------------------------------------------------------
 
-A preemptálási idõ méréséhez három, különbözõ prioritású taszkot használtam. Az taszkok indítása a már megismert módon történik, viszont a közepes és magas prioritású taszkok (\emph{B} és \emph{C} jelû) kis ideig várakoznak, így adva az \emph{A} jelû taszknak futási jogot. Különbség még a \emph{taszkváltási idõ} méréséhez képest, hogy a három taszk ciklusa különbözõ hosszú. A várakozási idõt és a ciklusok hosszát úgy választottam meg, hogy a közepes prioritású \emph{B} taszk preemptálja \emph{A}-t, és a magas prioritású \emph{C} taszk preemptálja \emph{B}-t. A folyamat \afigref{Preemption}án látható.
+A preemptálási idõ méréséhez három, különbözõ prioritású taszkot használtam. A taszkok indítása a már megismert módon történik, viszont a közepes és magas prioritású taszkok ($\mathcal{B}$ és $\mathcal{C}$ jelû) kis ideig várakoznak, így adva az $\mathcal{A}$ jelû taszknak futási jogot. Különbség még a \emph{taszkváltási idõ} méréséhez képest, hogy a három taszk ciklusa különbözõ hosszú. A várakozási idõt és a ciklusok hosszát úgy választottam meg, hogy a közepes prioritású $\mathcal{B}$ taszk preemptálja $\mathcal{A}$-t, és a magas prioritású $\mathcal{C}$ taszk preemptálja $\mathcal{B}$-t. A folyamat \afigref{Preemption}án látható.
 
 % Preemption
 \begin{figure}[h!]
@@ -168,7 +168,7 @@ A megszakítás-késleltetési idõ mérése során a bemenetre érkezõ jel fel- és lefut
 \subsubsection{Szemafor-váltási idõ}
 %----------------------------------------------------------------------------
 
-A mérést két taszk valósítja meg, amik különbözõ prioritással rendelkeznek. Miután minkét taszk indult, a magasabb prioritású \emph{B} taszk várakozik. Ezen idõ alatt az alacsony prioritású \emph{A} taszk lefoglalja a szemafort, majd hosszabb lefutási ciklusba lép. Eközben a \emph{B} jelû taszk újból futni kezd (preemptálva \emph{A}-t), és megpróbálja lefoglalni a szemafort. Ekkort újból az \emph{A} taszk kapja meg a futás jogát, és a ciklus lejártával elengedi a szemafort. Ekkor a \emph{B} taszk lefoglalja, majd egybõl el is engedi a szemafort, és a két taszk várakozik a következõ indításra. A mérést megvalósító taszkok \afigref{SemaphoreShuffling}án láthatóak.
+A mérést két taszk valósítja meg, amik különbözõ prioritással rendelkeznek. Miután minkét taszk elindult, a magasabb prioritású $\mathcal{B}$ taszk várakozik. Ezen idõ alatt az alacsony prioritású $\mathcal{A}$ taszk lefoglalja a szemafort, majd hosszabb lefutási ciklusba lép. Eközben a $\mathcal{B}$ jelû taszk újból futni kezd (preemptálva $\mathcal{A}$-t), és megpróbálja lefoglalni a szemafort. Ekkort újból az $\mathcal{A}$ taszk kapja meg a futás jogát, és a ciklus lejártával elengedi a szemafort. Ekkor a $\mathcal{B}$ taszk lefoglalja, majd egybõl el is engedi a szemafort, és a két taszk várakozik a következõ indításra. A mérést megvalósító taszkok \afigref{SemaphoreShuffling}án láthatóak.
 
 % SemaphoreShuffling
 \begin{figure}[h!]
@@ -182,7 +182,7 @@ A mérést két taszk valósítja meg, amik különbözõ prioritással rendelkeznek. Miut
 \subsubsection{Deadlock-feloldási idõ}
 %----------------------------------------------------------------------------
 
-Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elindult -- és a magasabb prioritásúak várakoznak, hogy az alacsony prioritású taszk futási jogot kapjon -- az alacsony prioritású \emph{A} taszk lefoglalja a mutex-et, majd hosszú lefutású ciklusba lép. Közben a közepes prioritású \emph{B} taszk késleltetése letelik, és preemtálja \emph{A}-t. A \emph{B} taszk is üres ciklus futtatásába kezd. Mikor a \emph{C} taszk várakozási ideje is lejár, akkor megpróbálja lefoglalni a mutex-et, amit az alacsony prioritású taszk birtokol. Az ezt követõ viselkedés függ attól, hogy az \emph{A} taszk örökli-e a \emph{C} taszk prioritását vagy sem, de valamikor az alacsony prioritású taszk befejezi a ciklus futtatását, majd felszabadítja a mutex-et, amit a magas prioritású \emph{C} taszk lefoglal, majd azonnal el is engedi. A folyamat \afigref{DeadlockBreaking}án látható.
+Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elindult -- és a magasabb prioritásúak várakoznak, hogy az alacsony prioritású taszk futási jogot kapjon -- az alacsony prioritású $\mathcal{A}$ taszk lefoglalja a mutex-et, majd hosszú lefutású ciklusba lép. Közben a közepes prioritású $\mathcal{B}$ taszk késleltetése letelik, és preemtálja $\mathcal{A}$-t. A $\mathcal{B}$ taszk is üres ciklus futtatásába kezd. Mikor a $\mathcal{C}$ taszk várakozási ideje is lejár, akkor megpróbálja lefoglalni a mutex-et, amit az alacsony prioritású taszk birtokol. Az ezt követõ viselkedés függ attól, hogy az $\mathcal{A}$ taszk örökli-e a $\mathcal{C}$ taszk prioritását vagy sem, de valamikor az alacsony prioritású taszk befejezi a ciklus futtatását, majd felszabadítja a mutex-et, amit a magas prioritású $\mathcal{C}$ taszk lefoglal, majd azonnal el is engedi. A folyamat \afigref{DeadlockBreaking}án látható.
 
 % DeadlockBreaking
 \begin{figure}[h!]
@@ -196,7 +196,7 @@ Három különbözõ prioritású taszk vesz részt a mérésben. Miután minden taszk elin
 \subsubsection{Datagram-átviteli idõ}
 %----------------------------------------------------------------------------
 
-A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg. Az adat vételét szemaforral jelzi a vételi oldalt megvalósító taszk, amit már a mérés kezdete elõtt birtokol. A taszkok elindulása után a magas prioritású \emph{B} jelû taszk a kimeneti lábat magas értékbe állítja, majd a $32$-bites \emph{i} változó értékét $256$ alkalommal betölti a sorba ($1~kB$ adat). Ezután megpróbálja elvenni a méréshez használt szemafort, aminek következtében az alacsony prioritású \emph{A} jelû taszk folytatja futását. A sorból elveszi a betöltött adatokat, majd a szemafor elengedésével jelez a \emph{B} jelû taszknak, amely egybõl felszabadítja a szemafort, majd a kimeneti láb alacsony szintre állításával jelzi az adatátvitel befejezõdését. A kimeneti láb írása ebben az esetben is assembly nyelven történik. A mérés folyamata \afigref{DatagramThroughput}án látható.
+A datagram-átviteli idõ mérését kettõ, különbözõ prioritású taszk valósítja meg. Az adat vételét szemaforral jelzi a vételi oldalt megvalósító taszk, amit már a mérés kezdete elõtt birtokol. A taszkok elindulása után a magas prioritású $\mathcal{B}$ jelû taszk a kimeneti lábat magas értékbe állítja, majd a $32$-bites \emph{i} változó értékét $256$ alkalommal betölti a sorba ($1~kB$ adat). Ezután megpróbálja elvenni a méréshez használt szemafort, aminek következtében az alacsony prioritású $\mathcal{A}$ jelû taszk folytatja futását. A sorból elveszi a betöltött adatokat, majd a szemafor elengedésével jelez a $\mathcal{B}$ jelû taszknak, amely egybõl felszabadítja a szemafort, majd a kimeneti láb alacsony szintre állításával jelzi az adatátvitel befejezõdését. A kimeneti láb írása ebben az esetben is assembly nyelven történik. A mérés folyamata \afigref{DatagramThroughput}án látható.
 
 % DatagramThroughput
 \begin{figure}[h!]
@@ -220,7 +220,7 @@ Rendelkezésemre állt egy \emph{Basys~3} FPGA fejlesztõkártya, amin megfelelõ kiv
 \begin{figure}[h!]
 \centering
 \includegraphics[width=9cm]{figures/Eval_Boards/04_basys3.png}
-\caption{Basys~3 fejlesztõkártya.}
+\caption{Basys~3 fejlesztõkártya\cite{BASYS3}.}
 \label{fig:Basys3}
 \end{figure}
 
@@ -230,4 +230,4 @@ Rendelkezésemre állt egy \emph{Basys~3} FPGA fejlesztõkártya, amin megfelelõ kiv
 \includegraphics[width=12cm]{figures/Measurements/01_bidirectional_counter.eps}
 \caption{A bemeneti jelek éldetektálását végzõ áramkör.}
 \label{fig:BidirectionalCounter}
-\end{figure} 
+\end{figure}

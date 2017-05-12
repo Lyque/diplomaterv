@@ -133,7 +133,7 @@ A mért adatokból számolt várható értékeket és a tapasztalati szórás értékeit \at
 
 A \emph{késleltetés} mérésének hisztogramján (\figref{PlotLatencyAndJitter}a) látható, hogy a \textmugreek C/OS--III által produkált eredmények módusza kisebb értéket vesz fel, viszont szélesebb tartományban szóródnak. Mindkét operációs rendszer esetén kialakult egy második csomósodási pont ($1,02~\mu s$ és $1,58~\mu s$ körül), aminek oka az lehet, hogy a gerjesztésként használt jel kritikus szakasz közben érkezett a bemenetre. A jitter értékét a mérés szorása adja.
 
-A terheléses mérés elemzésekor ritkán elõfordultak kugróan magas értékek. Ezek oka az SD kártyára való írás kritikus szakaszban történõ megvalósítása volt, ezért a számolás során nem vettem figyelembe õket.
+A terheléses mérés elemzésekor ritkán elõfordultak kiugróan magas értékek. Ezek oka az SD kártyára való írás kritikus szakaszban történõ megvalósítása volt, ezért a számolás során nem vettem figyelembe õket.
 
 %Plots
 % LatencyAndJitter
@@ -887,7 +887,7 @@ Nagyobb mennyiségû adat átvitelében a \textmugreek C/OS--III jelentõsen jobb ere
 \label{fig:PlotDatagramThroughput}
 \end{figure}
 
-A Raspberry Pi 3 rendszerei esetén a kapott értékek magasabbak, és nagy szórással rendelkeznek (\figref{PlotLatencyAndJitterRaspi}a). Grafikus felület használata esetén mindkét rendszernél látható, ahogyan a minták széles tartományon terülnek szét. Raspbian esetében a grafikus felület kikapcsolásával az adathalmaz módusza egyértelmûvé válik, és az adatok szórása is lecsökken. A mérést megnövelt prioritással is elvégezve a módusz értéke csökken -- ezzel együtt a várható érték is --, de az adathalmaz szórására nincs pozitív hatással.
+A Raspberry Pi 3 rendszerei esetén a megszakítás-késleltetési idõ mérésénél kapott értékek magasabbak, és nagy szórással rendelkeznek (\figref{PlotLatencyAndJitterRaspi}a). Grafikus felület használata esetén mindkét rendszernél látható, ahogyan a minták széles tartományon terülnek szét. Raspbian esetében a grafikus felület kikapcsolásával az adathalmaz módusza egyértelmûvé válik, és az adatok szórása is lecsökken. A mérést megnövelt prioritással is elvégezve a módusz értéke csökken -- ezzel együtt a várható érték is --, de az adathalmaz szórására nincs pozitív hatással.
 
 Windows 10 IoT Core esetén a grafikus felület mellõzése nem okozott jelentõsebb változást a módusz tekintetében, viszont \afigref{PlotLatencyAndJitterRaspi}án látható, hogy az értékek sokkal inkább csoportosulnak a módusz közelében, viszont ekkor is két kiugró érték van jelen a hisztogrammon.
 

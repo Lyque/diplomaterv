@@ -10,13 +10,13 @@ A FreeRTOS operációs rendszer tökéletes belépési lehetõség azoknak, akik elõtte 
 
 A \textmugreek C/OS--III érezhetõen összetettebb rendszer. Elérhetõ hozzá USB és TCP/IP stack, melyet a gyártó az operációs rendszerhez optimalizál. Mivel a \textmugreek C/OS kereskedelmi céllal történõ felhasználása jogdíj köteles, ezért inkább bonyolult termékek fejlesztése esetén érdemes elgondolkodni, amikor az egyes funkciók más rendszeren való implementálása már aránytalanul sok többletmunkát igényelne.
 
-A Windows 10 IoT Core használata során pozitív tapasztalat volt a \Csh{ }nyelv által elérhetõ hatékonyság. Az \emph{async} metódusok használatával nem kellett az egyes szálak létrehozásával törõdni, és az \emph{event}-ek segítségével könnyen kezelhettem a beérkezõ adatokat. Az fejlesztõrendszer több helyen is elvégzi a programozó helyett a munka nehéz részét. Viszont az alkalmazás implementálása végén szembesültem, hogy a felsorolt elõnyök mellett hátránya is van a UWP alkalmazás fejlesztésének. Például a felhasználó nem tudja bezárni az alkalmazást, ezáltal a fejlesztõnek nincs lehetõsége értesítést kapni arról, hogy az alkalmazást leállították. Természetesen megkerülõ megoldásokkal megoldható a probléma, de ezt mindeképp a rendszer hátrányaként említeném.
+A Windows 10 IoT Core használata során pozitív tapasztalat volt a \Csh{ }nyelv által elérhetõ hatékonyság. Az \emph{async} metódusok használatával nem kellett az egyes szálak létrehozásával törõdni, és az \emph{event}-ek segítségével könnyen kezelhettem a beérkezõ adatokat. A fejlesztõrendszer több helyen is elvégzi a programozó helyett a munka nehéz részét. Viszont az alkalmazás implementálása végén szembesültem a ténnyel, hogy a felsorolt elõnyök mellett hátránya is van a UWP alkalmazás fejlesztésének. Például a felhasználó nem tudja bezárni az alkalmazást, ezáltal a fejlesztõnek nincs lehetõsége értesítést kapni arról, hogy az alkalmazást leállították. Természetesen megkerülõ megoldásokkal megoldható a probléma, de ezt mindeképp a rendszer hátrányaként említeném.
 
 A Windows 10 IoT Core rendszert a \Csh{ }programozásban jártas fejlesztõknek ajánlom, fõleg kijelzõvel rendelkezõ eszközökhöz. Viszont amennyiben az alkalmazásban idõkritikus feladat is szerepel, akkor érdemes más platformot is számításba venni.
 
 A Raspbian rendszerre való fejlesztést magán a Raspberry Pi eszközön végeztem, és nem találkoztam különösebb problémával. A Raspberry Pi-re való fejlesztés elsõdleges nyelve a Python, ezért a legtöbb funkcióhoz elérhetõek Python modulok. Mivel én Qt-t használtam a fejlesztés során, így volt, amit magamnak kellett megoldanom -- például a GPIO lábak kezelése --, amit Pythonban könnyedén megvalósíthattam volna.
 
-Mivel a Raspbian-hoz elérhetõek kernel patch-ek, melyekkel a rendszer real-time mûködése megvalósítható, ezért úgy gondolom, hogy akár folyamatirányítési feladat ellátására is alkalmas eszköz lehet.
+Mivel a Raspbian-hoz elérhetõek kernel patch-ek, melyekkel a rendszer real-time mûködése megvalósítható, ezért úgy gondolom, hogy akár folyamatirányítási feladat ellátására is alkalmas eszköz lehet.
 
 %----------------------------------------------------------------------------
 \section{További lehetõségek}
@@ -26,4 +26,8 @@ A mérõkártya használata során apróbb tervezési hibák derültek ki. Ilyen hiba vol
 
 A FreeRTOS és a \textmugreek C/OS--III esetében a taszkok azonosítóinak kihelyezése a lábra assembly nyelven történt. Ezáltal az utasítások végrehajtási ideje pontosan meghatározható, és a mérési eredmények korrigálhatóak. Ez a végrehajtott feldolgozás során nem valósult meg, de szükség esetén kivitelezhetõ.
 
-A \textmugreek C/OS--III mérését megvalósító taszkok nem használják ki az operációs rendszer elõnyeit, és ez torzítja a rendszer eredményeit. A méréseket célszerû lenne elvégezni az említett szolgáltatások használatával is. 
+A \textmugreek C/OS--III mérését megvalósító taszkok nem használják ki az operációs rendszer elõnyeit, és ez torzítja a rendszer eredményeit. A méréseket célszerû lenne elvégezni az említett szolgáltatások használatával is.
+
+\vfill
+
+A diploma során elkészített projektek és a felhasznált dokumentumok a \url{https://github.com/Lyque/diplomaterv} oldalon elérhetõek. 

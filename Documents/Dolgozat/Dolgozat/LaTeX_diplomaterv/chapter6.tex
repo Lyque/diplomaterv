@@ -16,7 +16,7 @@ A \emph{késleltetés} és \emph{megszakítás-késleltetési idõ} mérésénél az \emph{I
 
 Azon méréseknél, ahol bemeneti jel használata szükséges, ott \emph{Hameg HMF2550} jelengenerátor szolgáltatta a gerjesztést a mérõkártyán található BNC csatlakozón keresztül. A STM32F4 fejlesztõkártyán futó rendszerek esetén $5~kHz$-es, a Raspberry Pi-n futó rendszerek esetén $2~kHz$-es négyszögjellel dolgoztam.
 
-A mérések feldolgozását \emph{Python} szkripttel végeztem el. Két szkript megírása vált szükségessé. Az egyik szkript a mérés során keletkezett száz fájlból készített egy darab fájlt, míg a másik szkript végezte az meghatározandó adatok kinyerését az egyesített fájlból.
+A mérések feldolgozását \emph{Python} szkripttel végeztem el. Két szkript megírása vált szükségessé. Az egyik szkript a mérés során keletkezett száz fájlból készített egy darab fájlt, míg a másik szkript végezte a meghatározandó adatok kinyerését az egyesített fájlból.
 
 %----------------------------------------------------------------------------
 \section{Adatok feldolgozása}
@@ -49,5 +49,5 @@ Az adatok várható értéke a mért értékek átlaga (\eqref{meanValue}~képlet), míg a
 
 \begin{equation}
 \label{eq:devValue}
-\sigma=\sqrt{\frac{\sum\limits_{i=1}^{N}(t_{i}-\mu)^2}{N-1}}.
+\sigma=\sqrt{\frac{\sum\limits_{i=1}^{N}(t_{i}-\hat{\mu})^2}{N-1}}.
 \end{equation} 

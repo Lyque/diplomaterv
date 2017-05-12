@@ -14,7 +14,7 @@ A vállalat kiemelt figyelmet fordít a forráskód minõségére, ezért szigorú szabál
 
 A részletes dokumentáció mellett -- mely oldalakon keresztül ismerteti a rendszer könyvtárának struktúráját és tartalmát; külön fejezet foglalkozik a portolás lépéseinek magyarázatával -- a forráskódban található megjegyzések is segítik a fejlesztõt a programozás során.
 
-Az operációs mellett a vállalat további modulokat is elérhetõvé tesz, mellyel a rendszer funkcionalitását bõvíti. Ilyen modul például a \textmugreek C/TCP-IP, a \textmugreek C/USB és a \textmugreek C/FS.
+Az operációs rendszer mellett a vállalat további modulokat is elérhetõvé tesz, mellyel a rendszer funkcionalitását bõvíti. Ilyen modul például a \textmugreek C/TCP-IP, a \textmugreek C/USB és a \textmugreek C/FS.
 
 %----------------------------------------------------------------------------
 \subsection{Taszkok}
@@ -22,7 +22,7 @@ Az operációs mellett a vállalat további modulokat is elérhetõvé tesz, mellyel a 
 
 A \textmugreek C/OS elõzõ verziójában a prioritások száma korlátozott volt és minden prioritási szinthez maximum egy taszk tartozhatott, ezáltal korlátozva a taszkok számát is. Az igényeket kielégítve ezt a korlátozást a rendszer harmadik verziójában eltörölték. Nincs megkötés sem a prioritásokra, sem a taszkok számára. Korlátot egyedül a használt mikrokontroller erõforrásai jelentenek.
 
-A preemptív ütemezés mellett implementálásra került a Round-Robin ütemezés, amely lehetõvé teszi az azonos prioritásû taszkok között a processzoridõ periodikus kiosztását. A Round-Robin ütemezést fordítási idõben engedélyezni kell, majd ezután futási idõben  szabadon engedélyezhetjük vagy letilthatjuk.
+A preemptív ütemezés mellett implementálásra került a Round-Robin ütemezés, amely lehetõvé teszi az azonos prioritású taszkok között a processzoridõ periodikus kiosztását. A Round-Robin ütemezést fordítási idõben engedélyezni kell, majd ezután futási idõben  szabadon engedélyezhetjük vagy letilthatjuk.
 
 A \textmugreek C/OS--III taszkjainak állapotmodellje kis mértékben különbözik a FreeRTOS esetében megismerttõl. Nem különbözteti meg a \emph{Felfüggesztett} és \emph{Blokkolt} állapotokat, viszont a törölt (vagy még el nem indított) taszkokat \emph{Alvó} állapotba sorolja. Ezen felül bevezeti a \emph{Megszakított} állapotot, melybe megszakítás érkezésekor kerül a taszk. Az állapotmodell \afigref{01_uCOS_states}án látható.
 
@@ -45,7 +45,7 @@ A taszkok nyílvántartása a \textmugreek C/OS--III esetében is TCB használatával 
 Változó & Jelentés \\
 \hline
 \hline
-StkPtr & A stack utolsó elemére mutató pointer \\
+StkPtr & A stack utolsó elemére mutató pointer. \\
 \hline
 StkLimitPtr & A stack-en belül egy adott részre mutat. A stack túlcsordulásának ellenõrzésére használja a rendszer. \\
 \hline
@@ -148,7 +148,7 @@ Késleltett módszer (\emph{Deferred Method}) esetén a kritikus szakaszokban a meg
 \subsection{Erõforrás-kezelés}
 %----------------------------------------------------------------------------
 
-A korábban bemutatott szemfor és mutex mellett az erõforrások védelmére használhatunk kritikus szakaszokat is. Ahogy azt a \emph{Megszakítás-kezelés} részben ismertettem, a \textmugreek C/OS a kritikus szakaszokban beállítástól függõen vagy letiltja a megszakításokat, vagy csak az ütemezõt függeszti fel. Fontos megjegyezni, hogy amennyiben megszakítási rutinnal szeretnénk közös memóriaterületet (változót, adatstruktúrát) használni, úgy csak a megszakítások letiltása nyújt védelmet az adat hibás olvasásának lehetõsége ellen.
+A korábban bemutatott szemafor és mutex mellett az erõforrások védelmére használhatunk kritikus szakaszokat is. Ahogy azt a \emph{Megszakítás-kezelés} részben ismertettem, a \textmugreek C/OS a kritikus szakaszokban beállítástól függõen vagy letiltja a megszakításokat, vagy csak az ütemezõt függeszti fel. Fontos megjegyezni, hogy amennyiben megszakítási rutinnal szeretnénk közös memóriaterületet (változót, adatstruktúrát) használni, úgy csak a megszakítások letiltása nyújt védelmet az adat hibás olvasásának lehetõsége ellen.
 
 %----------------------------------------------------------------------------
 \subsection{Memória-kezelés}

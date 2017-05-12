@@ -73,6 +73,8 @@ A távoli felügyeletet soros kommunikáció segítségével valósítottam meg, amihez c
   \item Lezáró karakter (sortörés).
 \end{itemize}
 
+Például: \verb*;"led0    :UUUU\n;\footnote{Az \verb;UUUU; karakterlánc a $0\textrm{x}55555555$ értéknek felel meg.}.
+
 \begin{lstlisting}[language=C,numbers={left},keywordstyle={\color{blue}},stringstyle={\color{red}},commentstyle={\color{olive}},morecomment={[l][\color{red}]{\#}},tabsize=2, caption={Mérés kiválasztását megvalósító makrók.} \label{lst:measurementDefines}]
 /**
  * Mérési folyamat:
@@ -123,7 +125,7 @@ Az \emph{OSSched()} lefutása során két lehetõség áll fenn:
 
 A \textmugreek C/OS--III TCB struktúrája különbözik a FreeRTOS-nál használt TCB struktúrájától. Egyrészt a TCB nem tartalmazza a nevet, csak arra mutató pointert, másrészt a TCB kezdetétõl számított ofszet is különbözik. Az ofszet értéke $32$~byte, mely \alstref{ucosTaskID}ában az ötödik sorban látható. A kinyert memóriacímrõl még be kell olvasni az azonosítót, ami a kilencedik sorban történik.
 
-A \textmugreek C/OS--III a szemaforok és sorok mellett támogatja a közvetlenül a taszkoknak küldött jelzések és üzenetek használatát, mely hatékonyabb futás eredményez. Mivel a két rendszer összehasonlítása volt a cél, ezért úgy döntöttem, hogy azonos implementációt használok, és nem használom a beépített objektumokat.
+A \textmugreek C/OS--III a szemaforok és sorok mellett támogatja a közvetlenül a taszkoknak küldött jelzések és üzenetek használatát, mely hatékonyabb futást eredményez. Mivel a két rendszer összehasonlítása volt a cél, ezért úgy döntöttem, hogy azonos implementációt használok, és nem használom a beépített objektumokat.
 
 Az datagram-átviteli idõ taszkjainak implementációja során felmerült a probléma, hogy a \textmugreek C/OS--III az üzenetre mutató pointereket használja a továbbítás során. A mérés leírásában hangsúlyozva szerepelt, hogy az átvitel ne pointer használatával történjen, ezért a mérés során a sorba az adat címe helyett magát az adatot helyeztem, és a fogadó taszk esetében is figyeltem, hogy helyesen olvassam ki az üzenet tartalmát\footnote{Mivel az adattovábbítás során $32$~bites adatot használtam, és az architektúra által használt pointerek is $32$~bitesek, ezért a megvalósítás nem okozott problémát. Összetett struktúra átvitele esetén bonyolultabb lett volna a helyzet.}.
 
@@ -156,9 +158,9 @@ A távoli vezérlést megvalósító szoftvert Qt fejlesztõkörnyezet használatával val
 
 A vezérlõ és az eszköz között a kommunikációt UART\footnote{A soros kommunikáció beállításához a példaprogramok között megtalálható \emph{Terminal} alkalmazást vettem alapul.} valósítja meg a \emph{Base Board}-on elérhetõ kivezetésen keresztül. A csatlakozáskor a vezérlõ jelzi az eszköz számára, amire az eszköz a LED-ek és kapcsolók aktuális állapotával válaszol. A kapott értékeknek megfelelõen az szoftver frissíti a felhasználói felületet.
 
-A felületen a helyi és távoli hõmréséklet mellett a potméter állása grafikusan is megjelenítésre kerül, míg a környezeti hõmérséklet és a fényerõsség számértéke olvasható le a felületrõl. Jobb oldalon a kapcsolók és LED-ek jelenlegi állapotára utaló indikátorok láthatóak. A LED-ek értéke változtatható.
+A felületen a helyi és távoli hõmérséklet mellett a potméter állása grafikusan is megjelenítésre kerül, míg a környezeti hõmérséklet és a fényerõsség értéke számokkal kerül kijelzésre. Jobb oldalon a kapcsolók és LED-ek jelenlegi állapotára utaló indikátorok láthatóak. A LED-ek értéke változtatható.
 
-Az eszköztõl érkezõ adatok a szenzorokból kinyert nyers adatok, melyeket a vezérlõ szoftver dolgoz fel. A Sensortag által mért értékeket az adott szenzor adatlapjában meghatározott számolás alapján számoltam, míg a helyi hõmérséklet esetében a hõmérõ adatlapjában található hõmérséklet--feszültség karakterisztika alapján végeztem közelítõ számítást. Minden érték esetén átlagolt adat kerül megjelenítésre.
+Az eszköztõl érkezõ adatok a szenzorokból kinyert nyers adatok, melyeket a vezérlõ szoftver dolgoz fel. A Sensortag által mért értékeket az adott szenzor adatlapjában meghatározott számolás alapján számoltam, míg a helyi hõmérséklet esetében a hõmérõ adatlapjában található hõmérséklet-feszültség karakterisztika alapján végeztem közelítõ számítást. Minden érték esetén átlagolt adat kerül megjelenítésre.
 
 A grafikus felület \aappref{gui} \figref{remoteControl}áján látható.
 
@@ -210,15 +212,15 @@ A fejlesztés megoldható lett volna asztali számítógépen, viszont a Raspbian lehe
 
 Mivel a Qt nem rendelkezik kiemelt támogatással a Raspberry Pi-vel kapcsolatban, ezért elõször az egyes perifériákat bírtam mûködésre.
 
-Linux rendszerek esetén a legtöbb periféria állományként jelenik meg a fájlrendszeren belül\cite{OpreLin}. Ez Raspbian esetén is igaz maradt, és a GPIO lábakat a \verb;/sys/class/gpio/; elérési útvonalon érhetjük el. Itt található \verb;export; fájlba a használni kívánt láb számát beírva megjelenik a láb kezelését lehetõvé tevõ fájlokat tartalmazó mappa. Például az
+Linux rendszerek esetén a legtöbb periféria állományként jelenik meg a fájlrendszeren belül\cite{OpreLin}. Ez Raspbian esetén is igaz maradt, és a GPIO lábakat a \verb;/sys/class/gpio/; elérési útvonalon érhetjük el. Az itt található \verb;export; fájlba a használni kívánt láb számát beírva megjelenik a láb kezelését lehetõvé tevõ fájlokat tartalmazó mappa. Például az
 \begin{lstlisting}
 echo 4 > /sys/class/gpio/export
 \end{lstlisting}
 utasítás hatására létrejön a \verb;/sys/class/gpio/gpio4; mappa, amelyen belül az alábbi fájlok segítségével lehet a GPIO lábat kezelni:
 \begin{description}
-  \item[direction:] Meghatározza, hogy a lábat kimenetként vagy bemenetként használjuk. Lehetséges értékei: in, out.
-  \item[value:] A láb jelenlegi értékét olvashatjuk ki a fájlon keresztül. Kimenet esetén a fájlba való írással változtathatjuk meg a láb állapotát. Lehetséges értékei: 0, 1.
-  \item[edge:] A bemeneti láb változásakor a \verb;value; fájlból kiolvasott érték megfelel a lábon megfigyelhetõ jelszintnek, viszont a fájl metadatai nem változnak (mint például az utolsó módosítás dátuma). A \verb;edge; fájl tartalmának megváltoztatásával elérhetõ, hogy az adott változás esetén fájlleírón keresztül detektálható legyen a változás. Lehetséges értékei: none, rising, falling, both.
+  \item[direction:] Meghatározza, hogy a lábat kimenetként vagy bemenetként használjuk. Lehetséges értékei: \verb;in, out;.
+  \item[value:] A láb jelenlegi értékét olvashatjuk ki a fájlon keresztül. Kimenet esetén a fájlba való írással változtathatjuk meg a láb állapotát. Lehetséges értékei: \verb;0, 1;.
+  \item[edge:] A bemeneti láb változásakor a \verb;value; fájlból kiolvasott érték megfelel a lábon megfigyelhetõ jelszintnek, viszont a fájl metadatai nem változnak (mint például az utolsó módosítás dátuma). A \verb;edge; fájl tartalmának megváltoztatásával elérhetõ, hogy az adott változás esetén fájlleírón keresztül detektálható legyen a változás. Lehetséges értékei: \verb;none, rising, falling, both;.
 \end{description}
 
 A GPIO lábak kezeléséhez létrehoztam egy osztályt, ami négy tagfüggvényt tartalmaz.

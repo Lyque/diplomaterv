@@ -1,20 +1,20 @@
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \contentsline {table}{\numberline {2.1.}{\ignorespaces A \unhbox \voidb@x \hbox {FreeRTOS} TCB-j\'enek f\H obb v\'altoz\'oi.\relax }}{29}{table.caption.20}
-\select@language {magyar} \contentsline {table}{\numberline {2.2.}{\ignorespaces A \unhbox \voidb@x \hbox {\textmugreek C/OS--III} TCB-j\'enek f\H obb v\'altoz\'oi.\relax }}{41}{table.caption.27}
+\select@language {magyar} \contentsline {table}{\numberline {2.2.}{\ignorespaces A \unhbox \voidb@x \hbox {\textmugreek C/OS--III} TCB-j\'enek f\H obb v\'altoz\'oi.\relax }}{40}{table.caption.27}
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
-\select@language {magyar} \contentsline {table}{\numberline {7.1.}{\ignorespaces A FreeRTOS \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjai n\'elk\"ul.\relax }}{77}{table.caption.49}
-\select@language {magyar} \contentsline {table}{\numberline {7.2.}{\ignorespaces A \textmugreek C/OS--III \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjai n\'elk\"ul.\relax }}{78}{table.caption.50}
-\select@language {magyar} \contentsline {table}{\numberline {7.3.}{\ignorespaces A FreeRTOS \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjaival.\relax }}{78}{table.caption.51}
-\select@language {magyar} \contentsline {table}{\numberline {7.4.}{\ignorespaces A \textmugreek C/OS--III \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjaival.\relax }}{78}{table.caption.52}
-\select@language {magyar} \contentsline {table}{\numberline {7.5.}{\ignorespaces Az STM32F4 Discovery fejleszt\H ok\'arty\'an fut\'o rendszerek m\'er\'esek eredm\'enyei t\'abl\'azatba rendezve. A v\'arhat\'o \'ert\'ek \'es sz\'or\'as $\mu s$ m\'ert\'ekegys\'egben \'ertend\H o.\relax }}{84}{table.caption.62}
-\select@language {magyar} \contentsline {table}{\numberline {7.6.}{\ignorespaces A Raspberry Pi 3 eszk\"oz\"on fut\'o rendszerek m\'er\'esek eredm\'enyei t\'abl\'azatba rendezve. A v\'arhat\'o \'ert\'ek \'es sz\'or\'as $\mu s$ m\'ert\'ekegys\'egben \'ertend\H o.\relax }}{85}{table.caption.63}
-\select@language {magyar} \contentsline {table}{\numberline {7.7.}{\ignorespaces A legrosszabb v\'alaszid\H o m\'er\'es\'enek eredm\'enyei.\relax }}{85}{table.caption.64}
-\select@language {magyar} \contentsline {table}{\numberline {7.8.}{\ignorespaces Objekt\IeC {\'\i }v Rhealstone \'ert\'ekek.\relax }}{86}{table.caption.65}
+\select@language {magyar} \contentsline {table}{\numberline {7.1.}{\ignorespaces A FreeRTOS \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjai n\'elk\"ul.\relax }}{76}{table.caption.49}
+\select@language {magyar} \contentsline {table}{\numberline {7.2.}{\ignorespaces A \textmugreek C/OS--III \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjai n\'elk\"ul.\relax }}{77}{table.caption.50}
+\select@language {magyar} \contentsline {table}{\numberline {7.3.}{\ignorespaces A FreeRTOS \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjaival.\relax }}{77}{table.caption.51}
+\select@language {magyar} \contentsline {table}{\numberline {7.4.}{\ignorespaces A \textmugreek C/OS--III \'altal elfoglalt mem\'oria az ipari alkalmaz\'as taszkjaival.\relax }}{77}{table.caption.52}
+\select@language {magyar} \contentsline {table}{\numberline {7.5.}{\ignorespaces Az STM32F4 Discovery fejleszt\H ok\'arty\'an fut\'o rendszerek m\'er\'esek eredm\'enyei t\'abl\'azatba rendezve. A v\'arhat\'o \'ert\'ek \'es sz\'or\'as $\mu s$ m\'ert\'ekegys\'egben \'ertend\H o.\relax }}{83}{table.caption.62}
+\select@language {magyar} \contentsline {table}{\numberline {7.6.}{\ignorespaces A Raspberry Pi 3 eszk\"oz\"on fut\'o rendszerek m\'er\'esek eredm\'enyei t\'abl\'azatba rendezve. A v\'arhat\'o \'ert\'ek \'es sz\'or\'as $\mu s$ m\'ert\'ekegys\'egben \'ertend\H o.\relax }}{84}{table.caption.63}
+\select@language {magyar} \contentsline {table}{\numberline {7.7.}{\ignorespaces A legrosszabb v\'alaszid\H o m\'er\'es\'enek eredm\'enyei.\relax }}{84}{table.caption.64}
+\select@language {magyar} \contentsline {table}{\numberline {7.8.}{\ignorespaces Objekt\IeC {\'\i }v Rhealstone \'ert\'ekek.\relax }}{85}{table.caption.65}
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }
 \select@language {magyar} \addvspace {10\p@ }

@@ -38,9 +38,9 @@ A BSD licenc eredetileg egy egyszerû és szabad felfogású licenc számítógép szoft
 \paragraph{4-clause BSD (eredeti)}
 %----------------------------------------------------------------------------
 
-Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhasználás feltételeit. A licenc tartalmazza a szerzõi jog keletkezésének évét, a fejlesztõ szervezet nevét és a szerzõi jog tulajdonosának nevét. A licenc megengedi a szoftver használatát mind forrás, mind bináris formában, akár módosítással, akár anélkül, amennyiben a felhasználás feltételei teljesülnek. A szöveg azonban tartalmaz egy megkötést, amely a használat során gyakran kellemetlenségként jött elõ a felhasználók körében: amennyiben a szoftver bármilyen részére vagy a szoftver használatára hivatkozás történik egy reklámanyagban, úgy a szoftver fejlesztõjét fel kellett tüntetni a szövegben. Amennyiben több, eredeti BSD licenc alá esõ szoftvert tartalmazó rendszer került hivatkozásra, úgy az említett lista hamar nagy méretûvé válhatott\cite{Linfo}. Ezen kellemetlenség miatt került elõször módosításra a BSD licenc.
+Az eredeti, másnéven 4-clause BSD licenc négy pontban foglalta össze a felhasználás feltételeit. A licenc tartalmazza a szerzõi jog keletkezésének évét, a fejlesztõ szervezet nevét és a szerzõi jog tulajdonosának nevét. A licenc megengedi a szoftver használatát mind forrás, mind bináris formában, akár módosítással, akár anélkül, amennyiben a felhasználás feltételei teljesülnek. A szöveg azonban tartalmaz egy megkötést, amely a használat során gyakran kellemetlenségként jött elõ a felhasználók körében: amennyiben a szoftver bármilyen részére vagy a szoftver használatára hivatkozás történik egy reklámanyagban, úgy a szoftver fejlesztõjét fel kell tüntetni a szövegben. Amennyiben több, eredeti BSD licenc alá esõ szoftvert tartalmazó rendszer került hivatkozásra, úgy az említett lista hamar nagy méretûvé válhatott\cite{Linfo}. Ezen kellemetlenség miatt került elõször módosításra a BSD licenc.
 
-A négy pont az alábbi feltételeket szabja a feljhasználó számára:
+A négy pont az alábbi feltételeket szabja a felhasználó számára:
 
 \begin{enumerate}
 \item A forráskódnak tartalmaznia kell a copyright szövegét, a felhasználás feltételeit felsorakoztató listát, illetve a nyilatkozatot.
@@ -70,7 +70,7 @@ Az egyszerûsített (vagy gyakran FreeBSD licencnek is nevezett) BSD licenc két po
 \subsubsection{GNU GPL}
 %----------------------------------------------------------------------------
 
-A GNU General Public Licence azzal a céllal jött létre, hogy garantálja egy program szabad módosítását és terjesztését, illetve hogy az szabad szoftver maradjon a felhasználói számára. Az licenc az angol free kifejezést nem a termék árára, hanem annak szabad felhasználására használja.
+A GNU General Public Licence azzal a céllal jött létre, hogy garantálja egy program szabad módosítását és terjesztését, illetve hogy az szabad szoftver maradjon a felhasználói számára. A licenc az angol \emph{free} kifejezést nem a termék árára, hanem annak szabad felhasználására használja.
 
 A licenc több módosításon keresztül ment. A két legutolsó változatot ismertetem a továbbiakban.
 
@@ -84,7 +84,7 @@ Ha módosítás történt a programon, akkor fel kell tüntetni a módosító nevét és a 
 
 A programtól elkülöníthetõ munkára nem kötelezõ kiterjeszteni a licenc hatályát, amennyiben az külön kerül terjesztésre. Ha az eredeti (szerzõi jogok alá esõ) munkával együtt kerül terjesztésre, akkor automatikusan kiterjesztésre kerülnek a feltételek.
 
-A program terjeszthetõ futtatható, bináris formában is, amennyiben a forráskód publikusan elérhetõ marad.
+A program terjeszthetõ futtatható (bináris) formában is, amennyiben a forráskód publikusan elérhetõ marad.
 
 A felhasználó jogait tovább korlátozni nem lehet.
 
@@ -122,7 +122,7 @@ Többféle operációs rendszert különböztetünk meg a futtatható folyamatok, az egyi
 \subsubsection{Valósidejû operációs rendszer}
 %----------------------------------------------------------------------------
 
-A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzor mag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát (\figref{02_multitasking}a)\cite{FreeRTOSAbout}.
+A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futtatását (multitasking). A valóságban minden processzormag csak egy szálat tud egy idõpillanatban futtatni. Az operációs rendszer ütemezõje a felelõs azért, hogy eldöntse, melyik program mikor fusson, és a programok közti gyors váltással éri el az egyidejû futás látszatát (\figref{02_multitasking}a)\cite{FreeRTOSAbout}.
 
 \begin{figure}[h!]
 \center
@@ -136,7 +136,7 @@ A legtöbb operációs rendszer látszólag lehetõvé teszi több program egyidejû futt
 \center
 \resizebox{13cm}{!}{
 \includegraphics{figures/RTOS/02_multitasking.png}}
-\caption{A valóságban minden folyamat egy kis idõszeletet kap a processzortól.}
+\caption{A valóságban minden folyamat egy kis idõszeletet kap a \mbox{processzortól}.}
 \label{fig:02_multitasking}
 \end{figure}
 
@@ -248,7 +248,7 @@ A kritikus szakaszt a lehetõ leggyorsabban el kell hagyni, mert különben a beérk
 
 Az alkalmazások egymástól független taszkok konstrukciójából állnak. Viszont ezeknek a taszkoknak ahhoz, hogy a feladatukat el tudják látni, gyakran kommunikálniuk kell egymással.
 
-A felsorolt kommunikációs objektumok listája nem teljes. Bizonyos operációs rendszerek ezektõl eltéró struktúrákat is használhatnak, és az itt felsorolt struktúrák implementációja is eltérhet a leírtaktól (természetesen az sem biztos, hogy implementálva van az adott objektum).
+A felsorolt kommunikációs objektumok listája nem teljes. Bizonyos operációs rendszerek ezektõl eltérõ struktúrákat is használhatnak, és az itt felsorolt struktúrák implementációja is eltérhet a leírtaktól (természetesen az sem biztos, hogy implementálva van az adott objektum).
 
 %----------------------------------------------------------------------------
 \paragraph{Szemafor}
@@ -413,7 +413,7 @@ Induláskor a \emph{TaskA} kapja meg a futás jogát, és lefoglalja a \emph{ResA}-t
 \begin{figure}[h!]
 \center
 \resizebox{8cm}{!}{
-\includegraphics{figures/RTOS/11_deadlock.png}}
+\includegraphics{figures/RTOS/11_deadlock.eps}}
 \caption{Holtponti helyzet kialakulásának egy egyszerû példája.}
 \label{fig:11_deadlock}
 \end{figure}
